@@ -1,0 +1,9 @@
+<table class="board">
+  <% _.each('87654321', function(x) { %>
+    <tr>
+      <% _.each('abcdefgh', function(y) { %>
+        <td id="square_<%=y%><%=x%>" class="square"></td>
+      <% }); %>
+    </tr>
+  <% }); %>
+</table>

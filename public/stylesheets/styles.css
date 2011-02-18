@@ -1,0 +1,33 @@
+body {
+  font-family: calibri;
+}
+
+.board {
+  empty-cells: show;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  -moz-box-shadow: 0 2px 8px -2px #999;
+}
+
+.board .dark {
+  background: lightgreen;
+}
+
+.board td, .board td img {
+  padding: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.board .highlight {
+  cursor: pointer;
+  background: yellow;
+}
+
+.board .target {
+  background: yellow;
+}
+
+.board .valid {
+  background: blue;
+}
