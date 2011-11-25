@@ -10,3 +10,4 @@ capa.QUEEN = 7;
 
 capa.WHITE = 1;
 capa.BLACK = -1;
+
