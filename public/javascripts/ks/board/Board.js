@@ -1,4 +1,5 @@
 var __ = require('underscore');
+var Factory = require('./PieceFactory').PieceFactory;
 
 var Board = function(fen) {
 	fen = fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -9,7 +10,8 @@ var Board = function(fen) {
 	__.each(fen.split(' ')[0].split('/'), function(file, rank) {
 		__.each(file.split(''), function(p, i) {
 			if (!p.match(/[0-8]/)) {
-				_board[(rank * 16) + i] = 'foo';
+				var pos = (rank * 16) + i;
+				_board[pos] = Factory.create(p, pos);
 			}
 		});
 	});
@@ -27,7 +29,7 @@ Board.prototype = {
 		if (isNaN(n) || n > 8 || n < 0 || 'abcdefgh'.indexOf(c) == -1) {
 			throw 'illegal pos ' + pos;
 		}
-		return (this._posIdxMap[c] * 16) + (n - 1);
+		return this._posIdxMap[c] + ((n - 1) * 16);
 	},
 	
 	_getPieceAt: function(idx) {
@@ -38,6 +40,11 @@ Board.prototype = {
 		return __.filter(this._board, function(p) {
 			return p;
 		});
+	},
+	
+	_getPiece: function(pos) {
+		var idx = this._posToIdx(pos);
+		return this._getPieceAt(idx);
 	},
 	
 	getMoves: function(pos) {
