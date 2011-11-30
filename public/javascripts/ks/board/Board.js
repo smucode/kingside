@@ -55,7 +55,7 @@ Board.prototype = {
 	},
 	
 	isOnBoard: function(idx) {
-		return (idx & 0x88) === 0;
+		return idx > 0 && idx < 127 && (idx & 0x88) === 0;
 	},
 	
 	getMoves: function(pos) {
