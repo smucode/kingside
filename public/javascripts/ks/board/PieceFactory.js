@@ -1,4 +1,5 @@
 var Pawn = require('./Pawn').Pawn;
+var Knight = require('./Knight').Knight;
 
 var Const = {
 	PAWN: 1,
@@ -14,7 +15,8 @@ var Const = {
 var PieceFactory = (function (){
 	var _instanceArr = [
 		null,
-		Pawn
+		Pawn,
+		Knight
 	];
 	
 	var _pieceMap = {
@@ -38,7 +40,7 @@ var PieceFactory = (function (){
 			var color = numCode > 0 ? Const.WHITE : Const.BLACK;
 			var inst = _instanceArr[Math.abs(numCode)];
 			if (inst) {
-				return new inst(color, pos, board);
+				return new inst(pos, color, board);
 			} else {
 				// remove when implemented all pieces
 				return {};

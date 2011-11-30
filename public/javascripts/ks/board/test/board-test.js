@@ -20,6 +20,22 @@ suite.addBatch({
 });
 
 suite.addBatch({
+	'creating a board with some random pieces': {
+		topic: new board.Board('7p/p7/p2p5/p7/8/8/8/8 w KQkq - 0 1'),
+		
+		'it should contain 5 pieces': function(topic) {
+			assert.equal(topic._getPieces().length, 5);
+		},
+		'd3 should contain a piece': function(topic) {
+			assert.ok(topic._getPiece('d3'));
+		},
+		'h1 should contain a piece': function(topic) {
+			assert.ok(topic._getPiece('h1'));
+		}
+	}
+});
+
+suite.addBatch({
 	'when resolving pos to idx': {
         topic: new board.Board(),
 

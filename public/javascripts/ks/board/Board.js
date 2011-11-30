@@ -8,13 +8,16 @@ var Board = function(fen) {
 	
 	// todo: move to some sort of fen util..
 	__.each(fen.split(' ')[0].split('/'), function(file, rank) {
+		var o = 0;
 		__.each(file.split(''), function(p, i) {
 			if (!p.match(/[0-8]/)) {
-				var pos = (rank * 16) + i;
-				_board[pos] = Factory.create(p, pos);
+				var pos = (rank * 16) + (i + o);
+				_board[pos] = Factory.create(p, pos, this);
+			} else {
+				o += parseInt(p, 10) - 1;
 			}
-		});
-	});
+		}, this);
+	}, this);
 	
 	this._board = _board;
 };
@@ -45,6 +48,14 @@ Board.prototype = {
 	_getPiece: function(pos) {
 		var idx = this._posToIdx(pos);
 		return this._getPieceAt(idx);
+	},
+	
+	isEmpty: function(idx) {
+		return !this._getPieceAt(idx);
+	},
+	
+	isOnBoard: function(idx) {
+		return (idx & 0x88) === 0;
 	},
 	
 	getMoves: function(pos) {

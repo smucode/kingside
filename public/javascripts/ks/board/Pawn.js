@@ -11,7 +11,6 @@ Pawn.prototype.calculate = function() {
 		this.moves.push(square);
 		if((this.idx >= 16 && this.idx < 16 + 8) || (this.idx >= 96 && this.idx < 96 + 8)) {
 			square = this.idx + (this.color * 32);
-			
 			if(this.board.isEmpty(square)) {
 				this.moves.push(square);
 			}
