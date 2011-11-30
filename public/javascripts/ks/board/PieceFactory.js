@@ -1,4 +1,5 @@
 var Pawn = require('./Pawn').Pawn;
+var King = require('./King').King;
 var Knight = require('./Knight').Knight;
 
 var Const = {
@@ -16,7 +17,8 @@ var PieceFactory = (function (){
 	var _instanceArr = [
 		null,
 		Pawn,
-		Knight
+		Knight,
+		King
 	];
 	
 	var _pieceMap = {
