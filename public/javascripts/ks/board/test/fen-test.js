@@ -125,6 +125,78 @@ vows.describe('Fen').addBatch({
 			assert.isFalse(topic.canCastle('k'));
 			assert.isFalse(topic.canCastle('q'));
 		}
+	},
+	'given a full board' : {
+		topic : new Fen(),
+		
+		'moving pawn at a2 to a4 should a3 should be marked as en passant square': function(topic) {
+			topic.move('a2', 'a4');
+			assert.equal(topic.enPassant, 'a3');
+		},
+		'moving pawn at h7 to h5 should h6 should be marked as en passant square': function(topic) {
+			topic.move('h7', 'h5');
+			assert.equal(topic.enPassant, 'h6');
+		},
+		'moving something else should remove en passant move': function(topic) {
+			topic.move('a7', 'a6');
+			assert.equal(topic.enPassant, '-');
+			
+			topic.move('b7', 'b2');
+			assert.equal(topic.enPassant, '-');
+		}
+	},
+	'given a full board' : {
+		topic : new Fen(),
+		
+		'moving a pawn should reset the halfmove clock': function(topic) {
+			assert.equal(topic.halfmove, 0);
+			
+			topic.move('a1', 'a3');
+			assert.equal(topic.halfmove, 1);
+			
+			topic.move('a3', 'a4');
+			assert.equal(topic.halfmove, 2);
+			
+			topic.move('a4', 'a5');
+			assert.equal(topic.halfmove, 3);
+			
+			topic.move('a2', 'a3');
+			assert.equal(topic.halfmove, 0);
+		},
+		
+		'capturing a piece should reset the halfmove clock': function(topic) {
+			assert.equal(topic.halfmove, 0);
+			
+			topic.move('b1', 'b3');
+			assert.equal(topic.halfmove, 1);
+			
+			topic.move('b3', 'b4');
+			assert.equal(topic.halfmove, 2);
+			
+			topic.move('b4', 'b5');
+			assert.equal(topic.halfmove, 3);
+			
+			topic.move('b5', 'b7');
+			assert.equal(topic.halfmove, 0);
+		}
+	},
+	'given a full board' : {
+		topic : new Fen(),
+		
+		'should update the full move clock after black moves': function(topic) {
+			assert.equal(topic.fullmove, 1);
+			assert.equal(topic.activeColor, 'w');
+			
+			topic.move('b1', 'b3');
+			
+			assert.equal(topic.fullmove, 1);
+			assert.equal(topic.activeColor, 'b');
+			
+			topic.move('b3', 'b1');
+			
+			assert.equal(topic.fullmove, 2);
+			assert.equal(topic.activeColor, 'w');
+		}
 	}
 
 }).export(module);

@@ -1,25 +1,29 @@
 var __ = require('underscore');
+var Fen = require('./Fen').Fen;
 var Factory = require('./PieceFactory').PieceFactory;
 
 var Board = function(fen) {
-	fen = fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 	
-	var _board = new Array(128);
+	this._fen = new Fen(fen);
+	this._board = new Array(128);
 	
-	// todo: move to some sort of fen util..
-	__.each(fen.split(' ')[0].split('/'), function(file, rank) {
-		var o = 0;
-		__.each(file.split(''), function(p, i) {
-			if (!p.match(/[0-8]/)) {
-				var pos = (rank * 16) + (i + o);
-				_board[pos] = Factory.create(p, pos, this);
-			} else {
-				o += parseInt(p, 10) - 1;
-			}
-		}, this);
+	__.each(this._fen.pieces, function(piece, pos) {
+		var idx = this._posToIdx(pos);
+		this._board[idx] = Factory.create(piece, idx, this);
 	}, this);
 	
-	this._board = _board;
+	// todo: move to some sort of fen util..
+	// __.each(fen.split(' ')[0].split('/'), function(file, rank) {
+		// var o = 0;
+		// __.each(file.split(''), function(p, i) {
+			// if (!p.match(/[0-8]/)) {
+				// var pos = (rank * 16) + (i + o);
+				// _board[pos] = Factory.create(p, pos, this);
+			// } else {
+				// o += parseInt(p, 10) - 1;
+			// }
+		// }, this);
+	// }, this);
 };
 
 Board.prototype = {
@@ -55,7 +59,7 @@ Board.prototype = {
 	},
 	
 	isOnBoard: function(idx) {
-		return idx > 0 && idx < 127 && (idx & 0x88) === 0;
+		return idx >= 0 && idx < 127 && (idx & 0x88) === 0;
 	},
 	
 	getMoves: function(pos) {

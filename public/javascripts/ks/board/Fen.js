@@ -5,14 +5,56 @@ var Fen = function(fen) {
 	this._parse(fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 };
 
+// public
+
 Fen.prototype.move = function(from, to) {
-	this._updatePiecePlacement(from, to);
+	this._validateMove(from, to);
 	this._updateActiveColor();
 	this._updateCastling(from);
+	this._updateEnPassant(from, to);
+	this._updateHalfmoveClock(from, to);
+	this._updateFullmoveNumber();
+	this._updatePiecePlacement(from, to);
 };
 
 Fen.prototype.canCastle = function(letter) {
 	return __.include(this.castling, letter);
+};
+
+// private
+
+Fen.prototype._validateMove = function(from, to) {
+	var piece = this.pieces[from];
+	if (!piece) {
+		throw new Error('You must select a valid piece to move: ' + from);
+	}
+};
+
+Fen.prototype._updateFullmoveNumber = function() {
+	if (this.activeColor == 'w') {
+		this.fullmove++;
+	}
+};
+
+Fen.prototype._updateHalfmoveClock = function(from, to) {
+	var piece = this.pieces[from];
+	if (this._isPawn(piece) || this.pieces[to]) {
+		this.halfmove = 0;
+	} else {
+		this.halfmove++;
+	}
+};
+
+Fen.prototype._updateEnPassant = function(from, to) {
+	var piece = this.pieces[from];
+	if (this._isPawn(piece)) {
+		var len = to.charAt(1) - from.charAt(1);
+		if (Math.abs(len) == 2) {
+			this.enPassant = to.charAt(0) + (parseInt(from.charAt(1), 10) + (len / 2));
+			return;
+		}
+	}
+	this.enPassant = '-';
 };
 
 Fen.prototype._updateCastling = function(from) {
@@ -31,16 +73,16 @@ Fen.prototype._updateCastling = function(from) {
 
 Fen.prototype._updatePiecePlacement = function(from, to) {
 	var piece = this.pieces[from];
-	if (!piece) {
-		console.log(this.pieces)
-		throw new Error('You must select a valid piece to move: ' + from);
-	}
 	delete(this.pieces[from]);
 	this.pieces[to] = piece;
 };
 
 Fen.prototype._updateActiveColor = function() {
 	this.activeColor = this.activeColor == 'w' ? 'b' : 'w';
+};
+
+Fen.prototype._isPawn = function(piece) {
+	return piece == 'p' || piece == 'P';
 };
 
 Fen.prototype._parse = function(fen) {
@@ -71,7 +113,7 @@ Fen.prototype._parsePiecePlacement = function(str) {
 				this.pieces[an] = p;
 				fileIdx++;
 			} else {
-				fileIdx += parseInt(p, 10) - 1;
+				fileIdx += parseInt(p, 10);
 			}
 		}, this);
 	}, this);
@@ -98,11 +140,11 @@ Fen.prototype._parseEnPassant = function(str) {
 };
 
 Fen.prototype._parseHalfmoveClock = function(str) {
-	this.halfmove = str;
+	this.halfmove = parseInt(str, 10);
 };
 
 Fen.prototype._parseFullmoveNumber = function(str) {
-	this.fullmove = str;
+	this.fullmove = parseInt(str, 10);
 };
 
 exports.Fen = Fen;

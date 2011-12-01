@@ -9,21 +9,21 @@ vows.describe('Rook').addBatch({
 		topic : new Board('r7/8/8/4r3/8/8/8/8 w KQkq - 0 1'),
 
 		'they should be rooks' : function(topic) {
-			var rook = topic._getPiece('a1');
+			var rook = topic._getPiece('a8');
 			assert.instanceOf(rook, Rook);
 			
-			rook = topic._getPiece('e4');
+			rook = topic._getPiece('e5');
 			assert.instanceOf(rook, Rook);
 		},
 		
 		'the rook in the center should have 14 moves': function(topic) {
-			var rook = topic._getPiece('e4');
+			var rook = topic._getPiece('e5');
 			rook.calculate();
 			assert.equal(rook.moves.length, 14);
 		},
 		
-		'the king in the corner should have 14 moves': function(topic) {
-			var rook = topic._getPiece('a1');
+		'the rook in the corner should have 14 moves': function(topic) {
+			var rook = topic._getPiece('a8');
 			rook.calculate();
 			assert.equal(rook.moves.length, 14);
 		}
