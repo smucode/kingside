@@ -12,9 +12,9 @@ var Rook = function(idx, color, board) {
 Rook.prototype = new Piece();
 
 Rook.prototype.calculate = function() {
-	this.addDirectionalMoves(this.OFFSETS);
+	this.addDirectionalMoves(this.DIRECTIONS);
 };
 
-Rook.prototype.OFFSETS = [1, -1, 16, -16];
+Rook.prototype.DIRECTIONS = [1, -1, 16, -16];
 
 exports.Rook = Rook;

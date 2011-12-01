@@ -28,5 +28,15 @@ vows.describe('Pawn').addBatch({
 			assert.equal(knight.moves.length, 2);
 		}
 		
+	},
+	'given a board' : {
+		topic : new Board('n7/2p5/1P6/4n3/8/8/8/8 w KQkq - 0 1'),
+		
+		'the knight should have one move': function(topic) {
+			var knight = topic._getPiece('a8');
+			knight.calculate();
+			assert.equal(knight.moves.length, 1);
+		}
 	}
+
 }).export(module);

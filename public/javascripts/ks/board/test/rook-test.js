@@ -28,5 +28,15 @@ vows.describe('Rook').addBatch({
 			assert.equal(rook.moves.length, 14);
 		}
 		
+	},
+	'given a board' : {
+		topic : new Board('rp6/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+
+		'the rook should have one move': function(topic) {
+			var rook = topic._getPiece('a8');
+			rook.calculate();
+			assert.equal(rook.moves.length, 1);
+		}
+		
 	}
 }).export(module);

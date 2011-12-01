@@ -10,7 +10,7 @@ Piece.prototype.canCapture = function(idx) {
 
 Piece.prototype.canMoveTo = function(idx) {
 	var piece = this.board._getPieceAt(idx);
-	return this.board.isOnBoard(idx) && !piece;
+	return !piece && this.board.isOnBoard(idx);
 };
 
 Piece.prototype.addDirectionalMoves = function(directions) {
@@ -21,10 +21,12 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 
 Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	offset = offset || 1;
-	var move = this.idx + (offset * direction);
-	if (this.board.isOnBoard(move)) {
-		this.moves.push(move);
+	var target = this.idx + (offset * direction);
+	if (this.canMoveTo(target)) {
+		this.moves.push(target);
 		this._addNextDirectionalMove(direction, ++offset);
+	} else if (this.canCapture(target)) {
+		this.moves.push(target);
 	}
 };
 
