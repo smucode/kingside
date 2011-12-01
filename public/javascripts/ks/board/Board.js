@@ -12,31 +12,18 @@ var Board = function(fen) {
 		this._board[idx] = Factory.create(piece, idx, this);
 	}, this);
 	
-	// todo: move to some sort of fen util..
-	// __.each(fen.split(' ')[0].split('/'), function(file, rank) {
-		// var o = 0;
-		// __.each(file.split(''), function(p, i) {
-			// if (!p.match(/[0-8]/)) {
-				// var pos = (rank * 16) + (i + o);
-				// _board[pos] = Factory.create(p, pos, this);
-			// } else {
-				// o += parseInt(p, 10) - 1;
-			// }
-		// }, this);
-	// }, this);
 };
 
 Board.prototype = {
 	
-	_posIdxMap: {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7},
+	_files: 'abcdefgh',
 	
 	_posToIdx: function(pos) {
-		var c = pos[0];
-		var n = pos[1];
-		if (isNaN(n) || n > 8 || n < 0 || 'abcdefgh'.indexOf(c) == -1) {
+		if (!pos || !pos.match(/[a-h]{1}[0-8]{1}/)) {
 			throw 'illegal pos ' + pos;
 		}
-		return this._posIdxMap[c] + ((n - 1) * 16);
+		var c = this._files.indexOf(pos[0]);
+		return c + ((pos[1] - 1) * 16);
 	},
 	
 	_getPieceAt: function(idx) {

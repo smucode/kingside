@@ -3,8 +3,14 @@ var __ = require('underscore');
 var Piece = function() {
 };
 
+Piece.prototype.canCapture = function(idx) {
+	var piece = this.board._getPieceAt(idx);
+	return piece && piece.color != this.color;
+};
+
 Piece.prototype.canMoveTo = function(idx) {
-	return this.board.isOnBoard(idx);
+	var piece = this.board._getPieceAt(idx);
+	return this.board.isOnBoard(idx) && !piece;
 };
 
 Piece.prototype.addDirectionalMoves = function(directions) {

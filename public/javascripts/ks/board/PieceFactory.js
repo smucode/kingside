@@ -30,18 +30,18 @@ var PieceFactory = (function (){
 	];
 	
 	var _pieceMap = {
-		r: Const.WHITE * Const.ROOK, 
-		n: Const.WHITE * Const.KNIGHT,
-		b: Const.WHITE * Const.BISHOP,
-		q: Const.WHITE * Const.QUEEN,
-		k: Const.WHITE * Const.KING,
-		p: Const.WHITE * Const.PAWN,
-		R: Const.BLACK * Const.ROOK, 
-		N: Const.BLACK * Const.KNIGHT,
-		B: Const.BLACK * Const.BISHOP,
-		Q: Const.BLACK * Const.QUEEN,
-		K: Const.BLACK * Const.KING,
-		P: Const.BLACK * Const.PAWN
+		r: Const.BLACK * Const.ROOK, 
+		n: Const.BLACK * Const.KNIGHT,
+		b: Const.BLACK * Const.BISHOP,
+		q: Const.BLACK * Const.QUEEN,
+		k: Const.BLACK * Const.KING,
+		p: Const.BLACK * Const.PAWN,
+		R: Const.WHITE * Const.ROOK, 
+		N: Const.WHITE * Const.KNIGHT,
+		B: Const.WHITE * Const.BISHOP,
+		Q: Const.WHITE * Const.QUEEN,
+		K: Const.WHITE * Const.KING,
+		P: Const.WHITE * Const.PAWN
 	};
 	
 	return {

@@ -1,4 +1,5 @@
 var __ = require('underscore');
+var Piece = require('./Piece').Piece;
 
 var King = function(idx, color, board) {
 	this.idx = idx;
@@ -7,15 +8,17 @@ var King = function(idx, color, board) {
 	this.moves = [];
 };
 
+King.prototype = new Piece();
+
 King.prototype.calculate = function() {
-	__.each(this.OFFSETS, function(offset) {
-		var move = this.idx + offset;
-		if (this.board.isOnBoard(move)) {
-			this.moves.push(move);
+	__.each(this.DIRECTIONS, function(direction) {
+		var target = this.idx + direction;
+		if (this.canMoveTo(target) || this.canCapture(target)) {
+			this.moves.push(target);
 		}
 	}, this);
 };
 
-King.prototype.OFFSETS = [-1, 1, 16 - 1, 16, 16 + 1, -16 - 1, -16, -16 + 1];
+King.prototype.DIRECTIONS = [-1, 1, 16 - 1, 16, 16 + 1, -16 - 1, -16, -16 + 1];
 
 exports.King = King;

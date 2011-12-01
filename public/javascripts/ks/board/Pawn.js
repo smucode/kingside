@@ -1,3 +1,6 @@
+var __ = require('underscore');
+var Piece = require('./Piece').Piece;
+
 var Pawn = function(idx, color, board) {
 	this.idx = idx;
 	this.color = color;
@@ -5,7 +8,14 @@ var Pawn = function(idx, color, board) {
 	this.moves = [];
 };
 
+Pawn.prototype = new Piece();
+
 Pawn.prototype.calculate = function() {
+	this._addRegularMoves();
+	this._addCaptureMoves();
+};
+
+Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
 	if(this.board.isEmpty(square)) {
 		this.moves.push(square);
@@ -17,5 +27,16 @@ Pawn.prototype.calculate = function() {
 		}
 	}
 };
+
+Pawn.prototype._addCaptureMoves = function() {
+	__.each(this._CAPTURE_DIRECTIONS, function(direction) {
+		var target = this.idx + (this.color * 16) + direction;
+		if (this.canCapture(target)) {
+			this.moves.push(target);
+		}
+	}, this);
+};
+
+Pawn.prototype._CAPTURE_DIRECTIONS = [1, -1];
 
 exports.Pawn = Pawn;
