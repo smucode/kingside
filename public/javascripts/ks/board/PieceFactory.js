@@ -1,6 +1,9 @@
 var Pawn = require('./Pawn').Pawn;
 var King = require('./King').King;
+var Rook = require('./Rook').Rook;
 var Knight = require('./Knight').Knight;
+var Bishop = require('./Bishop').Bishop;
+var Queen = require('./Queen').Queen;
 
 var Const = {
 	PAWN: 1,
@@ -9,6 +12,7 @@ var Const = {
 	BISHOP: 5,
 	ROOK: 6,
 	QUEEN: 7,
+	
 	WHITE: 1,
 	BLACK: -1
 };
@@ -18,7 +22,11 @@ var PieceFactory = (function (){
 		null,
 		Pawn,
 		Knight,
-		King
+		King,
+		null,
+		Bishop,
+		Rook,
+		Queen
 	];
 	
 	var _pieceMap = {
