@@ -49,6 +49,15 @@ Board.prototype = {
 		return idx >= 0 && idx < 127 && (idx & 0x88) === 0;
 	},
 	
+	isEnPassant: function(idx) {
+		var ep = this._fen.enPassant;
+		if (ep && ep != '-') {
+			var epIdx = this._posToIdx(ep);
+			return idx == epIdx;
+		}
+		return false;
+	},
+	
 	getMoves: function(pos) {
 		var idx = this._posToIdx(pos);
 		var piece = this._getPieceAt(idx);

@@ -31,7 +31,7 @@ Pawn.prototype._addRegularMoves = function() {
 Pawn.prototype._addCaptureMoves = function() {
 	__.each(this._CAPTURE_DIRECTIONS, function(direction) {
 		var target = this.idx + (this.color * 16) + direction;
-		if (this.canCapture(target)) {
+		if (this.canCapture(target) || this.canCaptureEnPassant(target)) {
 			this.moves.push(target);
 		}
 	}, this);

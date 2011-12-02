@@ -8,6 +8,10 @@ Piece.prototype.canCapture = function(idx) {
 	return piece && piece.color != this.color;
 };
 
+Piece.prototype.canCaptureEnPassant = function(idx) {
+	return this.board.isEnPassant(idx); 
+};
+
 Piece.prototype.canMoveTo = function(idx) {
 	var piece = this.board._getPieceAt(idx);
 	return !piece && this.board.isOnBoard(idx);
