@@ -63,5 +63,14 @@ vows.describe('King').addBatch({
 			var piece = topic._getPiece('e8').calculate();
 			assert.equal(piece.moves.length, 2);
 		}
+	},
+	'two of three moves are threathened by opponent' : {
+		topic : new Board('k7/8/8/8/8/8/8/1R2K2R b - - 0 1'),
+
+		'king should have one move' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 1);
+		}
 	}
 }).export(module);

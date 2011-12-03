@@ -2,6 +2,7 @@ var __ = require('underscore');
 
 var Fen = function(fen) {
 	this.pieces = {};
+	this.activeColor = null;
 	this._parse(fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 };
 

@@ -12,9 +12,13 @@ var Board = function(fen) {
 		this._board[idx] = Factory.create(piece, idx, this);
 	}, this);
 	
+	// todo: calculate moves in ctor?
 };
 
 Board.prototype = {
+	
+	WHITE: 1,
+	BLACK: -1,
 	
 	_files: 'abcdefgh',
 	
@@ -30,15 +34,40 @@ Board.prototype = {
 		return this._board[idx];
 	},
 	
-	_getPieces: function() {
+	_getPieces: function(color) {
 		return __.filter(this._board, function(p) {
-			return p;
+			if (!color) {
+				return p;
+			} else {
+				return p && p.color == color;
+			}
 		});
 	},
 	
 	_getPiece: function(pos) {
 		var idx = this._posToIdx(pos);
 		return this._getPieceAt(idx);
+	},
+	
+	_getCurrentColor: function() {
+		return (this._fen.activeColor == 'w') ? this.WHITE : this.BLACK;
+	},
+	
+	_calculate: function() {
+		var currentColor = this._getCurrentColor();
+		__.each(this._getPieces(currentColor * -1), function(p) {
+			p.calculate();
+		});
+		__.each(this._getPieces(currentColor), function(p) {
+			p.calculate();
+		});
+	},
+	
+	isAttacked: function(idx) {
+		var currentColor = this._getCurrentColor();
+		return __.detect(this._getPieces(currentColor * -1), function(p) {
+			return p.moves.indexOf(idx) != -1;
+		});
 	},
 	
 	isEmpty: function(idx) {

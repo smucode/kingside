@@ -23,10 +23,14 @@ King.prototype.canCastle = function(code) {
 	return this.idx == this._castlingIdx && this.board.canCastle(code);
 };
 
+King.prototype.isAttacked = function(idx) {
+	return this.board.isAttacked(idx);
+};
+
 King.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
-		if (this.canMoveTo(target) || this.canCapture(target)) {
+		if ((this.canMoveTo(target) && !this.isAttacked(target)) || this.canCapture(target)) {
 			this.moves.push(target);
 		}
 	}, this);
