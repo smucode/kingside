@@ -37,6 +37,31 @@ vows.describe('King').addBatch({
 			king.calculate();
 			assert.equal(king.moves.length, 2);
 		}
+	},
+	'kings with free path to the rooks and full castling rights' : {
+		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1'),
+
+		'white king should have 4 moves' : function(topic) {
+			var piece = topic._getPiece('e1').calculate();
+			assert.equal(piece.moves.length, 4);
+		},
 		
+		'black king should have 4 moves' : function(topic) {
+			var piece = topic._getPiece('e8').calculate();
+			assert.equal(piece.moves.length, 4);
+		}
+	},
+	'kings with free path to the rooks and no castling rights' : {
+		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1'),
+
+		'white king should have 2 moves' : function(topic) {
+			var piece = topic._getPiece('e1').calculate();
+			assert.equal(piece.moves.length, 2);
+		},
+		
+		'black king should have 2 moves' : function(topic) {
+			var piece = topic._getPiece('e8').calculate();
+			assert.equal(piece.moves.length, 2);
+		}
 	}
 }).export(module);

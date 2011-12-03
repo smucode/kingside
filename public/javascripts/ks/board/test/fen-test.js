@@ -197,6 +197,6 @@ vows.describe('Fen').addBatch({
 			assert.equal(topic.fullmove, 2);
 			assert.equal(topic.activeColor, 'w');
 		}
-	}
+	}	
 
 }).export(module);

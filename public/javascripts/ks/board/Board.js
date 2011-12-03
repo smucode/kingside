@@ -49,6 +49,10 @@ Board.prototype = {
 		return idx >= 0 && idx < 127 && (idx & 0x88) === 0;
 	},
 	
+	canCastle: function(code) {
+		return this._fen.canCastle(code);
+	},
+	
 	isEnPassant: function(idx) {
 		var ep = this._fen.enPassant;
 		if (ep && ep != '-') {
