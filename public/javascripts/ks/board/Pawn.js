@@ -15,6 +15,10 @@ Pawn.prototype.calculate = function() {
 	this._addCaptureMoves();
 };
 
+Pawn.prototype.canCaptureEnPassant = function(idx) {
+	return this.board.isEnPassant(idx); 
+};
+
 Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
 	if(this.board.isEmpty(square)) {
@@ -34,6 +38,10 @@ Pawn.prototype._addCaptureMoves = function() {
 		if (this.canCapture(target) || this.canCaptureEnPassant(target)) {
 			this.moves.push(target);
 		}
+		if (this.board.isOnBoard(target)) {
+			this.attacks.push(target);
+		}
+
 	}, this);
 };
 

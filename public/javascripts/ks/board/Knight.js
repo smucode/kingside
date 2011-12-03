@@ -16,6 +16,9 @@ Knight.prototype.calculate = function() {
 		if (this.canMoveTo(target) || this.canCapture(target)) {
 			this.moves.push(target);
 		}
+		if (this.board.isOnBoard(target)) {
+			this.attacks.push(target);
+		}
 	}, this);
 };
 

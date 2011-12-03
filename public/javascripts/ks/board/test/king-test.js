@@ -30,7 +30,7 @@ vows.describe('King').addBatch({
 		
 	},
 	'given a board' : {
-		topic : new Board('kp6/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+		topic : new Board('kp6/P7/8/8/8/8/8/8 b KQkq - 0 1'),
 
 		'the king should have two moves' : function(topic) {
 			var king = topic._getPiece('a8');
@@ -71,6 +71,51 @@ vows.describe('King').addBatch({
 			topic._calculate();
 			var piece = topic._getPiece('a8');
 			assert.equal(piece.moves.length, 1);
+		}
+	},
+	'king can not capture piece that is protected by queen' : {
+		topic : new Board('kB6/p7/8/8/8/8/8/1Q6 b - - 0 1'),
+
+		'so it should have no moves' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'king can not capture piece that is protected by pawn' : {
+		topic : new Board('kB6/p1P5/8/8/8/8/8/8 b - - 0 1'),
+
+		'so it should have one move' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 1);
+		}
+	},
+	'king can not capture piece that is protected by knight' : {
+		topic : new Board('kB6/p7/N7/8/8/8/8/8 b - - 0 1'),
+
+		'so it should have one move' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 1);
+		}
+	},
+	'king can not capture piece that is protected by opponent king' : {
+		topic : new Board('kBK5/p7/8/8/8/8/8/8 b - - 0 1'),
+
+		'so it should have no moves' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'king can not capture piece that is protected by rook' : {
+		topic : new Board('kB6/p7/8/8/8/8/8/1R6 b - - 0 1'),
+
+		'so it should have no moves' : function(topic) {
+			topic._calculate();
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 0);
 		}
 	}
 }).export(module);

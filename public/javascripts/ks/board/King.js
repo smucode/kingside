@@ -27,11 +27,18 @@ King.prototype.isAttacked = function(idx) {
 	return this.board.isAttacked(idx);
 };
 
+King.prototype.isProtected = function(idx) {
+	return this.board.isProtected(idx);
+};
+
 King.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
-		if ((this.canMoveTo(target) && !this.isAttacked(target)) || this.canCapture(target)) {
+		if ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target))) {
 			this.moves.push(target);
+		}
+		if (this.board.isOnBoard(target)) {
+			this.attacks.push(target);
 		}
 	}, this);
 };

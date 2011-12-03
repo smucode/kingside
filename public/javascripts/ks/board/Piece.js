@@ -1,15 +1,12 @@
 var __ = require('underscore');
 
 var Piece = function() {
+	this.attacks = [];
 };
 
 Piece.prototype.canCapture = function(idx) {
 	var piece = this.board._getPieceAt(idx);
 	return piece && piece.color != this.color;
-};
-
-Piece.prototype.canCaptureEnPassant = function(idx) {
-	return this.board.isEnPassant(idx); 
 };
 
 Piece.prototype.canMoveTo = function(idx) {
@@ -29,8 +26,13 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	if (this.canMoveTo(target)) {
 		this.moves.push(target);
 		this._addNextDirectionalMove(direction, ++offset);
-	} else if (this.canCapture(target)) {
-		this.moves.push(target);
+	} else {
+		if (this.canCapture(target)) {
+			this.moves.push(target);
+		}
+		if (this.board.isOnBoard(target)) {
+			this.attacks.push(target);
+		}
 	}
 };
 

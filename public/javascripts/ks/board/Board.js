@@ -70,6 +70,13 @@ Board.prototype = {
 		});
 	},
 	
+	isProtected: function(idx) {
+		var currentColor = this._getCurrentColor();
+		return __.detect(this._getPieces(currentColor * -1), function(p) {
+			return p.moves.indexOf(idx) != -1 || p.attacks.indexOf(idx) != -1;
+		});
+	},
+	
 	isEmpty: function(idx) {
 		return !this._getPieceAt(idx);
 	},
