@@ -12,7 +12,6 @@ table.foo-board {
     empty-cells: show;
     text-align: center;
     border-collapse: collapse;
-	x-webkit-box-shadow: 0 2px 8px -2px #999;
 	
 	img {
 		width: 30px;
@@ -21,19 +20,23 @@ table.foo-board {
 	}
 	
 	.light {
+		cursor: default;
 		background: #ffffff;
 	}
 	
 	.dark {
+		cursor: default;
 		background: #efefef;
 	}
 	
 	.light-hl {
-		background: #ffffdf;
+		cursor: pointer;
+		background: #aaa;
 	}
 	
 	.dark-hl {
-		background: #ffffdf;
+		cursor: pointer;
+		background: #bbb;
 	}
 	
 	.legend {

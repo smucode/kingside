@@ -18,6 +18,9 @@
 			
 			bean.add(fb, 'down', function(pos) {
 				var moves = b.getMoves(pos);
+				if (moves && moves.length > 0) {
+					moves.push(pos);
+				}
 				fb.highlight(moves);
 			});
 			

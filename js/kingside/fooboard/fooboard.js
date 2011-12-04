@@ -6,6 +6,7 @@ var FooBoard = function(pieces) {
 	this.pieces = pieces || {};
 	this.files = 'xabcdefgh'.split('');
 	this.ranks = '87654321x'.split('');
+	
 	this._create();
 	this._attachEvents();
 };
