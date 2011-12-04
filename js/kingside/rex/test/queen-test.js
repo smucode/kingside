@@ -16,12 +16,10 @@ vows.describe('Queen').addBatch({
 		},
 		'the queen in the center should have 27 moves' : function(topic) {
 			var piece = topic._getPiece('e5');
-			piece.calculate();
 			assert.equal(piece.moves.length, 27);
 		},
 		'the queen in the corner should have 21 moves' : function(topic) {
 			var piece = topic._getPiece('a8');
-			piece.calculate();
 			assert.equal(piece.moves.length, 21);
 		}
 	},
@@ -30,7 +28,6 @@ vows.describe('Queen').addBatch({
 
 		'the queen should have three moves' : function(topic) {
 			var piece = topic._getPiece('a8');
-			piece.calculate();
 			assert.equal(piece.moves.length, 3);
 		}
 	}

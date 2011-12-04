@@ -16,21 +16,18 @@ vows.describe('Bishop').addBatch({
 		},
 		'the bishop in the center should have 13 moves' : function(topic) {
 			var piece = topic._getPiece('e5');
-			piece.calculate();
 			assert.equal(piece.moves.length, 13);
 		},
 		'the bishop in the corner should have 7 moves' : function(topic) {
 			var piece = topic._getPiece('a8');
-			piece.calculate();
 			assert.equal(piece.moves.length, 7);
 		}
 	},
 	'given a board' : {
 		topic : new Board('b7/1P6/8/4b3/8/8/8/8 w KQkq - 0 1'),
 
-		'the bishp should have one move' : function(topic) {
+		'the bishop should have one move' : function(topic) {
 			var piece = topic._getPiece('a8');
-			piece.calculate();
 			assert.equal(piece.moves.length, 1);
 		}
 	}

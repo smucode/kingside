@@ -18,13 +18,11 @@ vows.describe('Pawn').addBatch({
 		
 		'the knight in the center should have eight moves': function(topic) {
 			var knight = topic._getPiece('e5');
-			knight.calculate();
 			assert.equal(knight.moves.length, 8);
 		},
 		
 		'the knight in the corner should have two moves': function(topic) {
 			var knight = topic._getPiece('a8');
-			knight.calculate();
 			assert.equal(knight.moves.length, 2);
 		}
 		
@@ -34,7 +32,6 @@ vows.describe('Pawn').addBatch({
 		
 		'the knight should have one move': function(topic) {
 			var knight = topic._getPiece('a8');
-			knight.calculate();
 			assert.equal(knight.moves.length, 1);
 		}
 	}

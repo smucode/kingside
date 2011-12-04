@@ -20,6 +20,11 @@ suite.addBatch({
         
         'number of pieces should be 32': function (topic) {
             assert.equal(topic._getPieces().length, 32);
+        },
+        
+        'the piece at a2 should have some moves': function(topic) {
+        	var moves = topic.getMoves('a2');
+        	assert.equal(moves.length, 2);
         }
     }
 });
@@ -88,5 +93,31 @@ suite.addBatch({
     }
 });
 
+suite.addBatch({
+	'when resolving idx to pos': {
+        topic: new board.Board(),
+
+        '0 should resolve to a1': function (topic) {
+        	assert.equal(topic._idxToPos(0), 'a1');
+        },
+        
+        '16 should resolve to a2': function (topic) {
+        	assert.equal(topic._idxToPos(16), 'a2');
+        },
+        
+        'b1 should resolve to 1': function (topic) {
+        	assert.equal(topic._idxToPos(1), 'b1');
+        },
+        
+        'b2 should resolve to 17': function (topic) {
+        	assert.equal(topic._idxToPos(17), 'b2');
+        },
+        
+        '15 should throw': function(topic) {
+			assert.throws(function() { topic._idxToPos('15'); });
+        }
+        
+    }
+});
 
 suite.export(module);

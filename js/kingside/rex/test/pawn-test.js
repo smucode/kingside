@@ -9,7 +9,6 @@ vows.describe('Pawn').addBatch({
 
 		'it should have two valid moves' : function(topic) {
 			var pawn = topic._getPiece('a7');
-			pawn.calculate();
 			assert.equal(pawn.moves.length, 2);
 		}
 	},
@@ -18,7 +17,6 @@ vows.describe('Pawn').addBatch({
 
 		'it should have four valid moves' : function(topic) {
 			var pawn = topic._getPiece('b7');
-			pawn.calculate();
 			assert.equal(pawn.moves.length, 4);
 		}
 	},
@@ -27,7 +25,6 @@ vows.describe('Pawn').addBatch({
 
 		'it should have two valid moves' : function(topic) {
 			var pawn = topic._getPiece('a5');
-			pawn.calculate();
 			assert.equal(pawn.moves.length, 2);
 		}
 	}

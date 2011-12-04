@@ -1798,7 +1798,7 @@ var Board = function(fen) {
 		this._board[idx] = Factory.create(piece, idx, this);
 	}, this);
 	
-	// todo: calculate moves in ctor?
+	this._calculate();
 };
 
 Board.prototype = {
@@ -1814,6 +1814,16 @@ Board.prototype = {
 		}
 		var c = this._files.indexOf(pos[0]);
 		return c + ((pos[1] - 1) * 16);
+	},
+	
+	_idxToPos: function(idx) {
+		var file = idx % 16;
+		var rank = Math.floor(idx / 16);
+		var pos = this._files[file] + (rank + 1);
+		if (typeof pos != 'string') {
+			throw 'illegal idx ' + idx;
+		}
+		return pos;
 	},
 	
 	_getPieceAt: function(idx) {
@@ -1888,7 +1898,9 @@ Board.prototype = {
 		var idx = this._posToIdx(pos);
 		var piece = this._getPieceAt(idx);
 		if (piece) {
-			return piece.getMoves();
+			return __.map(piece.moves, function(idx) {
+				return this._idxToPos(idx);
+			}, this);
 		}
 		return [];
 	}

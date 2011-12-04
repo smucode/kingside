@@ -18,23 +18,20 @@ vows.describe('Rook').addBatch({
 		
 		'the rook in the center should have 14 moves': function(topic) {
 			var rook = topic._getPiece('e5');
-			rook.calculate();
 			assert.equal(rook.moves.length, 14);
 		},
 		
 		'the rook in the corner should have 14 moves': function(topic) {
 			var rook = topic._getPiece('a8');
-			rook.calculate();
 			assert.equal(rook.moves.length, 14);
 		}
 		
 	},
-	'given a board' : {
-		topic : new Board('rp6/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+	'given a board where rook can only capture' : {
+		topic : new Board('rp6/P7/8/8/8/8/8/8 b KQkq - 0 1'),
 
-		'the rook should have one move': function(topic) {
+		'it should have one move': function(topic) {
 			var rook = topic._getPiece('a8');
-			rook.calculate();
 			assert.equal(rook.moves.length, 1);
 		}
 		

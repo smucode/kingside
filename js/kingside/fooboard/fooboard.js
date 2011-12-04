@@ -1,3 +1,4 @@
+var bean = require('bean');
 var __ = require('underscore');
 
 var FooBoard = function(pieces) {
@@ -7,13 +8,18 @@ var FooBoard = function(pieces) {
 	this._create();
 };
 
+// public
+
 FooBoard.prototype.render = function(target) {
 	target.appendChild(this.table);
 };
 
-FooBoard.prototype.move = function(from, to) {};
+// events
 
-FooBoard.prototype.remove = function(pos) {};
+FooBoard.prototype.onClick = function(pos) {
+};
+
+// private
 
 FooBoard.prototype._create = function() {
 	this.table = this._c('table');
@@ -27,6 +33,14 @@ FooBoard.prototype._create = function() {
 		}, this);
 		this.table.appendChild(tr);
 	}, this);
+	
+	bean.add(this.table, 'mousedown', __.bind(function(args) {
+		var target = args.target;
+		var pos = target.parentNode.getAttribute('xan');
+		if (pos) {
+			bean.fire(this, 'onClick', pos);
+		}
+	}, this));
 };
 
 FooBoard.prototype._formatCell = function(cell, file, rank) {
@@ -34,9 +48,14 @@ FooBoard.prototype._formatCell = function(cell, file, rank) {
 		cell.className = 'legend';
 		cell.innerHTML = (file != 'x' ? file : (rank != 'x' ? rank : '')).toUpperCase();
 	} else {
+		this._setId(cell, file, rank);
 		this._setImage(cell, file, rank);
 		this._setClassName(cell, file, rank);
 	} 
+};
+
+FooBoard.prototype._setId = function(cell, file, rank) {
+	cell.setAttribute('xan', file + rank);
 };
 
 FooBoard.prototype._setImage = function(cell, file, rank) {
