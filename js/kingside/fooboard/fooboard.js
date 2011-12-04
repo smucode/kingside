@@ -2,10 +2,12 @@ var bean = require('bean');
 var __ = require('underscore');
 
 var FooBoard = function(pieces) {
+	this.squares = {};
 	this.pieces = pieces || {};
 	this.files = 'xabcdefgh'.split('');
 	this.ranks = '87654321x'.split('');
 	this._create();
+	this._attachEvents();
 };
 
 // public
@@ -14,9 +16,15 @@ FooBoard.prototype.render = function(target) {
 	target.appendChild(this.table);
 };
 
-// events
-
-FooBoard.prototype.onClick = function(pos) {
+FooBoard.prototype.highlight = function(squares) {
+	__.each(this.squares, function(dom, sq) {
+		var cl = dom.className;
+		if (squares && squares.indexOf(sq) != -1) {
+			dom.className = (cl.indexOf('light') != -1) ? 'light-hl' : 'dark-hl';
+		} else {
+			dom.className = (cl.indexOf('light') != -1) ? 'light' : 'dark';
+		}
+	}, this);
 };
 
 // private
@@ -33,13 +41,31 @@ FooBoard.prototype._create = function() {
 		}, this);
 		this.table.appendChild(tr);
 	}, this);
+};
 	
+FooBoard.prototype._attachEvents = function() {
 	bean.add(this.table, 'mousedown', __.bind(function(args) {
 		var target = args.target;
 		var pos = target.parentNode.getAttribute('xan');
 		if (pos) {
-			bean.fire(this, 'onClick', pos);
+			bean.fire(this, 'down', pos);
 		}
+	}, this));
+	
+	bean.add(this.table, 'mouseup', __.bind(function(args) {
+		bean.fire(this, 'up');
+	}, this));
+	
+	bean.add(this.table, 'mouseover', __.bind(function(args) {
+		var target = args.target;
+		var pos = target.parentNode.getAttribute('xan');
+		if (pos) {
+			bean.fire(this, 'over', pos);
+		}
+	}, this));
+	
+	bean.add(this.table, 'mouseout', __.bind(function(args) {
+		bean.fire(this, 'out');
 	}, this));
 };
 
@@ -51,6 +77,7 @@ FooBoard.prototype._formatCell = function(cell, file, rank) {
 		this._setId(cell, file, rank);
 		this._setImage(cell, file, rank);
 		this._setClassName(cell, file, rank);
+		this.squares[file + rank] = cell;
 	} 
 };
 

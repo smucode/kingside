@@ -16,10 +16,26 @@
 			var fb = new FooBoard(b._fen.pieces);
 			fb.render(document.getElementsByTagName('body')[0]);
 			
-			bean.add(fb, 'onClick', function(pos) {
+			bean.add(fb, 'down', function(pos) {
 				var moves = b.getMoves(pos);
-				console.log(moves);
+				fb.highlight(moves);
 			});
+			
+			bean.add(fb, 'up', function() {
+				fb.highlight();
+			});
+			
+			bean.add(fb, 'over', function(pos) {
+				var moves = b.getMoves(pos);
+				if (moves && moves.length > 0) {
+					fb.highlight([pos]);
+				}
+			});
+			
+			bean.add(fb, 'out', function() {
+				fb.highlight();
+			});
+			
 		</script>
 	</body>
 </html>

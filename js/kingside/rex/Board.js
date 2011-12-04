@@ -23,7 +23,7 @@ Board.prototype = {
 	_files: 'abcdefgh',
 	
 	_posToIdx: function(pos) {
-		if (!pos || !pos.match(/[a-h]{1}[0-8]{1}/)) {
+		if (!pos || typeof pos != 'string' || !pos.match(/[a-h]{1}[0-8]{1}/)) {
 			throw 'illegal pos ' + pos;
 		}
 		var c = this._files.indexOf(pos[0]);
