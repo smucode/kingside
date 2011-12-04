@@ -5,14 +5,16 @@
 		<link rel="stylesheet/less" type="text/css" href="css/kingside.css">
 		<script src="js/less/less.js" type="text/javascript"></script>
 		<script src="js/ender/ender.js" type="text/javascript"></script>
-		<script src="js/fooboard/fooboard.js" type="text/javascript"></script>
+		<script src="js/kingside/fooboard/fooboard.js" type="text/javascript"></script>
+		<script src="js/kingside/rex/rex.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<script>
-			var board = new FooBoard({
-				a1: 'K'
-			});
-			board.render(document.getElementsByTagName('body')[0]);
+			var rex = require('./Board');
+			var b = new rex.Board();
+		
+			var fooboard = new FooBoard(b._fen.pieces);
+			fooboard.render(document.getElementsByTagName('body')[0]);
 		</script>
 	</body>
 </html>
