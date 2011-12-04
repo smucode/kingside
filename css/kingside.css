@@ -1,0 +1,33 @@
+// general styles
+
+body {
+    font-family: calibri;
+}
+
+// foo board
+
+table.foo-board {
+    color: #999;
+    font-size: 10px;
+    empty-cells: show;
+    text-align: center;
+    border-collapse: collapse;
+	x-webkit-box-shadow: 0 2px 8px -2px #999;
+	
+	img {
+		width: 30px;
+		height: 30px;
+		display: block;
+	}
+	
+	.light {
+	}
+	
+	.dark {
+		background: #efefef;
+	}
+	
+	.legend {
+		padding:  2px 5px;
+	}
+}
