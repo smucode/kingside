@@ -24,8 +24,13 @@ King.prototype.canCastle = function(code, direction) {
 	if (!hasCastlingRights) {
 		return false;
 	}
-	return !__.find(this.CASTLE_SQUARES[code.toLowerCase()], function(offset) {
-		return !this.canMoveTo(this.idx + offset);
+	return !this._pathToRookIsBlocked(code);
+};
+
+King.prototype._pathToRookIsBlocked = function(code) {
+	return __.find(this.CASTLE_SQUARES[code.toLowerCase()], function(offset) {
+		var target = this.idx + offset;
+		return !this.canMoveTo(target) || this.isAttacked(target);
 	}, this);
 };
 

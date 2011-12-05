@@ -122,5 +122,21 @@ vows.describe('King').addBatch({
 			var piece = topic._getPiece('e1');
 			assert.equal(piece.moves.length, 0);
 		}
+	},
+	'king on the first line with no pawns in front' : {
+		topic : new Board('rnbqkbnr/pppppppp/8/8/8/8/8/RNBQKBNR w KQkq - 0 1'),
+
+		'should have three moves' : function(topic) {
+			var piece = topic._getPiece('e1');
+			assert.equal(piece.moves.length, 3);
+		}
+	},
+	'king with path to rook attacked' : {
+		topic : new Board('1r4r1/8/8/8/8/8/2PPPP2/R3K2R w KQkq - 0 1'),
+
+		'should have two moves' : function(topic) {
+			var piece = topic._getPiece('e1');
+			assert.equal(piece.moves.length, 2);
+		}
 	}
 }).export(module);
