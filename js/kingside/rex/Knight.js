@@ -11,6 +11,11 @@ var Knight = function(idx, color, board) {
 Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
+	this._addRegularMoves();
+	this._removePinnedMoves();
+};
+
+Knight.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
 		if (this.canMoveTo(target) || this.canCapture(target)) {

@@ -13,6 +13,7 @@ Pawn.prototype = new Piece();
 Pawn.prototype.calculate = function() {
 	this._addRegularMoves();
 	this._addCaptureMoves();
+	this._removePinnedMoves();
 };
 
 Pawn.prototype.canCaptureEnPassant = function(idx) {

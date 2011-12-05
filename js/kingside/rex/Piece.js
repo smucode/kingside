@@ -21,6 +21,10 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 		this._addNextDirectionalMove(direction);
 	}, this);
 	
+	this._removePinnedMoves();
+}
+
+Piece.prototype._removePinnedMoves = function() {
 	var pinned = this.board.isPinned(this.idx);
 	if (pinned) {
 		this.moves = __.intersect(this.moves, pinned);

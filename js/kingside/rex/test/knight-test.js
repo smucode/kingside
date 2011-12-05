@@ -34,6 +34,14 @@ vows.describe('Pawn').addBatch({
 			var knight = topic._getPiece('a8');
 			assert.equal(knight.moves.length, 1);
 		}
+	},
+	'given a board with a pinned knight' : {
+		topic : new Board('r7/8/8/1p6/8/N7/8/K7 w KQkq - 0 1'),
+
+		'it should have no moves' : function(topic) {
+			var piece = topic._getPiece('a3');
+			assert.equal(piece.moves.length, 0);
+		}
 	}
 
 }).export(module);

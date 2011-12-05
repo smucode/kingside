@@ -27,5 +27,13 @@ vows.describe('Pawn').addBatch({
 			var pawn = topic._getPiece('a5');
 			assert.equal(pawn.moves.length, 2);
 		}
+	},
+	'given a board with a pinned pawn' : {
+		topic : new Board('r7/8/8/8/8/1p6/P7/K7 w KQkq - 0 1'),
+
+		'it should have two moves' : function(topic) {
+			var piece = topic._getPiece('a2');
+			assert.equal(piece.moves.length, 2);
+		}
 	}
 }).export(module);
