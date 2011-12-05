@@ -34,6 +34,21 @@ vows.describe('Rook').addBatch({
 			var rook = topic._getPiece('a8');
 			assert.equal(rook.moves.length, 1);
 		}
-		
+	},
+	'given a board with a pinned rook next to the king' : {
+		topic : new Board('r7/8/8/8/8/8/R7/K7 w KQkq - 0 1'),
+
+		'it must protect king' : function(topic) {
+			var piece = topic._getPiece('a2');
+			assert.equal(piece.moves.length, 6);
+		}
+	},
+	'given a board with a pinned rook' : {
+		topic : new Board('r7/8/8/8/8/R7/8/K7 w KQkq - 0 1'),
+
+		'it must protect king' : function(topic) {
+			var piece = topic._getPiece('a3');
+			assert.equal(piece.moves.length, 6);
+		}
 	}
 }).export(module);

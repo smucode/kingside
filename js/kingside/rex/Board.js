@@ -75,9 +75,15 @@ Board.prototype = {
 	
 	isPinned: function(idx) {
 		var currentColor = this._getCurrentColor();
-		return __.detect(this._getPieces(currentColor * -1), function(p) {
-			return p.pin == idx;
+		var pieces = this._getPieces(currentColor * -1);
+		
+		var pinningPiece = __.detect(pieces, function(p) {
+			return p.pinning && p.pinning[idx];
 		});
+		
+		if (pinningPiece) {
+			return __(pinningPiece.pinning[idx]).chain().clone().without(idx).union(pinningPiece.idx).value();
+		}
 	},
 	
 	isAttacked: function(idx) {

@@ -15,13 +15,16 @@ Piece.prototype.canMoveTo = function(idx) {
 };
 
 Piece.prototype.addDirectionalMoves = function(directions) {
-	this.pin = null;
-	if (this.board.isPinned(this.idx)) {
-		return;
-	}
+	this.pinning = {};
+	
 	__.each(directions, function(direction) {
 		this._addNextDirectionalMove(direction);
 	}, this);
+	
+	var pinned = this.board.isPinned(this.idx);
+	if (pinned) {
+		this.moves = __.intersect(this.moves, pinned);
+	}
 };
 
 Piece.prototype._addNextDirectionalMove = function(direction, offset) {
@@ -43,12 +46,24 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 
 Piece.prototype._checkPinning = function(pinned, direction, offset) {
 	var target = this.idx + (offset * direction);
-	if (this.board.isOnBoard(target)) {
+	if (this.canMoveTo(target)) {
+		this._checkPinning(pinned, direction, ++offset);
+	} else if (this.canCapture(target)) {
 		var piece = this.board._getPieceAt(target);
-		if (piece && piece.type == 3 && piece.color != this.color) {
-			this.pin = pinned;
+		if (piece.type == 3 && piece.color != this.color) {
+			this.pinning[pinned] = [];
+			this._backtrackPinnedMoves(direction, --offset, this.pinning[pinned]);
 		}
+		
 	}
 };
+
+Piece.prototype._backtrackPinnedMoves = function(direction, offset, arr) {
+	var target = this.idx + (offset * direction);
+	arr.push(target);
+	if (target != this.idx) {
+		this._backtrackPinnedMoves(direction, --offset, arr);
+	}
+}
 
 exports.Piece = Piece;
