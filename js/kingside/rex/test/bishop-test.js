@@ -30,5 +30,13 @@ vows.describe('Bishop').addBatch({
 			var piece = topic._getPiece('a8');
 			assert.equal(piece.moves.length, 1);
 		}
+	},
+	'given a board with a pinned bishop' : {
+		topic : new Board('r7/8/8/8/8/8/B7/K7 w KQkq - 0 1'),
+
+		'it should not be able to move' : function(topic) {
+			var piece = topic._getPiece('a2');
+			assert.equal(piece.moves.length, 0);
+		}
 	}
 }).export(module);

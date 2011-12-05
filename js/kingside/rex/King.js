@@ -6,6 +6,7 @@ var King = function(idx, color, board) {
 	this.color = color;
 	this.board = board;
 	this.moves = [];
+	this.type = 3;
 	
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
 	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};

@@ -73,6 +73,13 @@ Board.prototype = {
 		});
 	},
 	
+	isPinned: function(idx) {
+		var currentColor = this._getCurrentColor();
+		return __.detect(this._getPieces(currentColor * -1), function(p) {
+			return p.pin == idx;
+		});
+	},
+	
 	isAttacked: function(idx) {
 		var currentColor = this._getCurrentColor();
 		return __.detect(this._getPieces(currentColor * -1), function(p) {
