@@ -1629,8 +1629,8 @@ var King = function(idx, color, board) {
 	this.board = board;
 	this.moves = [];
 	
-	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
+	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
 };
 
 King.prototype = new Piece();
@@ -1641,8 +1641,19 @@ King.prototype.calculate = function() {
 	return this;
 };
 
-King.prototype.canCastle = function(code) {
-	return this.idx == this._castlingIdx && this.board.canCastle(code);
+King.prototype.canCastle = function(code, direction) {
+	var hasCastlingRights = this.idx == this._castlingIdx && this.board.canCastle(code);
+	if (!hasCastlingRights) {
+		return false;
+	}
+	return !this._pathToRookIsBlocked(code);
+};
+
+King.prototype._pathToRookIsBlocked = function(code) {
+	return __.find(this.CASTLE_SQUARES[code.toLowerCase()], function(offset) {
+		var target = this.idx + offset;
+		return !this.canMoveTo(target) || this.isAttacked(target);
+	}, this);
 };
 
 King.prototype.isAttacked = function(idx) {
@@ -1673,7 +1684,7 @@ King.prototype._addCastlingMoves = function() {
 	}, this);
 };
 
-// King.prototype.CASTLING = { 3: 'Q', 5: 'K', 115: 'q', 117: 'k' };
+King.prototype.CASTLE_SQUARES = { q: [-1, -2, -3], k: [1, 2] };
 King.prototype.DIRECTIONS = [-1, 1, 16 - 1, 16, 16 + 1, -16 - 1, -16, -16 + 1];
 
 exports.King = King;
@@ -1897,7 +1908,7 @@ Board.prototype = {
 	getMoves: function(pos) {
 		var idx = this._posToIdx(pos);
 		var piece = this._getPieceAt(idx);
-		if (piece) {
+		if (piece && piece.color == this._getCurrentColor()) {
 			return __.map(piece.moves, function(idx) {
 				return this._idxToPos(idx);
 			}, this);

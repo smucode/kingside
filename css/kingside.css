@@ -21,22 +21,22 @@ table.foo-board {
 	
 	.light {
 		cursor: default;
-		background: #ffffff;
+		background: #fff;
 	}
 	
 	.dark {
 		cursor: default;
-		background: #efefef;
+		background: #d6d6d6;
 	}
 	
 	.light-hl {
 		cursor: pointer;
-		background: #bbb;
+		background: #aaa;
 	}
 	
 	.dark-hl {
 		cursor: pointer;
-		background: #ccc;
+		background: #bbb;
 	}
 	
 	.legend {
