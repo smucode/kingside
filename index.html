@@ -11,7 +11,7 @@
 	<body>
 		<script>
 			var rex = require('./Board');
-			var b = new rex.Board();
+			var b = new rex.Board('rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2');
 			
 			var fb = new FooBoard(b._fen.pieces);
 			fb.render(document.getElementsByTagName('body')[0]);

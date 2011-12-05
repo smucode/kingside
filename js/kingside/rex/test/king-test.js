@@ -35,18 +35,18 @@ vows.describe('King').addBatch({
 			assert.equal(king.moves.length, 2);
 		}
 	},
-	'kings with free path to the rooks and full castling rights' : {
+	'white king with free path to rooks and full castling rights' : {
 		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1'),
 
-		'white king should have 4 moves' : function(topic) {
+		'should have 4 moves' : function(topic) {
 			var piece = topic._getPiece('e1');
 			assert.equal(piece.moves.length, 4);
 		}
 	},
-	'kings with free path to the rooks and full castling rights' : {
+	'black king with free path to rooks and full castling rights' : {
 		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1'),
 
-		'black king should have 4 moves' : function(topic) {
+		'should have 4 moves' : function(topic) {
 			var piece = topic._getPiece('e8');
 			assert.equal(piece.moves.length, 4);
 		}
@@ -112,6 +112,14 @@ vows.describe('King').addBatch({
 
 		'so it should have no moves' : function(topic) {
 			var piece = topic._getPiece('a8');
+			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'king with blocked path and full castling' : {
+		topic : new Board(),
+
+		'should have no moves' : function(topic) {
+			var piece = topic._getPiece('e1');
 			assert.equal(piece.moves.length, 0);
 		}
 	}

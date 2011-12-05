@@ -31,12 +31,12 @@ table.foo-board {
 	
 	.light-hl {
 		cursor: pointer;
-		background: #aaa;
+		background: #bbb;
 	}
 	
 	.dark-hl {
 		cursor: pointer;
-		background: #bbb;
+		background: #ccc;
 	}
 	
 	.legend {
