@@ -25,6 +25,14 @@ suite.addBatch({
         'the piece at a2 should have some moves': function(topic) {
         	var moves = topic.getMoves('a2');
         	assert.equal(moves.length, 2);
+        },
+        
+        'only the active color should have moves': function(topic) {
+        	var moves = topic.getMoves('a2');
+        	assert.equal(moves.length, 2);
+        	
+        	var moves = topic.getMoves('a7');
+        	assert.equal(moves.length, 0);
         }
     }
 });

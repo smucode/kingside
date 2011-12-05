@@ -111,7 +111,7 @@ Board.prototype = {
 	getMoves: function(pos) {
 		var idx = this._posToIdx(pos);
 		var piece = this._getPieceAt(idx);
-		if (piece) {
+		if (piece && piece.color == this._getCurrentColor()) {
 			return __.map(piece.moves, function(idx) {
 				return this._idxToPos(idx);
 			}, this);
