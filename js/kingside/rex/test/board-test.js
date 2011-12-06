@@ -43,8 +43,27 @@ suite.addBatch({
 
         'white should be able to move d2 -> d4': function (topic) {
             topic.move('d2', 'd4');
-            // todo check FEN
         },
+        
+        'white should not be able to move e2 -> e4': function (topic) {
+            assert.throws(function() {
+	            topic.move('e2', 'e4');
+            });
+        },
+        
+        'black should be able to move e7 -> e5': function (topic) {
+            topic.move('e7', 'e5');
+        },
+        
+        'white should be able to capture pawn at e5': function (topic) {
+            topic.move('d4', 'e5');
+        },
+        
+        'black should not able to move pawn at e5': function (topic) {
+            assert.throws(function() {
+            	topic.move('e5', 'e4');
+            });
+        }
 
     }
 });

@@ -74,11 +74,28 @@ Board.prototype = {
 	
 	move: function(from, to) {
 		var source = this._getPiece(from);
-		if (source && (source.canCapture(to) || source.canMoveTo(to))) {
+		if (this._getCurrentColor() != source.color) {
+			throw 'cannot move out of order';
+		}
+		
+		var toIdx = this._posToIdx(to);
+		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
 			this._calculate();
+			this._updateArray(from, to);
+		} else {
+			throw 'unable to move from ' + from + ' to ' + to;
 		}
-		// var target = this._getPiece(to);
+	},
+	
+	_updateArray: function(from, to) {
+		var fidx = this._posToIdx(from);
+		var fromPiece = this._board[fidx];
+		this._board[fidx] = null;
+		
+		var tidx = this._posToIdx(to);
+		fromPiece.idx = tidx;
+		this._board[tidx] = fromPiece;
 	},
 	
 	isPinned: function(idx) {
