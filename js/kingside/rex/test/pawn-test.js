@@ -40,5 +40,29 @@ vows.describe('Pawn').addBatch({
 			var piece = topic._getPiece('a2');
 			assert.equal(piece.moves.length, 2);
 		}
+	},
+	'given a board with a attacked king' : {
+		topic : new Board('r7/1PP5/8/8/8/8/8/K7 w KQkq - 0 1'),
+
+		'pawn at b7 to the rescue' : function(topic) {
+			var piece = topic._getPiece('b7');
+			assert.equal(piece.moves.length, 1);
+		},
+		'pawn at c7 cannot move' : function(topic) {
+			var piece = topic._getPiece('c7');
+			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'given a board with a king attacked by queen' : {
+		topic : new Board('8/8/8/8/8/8/q1P5/KP6 w KQkq - 0 1'),
+
+		'pawn at b1 to the rescue' : function(topic) {
+			var piece = topic._getPiece('b1');
+			assert.equal(piece.moves.length, 1);
+		},
+		'pawn at c2 cannot move' : function(topic) {
+			var piece = topic._getPiece('c2');
+			assert.equal(piece.moves.length, 0);
+		}
 	}
 }).export(module);

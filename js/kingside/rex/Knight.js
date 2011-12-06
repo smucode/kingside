@@ -14,6 +14,7 @@ Knight.prototype.calculate = function() {
 	this.moves = [];
 	this._addRegularMoves();
 	this._removePinnedMoves();
+	this._removeMovesNotHelpingCheckedKing();
 };
 
 Knight.prototype._addRegularMoves = function() {

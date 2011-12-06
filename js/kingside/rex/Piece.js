@@ -24,6 +24,7 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 	}, this);
 	
 	this._removePinnedMoves();
+	this._removeMovesNotHelpingCheckedKing();
 }
 
 Piece.prototype._removePinnedMoves = function() {
@@ -42,7 +43,8 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	} else {
 		if (this.canCapture(target)) {
 			this.moves.push(target);
-			this._checkPinning(target, direction, ++offset);
+			this._checkPinning(target, direction, offset);
+			this._checkKingAttacks(target, direction, offset)
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
@@ -50,15 +52,32 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	}
 };
 
+Piece.prototype._removeMovesNotHelpingCheckedKing = function() {
+	var checkingPieces = this.board.getCheckingPieces();
+	if (checkingPieces.length == 1) {
+		this.moves = __.intersect(this.moves, checkingPieces[0].checks);
+	} else if (checkingPieces.length > 1) {
+		this.moves = [];
+	}
+};
+
+Piece.prototype._checkKingAttacks = function(square, direction, offset) {
+	var piece = this.board._getPieceAt(square);
+	if (piece.type == 3) {
+		this.checks = [];
+		this._backtrackPinnedMoves(direction, --offset, this.checks);
+	}
+};
+
 Piece.prototype._checkPinning = function(pinned, direction, offset) {
-	var target = this.idx + (offset * direction);
+	var target = this.idx + ((offset + 1) * direction);
 	if (this.canMoveTo(target)) {
 		this._checkPinning(pinned, direction, ++offset);
 	} else if (this.canCapture(target)) {
 		var piece = this.board._getPieceAt(target);
 		if (piece.type == 3 && piece.color != this.color) {
 			this.pinning[pinned] = [];
-			this._backtrackPinnedMoves(direction, --offset, this.pinning[pinned]);
+			this._backtrackPinnedMoves(direction, offset, this.pinning[pinned]);
 		}
 		
 	}

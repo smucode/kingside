@@ -1,3 +1,5 @@
+var __ = require('underscore');
+
 var vows = require('vows'),
     assert = require('assert');
 
@@ -63,6 +65,29 @@ suite.addBatch({
             assert.throws(function() {
             	topic.move('e5', 'e4');
             });
+        }
+
+    }
+});
+
+suite.addBatch({
+	'creating a board with the initial configuration': {
+        topic: new board.Board(),
+
+        'scholars mate should cause mate': function (topic) {
+            topic.move('e2', 'e4');
+            topic.move('e7', 'e5');
+            topic.move('d1', 'h5');
+            topic.move('b8', 'c6');
+            topic.move('f1', 'c4');
+            topic.move('g8', 'f6');
+            topic.move('h5', 'f7');
+			
+			var allMoves = __(topic._getPieces(-1)).chain().map(function(p) {
+				return p.moves;
+			}).flatten().value().length;
+			
+			assert.equal(allMoves, 0);
         }
 
     }

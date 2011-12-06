@@ -15,6 +15,7 @@ Pawn.prototype.calculate = function() {
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();
+	this._removeMovesNotHelpingCheckedKing();
 };
 
 Pawn.prototype.canCaptureEnPassant = function(idx) {
@@ -25,7 +26,7 @@ Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
 	if(this.board.isEmpty(square)) {
 		this.moves.push(square);
-		if((this.idx >= 16 && this.idx < 16 + 8) || (this.idx >= 96 && this.idx < 96 + 8)) {
+		if((this.color == 1 && this.idx >= 16 && this.idx < 16 + 8) || (this.color == -1 && this.idx >= 96 && this.idx < 96 + 8)) {
 			square = this.idx + (this.color * 32);
 			if(this.board.isEmpty(square)) {
 				this.moves.push(square);
@@ -43,7 +44,6 @@ Pawn.prototype._addCaptureMoves = function() {
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
 		}
-
 	}, this);
 };
 

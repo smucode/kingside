@@ -56,5 +56,13 @@ vows.describe('Rook').addBatch({
 			var piece = topic._getPiece('a3');
 			assert.equal(piece.moves.length, 6);
 		}
+	},
+	'given a board with a threathened king' : {
+		topic : new Board('r7/8/8/8/8/8/7R/K7 w KQkq - 0 1'),
+
+		'rook to the rescue' : function(topic) {
+			var piece = topic._getPiece('h2');
+			assert.equal(piece.moves.length, 1);
+		}
 	}
 }).export(module);

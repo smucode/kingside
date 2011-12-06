@@ -1,3 +1,5 @@
+var __ = require('underscore');
+
 var vows = require('vows');
 var assert = require('assert');
 
@@ -47,6 +49,38 @@ vows.describe('Pawn').addBatch({
 		'it should have no moves' : function(topic) {
 			var piece = topic._getPiece('a3');
 			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'given a board where king is attacked by multipple pieces' : {
+		topic : new Board('r6b/8/8/8/8/8/8/KN6 w KQkq - 0 1'),
+
+		'a knight should have no moves' : function(topic) {
+			var piece = topic._getPiece('b1');
+			assert.equal(piece.moves.length, 0);
+		}
+	},
+	'given a board where king is in check' : {
+		topic : new Board('rN6/8/1N6/8/8/8/8/K6N w KQkq - 0 1'),
+
+		'the number number of squares to neutralize the checks is 7' : function(topic) {
+			var piece = topic._getPiece('a8');
+			assert.equal(piece.checks.length, 7);
+			assert.equal(-1, piece.checks.indexOf(0));
+		},
+		
+		'knight that cannot help should have no moves' : function(topic) {
+			var piece = topic._getPiece('h1');
+			assert.equal(piece.moves.length, 0);
+		},
+		
+		'knight that can block should have 1 move' : function(topic) {
+			var piece = topic._getPiece('b8');
+			assert.equal(piece.moves.length, 1);
+		},
+		
+		'knight that can block or capture should have 2 moves' : function(topic) {
+			var piece = topic._getPiece('b6');
+			assert.equal(piece.moves.length, 2);
 		}
 	}
 

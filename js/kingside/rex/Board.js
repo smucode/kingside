@@ -98,6 +98,14 @@ Board.prototype = {
 		this._board[tidx] = fromPiece;
 	},
 	
+	getCheckingPieces: function() {
+		var currentColor = this._getCurrentColor();
+		var pieces = this._getPieces(currentColor * -1);
+		return __.filter(pieces, function(piece) {
+			return piece.checks && piece.checks.length > 0;
+		});
+	},
+	
 	isPinned: function(idx) {
 		var currentColor = this._getCurrentColor();
 		var pieces = this._getPieces(currentColor * -1);
