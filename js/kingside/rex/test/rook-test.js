@@ -24,6 +24,12 @@ vows.describe('Rook').addBatch({
 		'the rook in the corner should have 14 moves': function(topic) {
 			var rook = topic._getPiece('a8');
 			assert.equal(rook.moves.length, 14);
+		},
+		
+		'recalculating should give the same answer': function(topic) {
+			var rook = topic._getPiece('a8');
+			rook.calculate();
+			assert.equal(rook.moves.length, 14);
 		}
 		
 	},

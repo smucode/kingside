@@ -1539,6 +1539,7 @@ Pawn.prototype = new Piece();
 Pawn.prototype.calculate = function() {
 	this._addRegularMoves();
 	this._addCaptureMoves();
+	this._removePinnedMoves();
 };
 
 Pawn.prototype.canCaptureEnPassant = function(idx) {
@@ -1595,9 +1596,20 @@ Piece.prototype.canMoveTo = function(idx) {
 };
 
 Piece.prototype.addDirectionalMoves = function(directions) {
+	this.pinning = {};
+	
 	__.each(directions, function(direction) {
 		this._addNextDirectionalMove(direction);
 	}, this);
+	
+	this._removePinnedMoves();
+}
+
+Piece.prototype._removePinnedMoves = function() {
+	var pinned = this.board.isPinned(this.idx);
+	if (pinned) {
+		this.moves = __.intersect(this.moves, pinned);
+	}
 };
 
 Piece.prototype._addNextDirectionalMove = function(direction, offset) {
@@ -1609,12 +1621,35 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	} else {
 		if (this.canCapture(target)) {
 			this.moves.push(target);
+			this._checkPinning(target, direction, ++offset);
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
 		}
 	}
 };
+
+Piece.prototype._checkPinning = function(pinned, direction, offset) {
+	var target = this.idx + (offset * direction);
+	if (this.canMoveTo(target)) {
+		this._checkPinning(pinned, direction, ++offset);
+	} else if (this.canCapture(target)) {
+		var piece = this.board._getPieceAt(target);
+		if (piece.type == 3 && piece.color != this.color) {
+			this.pinning[pinned] = [];
+			this._backtrackPinnedMoves(direction, --offset, this.pinning[pinned]);
+		}
+		
+	}
+};
+
+Piece.prototype._backtrackPinnedMoves = function(direction, offset, arr) {
+	var target = this.idx + (offset * direction);
+	arr.push(target);
+	if (target != this.idx) {
+		this._backtrackPinnedMoves(direction, --offset, arr);
+	}
+}
 
 exports.Piece = Piece;
 });
@@ -1628,6 +1663,7 @@ var King = function(idx, color, board) {
 	this.color = color;
 	this.board = board;
 	this.moves = [];
+	this.type = 3;
 	
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
 	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
@@ -1729,6 +1765,11 @@ var Knight = function(idx, color, board) {
 Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
+	this._addRegularMoves();
+	this._removePinnedMoves();
+};
+
+Knight.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
 		if (this.canMoveTo(target) || this.canCapture(target)) {
@@ -1868,6 +1909,19 @@ Board.prototype = {
 		__.each(this._getPieces(currentColor), function(p) {
 			p.calculate();
 		});
+	},
+	
+	isPinned: function(idx) {
+		var currentColor = this._getCurrentColor();
+		var pieces = this._getPieces(currentColor * -1);
+		
+		var pinningPiece = __.detect(pieces, function(p) {
+			return p.pinning && p.pinning[idx];
+		});
+		
+		if (pinningPiece) {
+			return __(pinningPiece.pinning[idx]).chain().clone().without(idx).union(pinningPiece.idx).value();
+		}
 	},
 	
 	isAttacked: function(idx) {

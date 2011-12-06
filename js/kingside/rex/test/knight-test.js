@@ -24,6 +24,12 @@ vows.describe('Pawn').addBatch({
 		'the knight in the corner should have two moves': function(topic) {
 			var knight = topic._getPiece('a8');
 			assert.equal(knight.moves.length, 2);
+		},
+		
+		'recalculating should give the same answer': function(topic) {
+			var knight = topic._getPiece('a8');
+			knight.calculate();
+			assert.equal(knight.moves.length, 2);
 		}
 		
 	},

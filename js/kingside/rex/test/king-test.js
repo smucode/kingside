@@ -24,6 +24,12 @@ vows.describe('King').addBatch({
 		'the king in the corner should have three moves': function(topic) {
 			var king = topic._getPiece('a8');
 			assert.equal(king.moves.length, 3);
+		},
+		
+		'recalculating should give the same answer': function(topic) {
+			var king = topic._getPiece('a8');
+			king.calculate();
+			assert.equal(king.moves.length, 3);
 		}
 		
 	},

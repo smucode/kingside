@@ -10,6 +10,11 @@ vows.describe('Pawn').addBatch({
 		'it should have two valid moves' : function(topic) {
 			var pawn = topic._getPiece('a7');
 			assert.equal(pawn.moves.length, 2);
+		},
+		'recalculating should provide the same answer' : function(topic) {
+			var pawn = topic._getPiece('a7');
+			pawn.calculate();
+			assert.equal(pawn.moves.length, 2);
 		}
 	},
 	'given a board with a pawn who can capture' : {

@@ -38,6 +38,18 @@ suite.addBatch({
 });
 
 suite.addBatch({
+	'creating a board with the initial configuration': {
+        topic: new board.Board(),
+
+        'white should be able to move d2 -> d4': function (topic) {
+            topic.move('d2', 'd4');
+            // todo check FEN
+        },
+
+    }
+});
+
+suite.addBatch({
 	'creating a board': {
 		topic: new board.Board('p6R/p7/p2p5/p7/8/8/8/k6Q w KQkq - 0 1'),
 		

@@ -3,7 +3,6 @@ var Fen = require('./Fen').Fen;
 var Factory = require('./PieceFactory').PieceFactory;
 
 var Board = function(fen) {
-	
 	this._fen = new Fen(fen);
 	this._board = new Array(128);
 	
@@ -71,6 +70,15 @@ Board.prototype = {
 		__.each(this._getPieces(currentColor), function(p) {
 			p.calculate();
 		});
+	},
+	
+	move: function(from, to) {
+		var source = this._getPiece(from);
+		if (source && (source.canCapture(to) || source.canMoveTo(to))) {
+			this._fen.move(from, to);
+			this._calculate();
+		}
+		// var target = this._getPiece(to);
 	},
 	
 	isPinned: function(idx) {

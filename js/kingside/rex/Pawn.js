@@ -11,6 +11,7 @@ var Pawn = function(idx, color, board) {
 Pawn.prototype = new Piece();
 
 Pawn.prototype.calculate = function() {
+	this.moves = [];
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();

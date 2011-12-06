@@ -15,6 +15,8 @@ Piece.prototype.canMoveTo = function(idx) {
 };
 
 Piece.prototype.addDirectionalMoves = function(directions) {
+	this.moves = [];
+	this.attacks = [];
 	this.pinning = {};
 	
 	__.each(directions, function(direction) {

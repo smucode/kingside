@@ -11,6 +11,7 @@ var Knight = function(idx, color, board) {
 Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
+	this.moves = [];
 	this._addRegularMoves();
 	this._removePinnedMoves();
 };
