@@ -1532,6 +1532,7 @@ var Pawn = function(idx, color, board) {
 	this.color = color;
 	this.board = board;
 	this.moves = [];
+	this.type = 1;
 };
 
 Pawn.prototype = new Piece();
@@ -1997,7 +1998,15 @@ Board.prototype = {
 		if (source.moves.indexOf(toIdx) == -1) {
 			throw 'illegal move';
 		}
-		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
+		
+		if (source.type == 1 && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
+			this._fen.move(from, to);
+			this._updateArray(from, to);
+			
+			this._board[toIdx] = Factory.create(source.color == '1' ? 'Q' : 'q', toIdx, this);
+			
+			this._calculate();
+		} else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
 			this._updateArray(from, to);
 			this._calculate();

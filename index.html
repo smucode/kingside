@@ -58,7 +58,7 @@
 						return;
 					}
 					
-					console.log(move);
+					console.log(b._fen.fullmove, move);
 					fb.move.apply(fb, move);
 					b.move.apply(b, move);
 					__.delay(generateMove, 1);
