@@ -23,16 +23,16 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 		this._addNextDirectionalMove(direction);
 	}, this);
 	
-	if (this.color == this.board._getCurrentColor()) {
-		this._removePinnedMoves();
-		this._removeMovesNotHelpingCheckedKing();
-	}
+	this._removePinnedMoves();
+	this._removeMovesNotHelpingCheckedKing();
 };
 
 Piece.prototype._removePinnedMoves = function() {
-	var pinned = this.board.isPinned(this.idx);
-	if (pinned) {
-		this.moves = __.intersect(this.moves, pinned);
+	if (this.color == this.board._getCurrentColor()) {
+		var pinned = this.board.isPinned(this.idx);
+		if (pinned) {
+			this.moves = __.intersect(this.moves, pinned);
+		}
 	}
 };
 
@@ -55,11 +55,13 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 };
 
 Piece.prototype._removeMovesNotHelpingCheckedKing = function() {
-	var checkingPieces = this.board.getCheckingPieces();
-	if (checkingPieces.length == 1) {
-		this.moves = __.intersect(this.moves, checkingPieces[0].checks);
-	} else if (checkingPieces.length > 1) {
-		this.moves = [];
+	if (this.color == this.board._getCurrentColor()) {
+		var checkingPieces = this.board.getCheckingPieces();
+		if (checkingPieces.length == 1) {
+			this.moves = __.intersect(this.moves, checkingPieces[0].checks);
+		} else if (checkingPieces.length > 1) {
+			this.moves = [];
+		}
 	}
 };
 

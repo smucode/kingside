@@ -1611,9 +1611,11 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 };
 
 Piece.prototype._removePinnedMoves = function() {
-	var pinned = this.board.isPinned(this.idx);
-	if (pinned) {
-		this.moves = __.intersect(this.moves, pinned);
+	if (this.color == this.board._getCurrentColor()) {
+		var pinned = this.board.isPinned(this.idx);
+		if (pinned) {
+			this.moves = __.intersect(this.moves, pinned);
+		}
 	}
 };
 
@@ -1636,11 +1638,13 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 };
 
 Piece.prototype._removeMovesNotHelpingCheckedKing = function() {
-	var checkingPieces = this.board.getCheckingPieces();
-	if (checkingPieces.length == 1) {
-		this.moves = __.intersect(this.moves, checkingPieces[0].checks);
-	} else if (checkingPieces.length > 1) {
-		this.moves = [];
+	if (this.color == this.board._getCurrentColor()) {
+		var checkingPieces = this.board.getCheckingPieces();
+		if (checkingPieces.length == 1) {
+			this.moves = __.intersect(this.moves, checkingPieces[0].checks);
+		} else if (checkingPieces.length > 1) {
+			this.moves = [];
+		}
 	}
 };
 
@@ -1697,9 +1701,11 @@ var King = function(idx, color, board) {
 King.prototype = new Piece();
 
 King.prototype.calculate = function() {
+	this.moves = [];
+	this.attacks = [];
+
 	this._addRegularMoves();
 	this._addCastlingMoves();
-	return this;
 };
 
 King.prototype.canCastle = function(code, direction) {
