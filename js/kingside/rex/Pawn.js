@@ -12,6 +12,7 @@ Pawn.prototype = new Piece();
 
 Pawn.prototype.calculate = function() {
 	this.moves = [];
+	this.attacks = [];
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();

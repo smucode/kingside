@@ -81,8 +81,8 @@ Board.prototype = {
 		var toIdx = this._posToIdx(to);
 		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
-			this._calculate();
 			this._updateArray(from, to);
+			this._calculate();
 		} else {
 			throw 'unable to move from ' + from + ' to ' + to;
 		}

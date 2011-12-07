@@ -12,6 +12,7 @@ Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
 	this.moves = [];
+	this.attacks = [];
 	this._addRegularMoves();
 	this._removePinnedMoves();
 	this._removeMovesNotHelpingCheckedKing();
