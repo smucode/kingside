@@ -17,9 +17,11 @@ var King = function(idx, color, board) {
 King.prototype = new Piece();
 
 King.prototype.calculate = function() {
+	this.moves = [];
+	this.attacks = [];
+
 	this._addRegularMoves();
 	this._addCastlingMoves();
-	return this;
 };
 
 King.prototype.canCastle = function(code, direction) {

@@ -23,9 +23,11 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 		this._addNextDirectionalMove(direction);
 	}, this);
 	
-	this._removePinnedMoves();
-	this._removeMovesNotHelpingCheckedKing();
-}
+	if (this.color == this.board._getCurrentColor()) {
+		this._removePinnedMoves();
+		this._removeMovesNotHelpingCheckedKing();
+	}
+};
 
 Piece.prototype._removePinnedMoves = function() {
 	var pinned = this.board.isPinned(this.idx);

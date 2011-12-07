@@ -1538,9 +1538,11 @@ Pawn.prototype = new Piece();
 
 Pawn.prototype.calculate = function() {
 	this.moves = [];
+	this.attacks = [];
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();
+	this._removeMovesNotHelpingCheckedKing();
 };
 
 Pawn.prototype.canCaptureEnPassant = function(idx) {
@@ -1551,7 +1553,7 @@ Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
 	if(this.board.isEmpty(square)) {
 		this.moves.push(square);
-		if((this.idx >= 16 && this.idx < 16 + 8) || (this.idx >= 96 && this.idx < 96 + 8)) {
+		if((this.color == 1 && this.idx >= 16 && this.idx < 16 + 8) || (this.color == -1 && this.idx >= 96 && this.idx < 96 + 8)) {
 			square = this.idx + (this.color * 32);
 			if(this.board.isEmpty(square)) {
 				this.moves.push(square);
@@ -1569,7 +1571,6 @@ Pawn.prototype._addCaptureMoves = function() {
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
 		}
-
 	}, this);
 };
 
@@ -1607,7 +1608,7 @@ Piece.prototype.addDirectionalMoves = function(directions) {
 	
 	this._removePinnedMoves();
 	this._removeMovesNotHelpingCheckedKing();
-}
+};
 
 Piece.prototype._removePinnedMoves = function() {
 	var pinned = this.board.isPinned(this.idx);
@@ -1684,8 +1685,10 @@ var King = function(idx, color, board) {
 	this.idx = idx;
 	this.color = color;
 	this.board = board;
-	this.moves = [];
+	
 	this.type = 3;
+	this.moves = [];
+	this.attacks = [];
 	
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
 	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
@@ -1788,6 +1791,7 @@ Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
 	this.moves = [];
+	this.attacks = [];
 	this._addRegularMoves();
 	this._removePinnedMoves();
 	this._removeMovesNotHelpingCheckedKing();
@@ -1943,8 +1947,8 @@ Board.prototype = {
 		var toIdx = this._posToIdx(to);
 		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
-			this._calculate();
 			this._updateArray(from, to);
+			this._calculate();
 		} else {
 			throw 'unable to move from ' + from + ' to ' + to;
 		}

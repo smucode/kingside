@@ -84,6 +84,11 @@ suite.addBatch({
             topic.move('h5', 'f7');
 			
 			var allMoves = __(topic._getPieces(-1)).chain().map(function(p) {
+				if (p.moves.length) {
+					console.log(topic._idxToPos(p.idx))
+					console.log(topic._idxToPos(100))
+					console.log(p.moves)
+				}
 				return p.moves;
 			}).flatten().value().length;
 			
