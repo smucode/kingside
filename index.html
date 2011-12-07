@@ -11,7 +11,7 @@
 	<body>
 		<script>
 			var rex = require('./Board');
-			var b = new rex.Board('rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2');
+			var b = new rex.Board();
 			
 			var fb = new FooBoard(b._fen.pieces);
 			fb.render(document.getElementsByTagName('body')[0]);
@@ -39,6 +39,36 @@
 				fb.highlight();
 			});
 			
+			var generateMove = function() {
+				if (b._fen.halfmove > 50) {
+					console.log('halfmoves');
+					return;
+				}
+				var pieces = __.shuffle(b._getPieces(b._getCurrentColor()));
+				var piece = __.find(pieces, function(p) {
+					return p.moves.length > 0;
+				});
+				if (piece) {
+					var target = __.shuffle(piece.moves)[0];
+					
+					var move = __.map([piece.idx, target], b._idxToPos, b);
+					var x = b._getPieceAt(target);
+					if (x && x.type == 3) {
+						console.warn(move);
+						return;
+					}
+					
+					console.log(move);
+					fb.move.apply(fb, move);
+					b.move.apply(b, move);
+					__.delay(generateMove, 1);
+				} else {
+					console.log('mate!');
+				}
+			};
+			
+			generateMove();
+
 		</script>
 	</body>
 </html>

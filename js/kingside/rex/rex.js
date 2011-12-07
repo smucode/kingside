@@ -1636,6 +1636,7 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	var target = this.idx + (offset * direction);
 	if (this.canMoveTo(target)) {
 		this.moves.push(target);
+		this.attacks.push(target);
 		this._addNextDirectionalMove(direction, ++offset);
 	} else {
 		if (this.canCapture(target)) {
@@ -2039,7 +2040,7 @@ Board.prototype = {
 	isAttacked: function(idx) {
 		var currentColor = this._getCurrentColor();
 		return __.detect(this._getPieces(currentColor * -1), function(p) {
-			return p.moves.indexOf(idx) != -1 || p.attacks.indexOf(idx) != -1;
+			return p.attacks.indexOf(idx) != -1;
 		});
 	},
 	

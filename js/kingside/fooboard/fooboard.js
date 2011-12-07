@@ -17,6 +17,15 @@ FooBoard.prototype.render = function(target) {
 	target.appendChild(this.table);
 };
 
+FooBoard.prototype.move = function(from, to) {
+	var fp = this.squares[from];
+	var tp = this.squares[to];
+	
+	// move images
+	tp.innerHTML = fp.innerHTML;
+	fp.innerHTML = '<img src="img/x.png" />';
+};
+
 FooBoard.prototype.highlight = function(squares) {
 	__.each(this.squares, function(dom, sq) {
 		var cl = dom.className;

@@ -6,6 +6,7 @@ var Pawn = function(idx, color, board) {
 	this.color = color;
 	this.board = board;
 	this.moves = [];
+	this.type = 1;
 };
 
 Pawn.prototype = new Piece();

@@ -106,7 +106,7 @@ suite.addBatch({
         'should be promoted to queen': function (topic) {
             topic.move('a7', 'a8');
             var p = topic._getPiece('a8');
-            assert.equal(p.moves.length, 15);			
+            assert.equal(p.moves.length, 21);			
         }
 
     }
