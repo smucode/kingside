@@ -160,5 +160,13 @@ vows.describe('King').addBatch({
 			var piece = topic._getPiece('a2');
 			assert.equal(piece.moves.length, 3);
 		}
+	},
+	'checked king can go to square pawn can move to but not capture' : {
+		topic : new Board('8/8/8/8/8/8/q2p4/2K5 w KQkq - 0 1'),
+
+		'king should have 1 move' : function(topic) {
+			var piece = topic._getPiece('c1');
+			assert.equal(piece.moves.length, 1);
+		}
 	}
 }).export(module);

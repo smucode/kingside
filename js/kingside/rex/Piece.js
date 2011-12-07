@@ -43,6 +43,7 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 	var target = this.idx + (offset * direction);
 	if (this.canMoveTo(target)) {
 		this.moves.push(target);
+		this.attacks.push(target);
 		this._addNextDirectionalMove(direction, ++offset);
 	} else {
 		if (this.canCapture(target)) {
