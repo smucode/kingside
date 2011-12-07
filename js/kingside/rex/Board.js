@@ -74,11 +74,16 @@ Board.prototype = {
 	
 	move: function(from, to) {
 		var source = this._getPiece(from);
+		if (!source) {
+			throw 'there is no piece to move';
+		}
 		if (this._getCurrentColor() != source.color) {
 			throw 'cannot move out of order';
 		}
-		
 		var toIdx = this._posToIdx(to);
+		if (source.moves.indexOf(toIdx) == -1) {
+			throw 'illegal move';
+		}
 		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
 			this._updateArray(from, to);
@@ -122,7 +127,7 @@ Board.prototype = {
 	isAttacked: function(idx) {
 		var currentColor = this._getCurrentColor();
 		return __.detect(this._getPieces(currentColor * -1), function(p) {
-			return p.moves.indexOf(idx) != -1;
+			return p.moves.indexOf(idx) != -1 || p.attacks.indexOf(idx) != -1;
 		});
 	},
 	

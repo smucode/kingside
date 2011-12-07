@@ -82,6 +82,14 @@ vows.describe('Pawn').addBatch({
 			var piece = topic._getPiece('b6');
 			assert.equal(piece.moves.length, 2);
 		}
+	},
+	'given a board where king is in checked by knight' : {
+		topic : new Board('kb6/8/1N6/8/8/8/8/8 b KQkq - 0 1'),
+
+		'only king should be able to move' : function(topic) {
+			var bishop = topic._getPiece('b8');
+			assert.equal(bishop.moves.length, 0);
+		},
 	}
 
 }).export(module);

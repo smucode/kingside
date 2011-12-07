@@ -144,5 +144,21 @@ vows.describe('King').addBatch({
 			var piece = topic._getPiece('e1');
 			assert.equal(piece.moves.length, 2);
 		}
+	},
+	'king should not be able to put himself in check' : {
+		topic : new Board('8/8/8/8/8/8/p7/K7 w KQkq - 0 1'),
+
+		'king should have two moves' : function(topic) {
+			var piece = topic._getPiece('a1');
+			assert.equal(piece.moves.length, 2);
+		}
+	},
+	'checked king must get out of check' : {
+		topic : new Board('r7/8/8/8/8/8/K7/8 w KQkq - 0 1'),
+
+		'king should have 1 move' : function(topic) {
+			var piece = topic._getPiece('a2');
+			assert.equal(piece.moves.length, 3);
+		}
 	}
 }).export(module);

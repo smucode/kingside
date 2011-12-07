@@ -9,6 +9,7 @@ var King = function(idx, color, board) {
 	this.type = 3;
 	this.moves = [];
 	this.attacks = [];
+	this.behindKing = null;
 	
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
 	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
@@ -18,7 +19,9 @@ King.prototype = new Piece();
 
 King.prototype.calculate = function() {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
+	this.pinning = {};
 
 	this._addRegularMoves();
 	this._addCastlingMoves();
@@ -50,13 +53,20 @@ King.prototype.isProtected = function(idx) {
 King.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
-		if ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target))) {
+		if (!this.isSquareBehindCheckedKing(target) && ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target)))) {
 			this.moves.push(target);
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
 		}
 	}, this);
+};
+
+King.prototype.isSquareBehindCheckedKing = function(square) {
+	var currentColor = this.board._getCurrentColor();
+	return __.detect(this.board._getPieces(currentColor * -1), function(p) {
+		return p.behindKing == square;
+	});
 };
 
 King.prototype._addCastlingMoves = function() {

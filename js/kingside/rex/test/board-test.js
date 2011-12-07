@@ -35,6 +35,12 @@ suite.addBatch({
         	
         	var moves = topic.getMoves('a7');
         	assert.equal(moves.length, 0);
+        },
+        
+        'erroneous move should throw': function(topic){
+        	assert.throws(function() { 
+        		topic.move('a1', 'b8');
+        	});
         }
     }
 });
@@ -84,15 +90,23 @@ suite.addBatch({
             topic.move('h5', 'f7');
 			
 			var allMoves = __(topic._getPieces(-1)).chain().map(function(p) {
-				if (p.moves.length) {
-					console.log(topic._idxToPos(p.idx))
-					console.log(topic._idxToPos(100))
-					console.log(p.moves)
-				}
 				return p.moves;
 			}).flatten().value().length;
 			
 			assert.equal(allMoves, 0);
+        }
+
+    }
+});
+
+suite.addBatch({
+	'a board where pawn can promote': {
+        topic: new board.Board('8/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+
+        'should be promoted to queen': function (topic) {
+            topic.move('a7', 'a8');
+            var p = topic._getPiece('a8');
+            assert.equal(p.moves.length, 15);			
         }
 
     }

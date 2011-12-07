@@ -1538,7 +1538,11 @@ Pawn.prototype = new Piece();
 
 Pawn.prototype.calculate = function() {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
+	this.pinning = {};
+	this.behindKing = null;
+	
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();
@@ -1551,7 +1555,7 @@ Pawn.prototype.canCaptureEnPassant = function(idx) {
 
 Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
-	if(this.board.isEmpty(square)) {
+	if(this.board.isOnBoard(square) && this.board.isEmpty(square)) {
 		this.moves.push(square);
 		if((this.color == 1 && this.idx >= 16 && this.idx < 16 + 8) || (this.color == -1 && this.idx >= 96 && this.idx < 96 + 8)) {
 			square = this.idx + (this.color * 32);
@@ -1567,6 +1571,12 @@ Pawn.prototype._addCaptureMoves = function() {
 		var target = this.idx + (this.color * 16) + direction;
 		if (this.canCapture(target) || this.canCaptureEnPassant(target)) {
 			this.moves.push(target);
+		}
+		if (this.canCapture(target)) {
+			var p = this.board._getPieceAt(target);
+			if (p.color != this.color && p.type == 3) {
+				this.checks = [this.idx];
+			}
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
@@ -1599,8 +1609,10 @@ Piece.prototype.canMoveTo = function(idx) {
 
 Piece.prototype.addDirectionalMoves = function(directions) {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
 	this.pinning = {};
+	this.behindKing = null;
 	
 	__.each(directions, function(direction) {
 		this._addNextDirectionalMove(direction);
@@ -1629,7 +1641,7 @@ Piece.prototype._addNextDirectionalMove = function(direction, offset) {
 		if (this.canCapture(target)) {
 			this.moves.push(target);
 			this._checkPinning(target, direction, offset);
-			this._checkKingAttacks(target, direction, offset)
+			this._checkKingAttacks(target, direction, offset);
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
@@ -1652,6 +1664,8 @@ Piece.prototype._checkKingAttacks = function(square, direction, offset) {
 	var piece = this.board._getPieceAt(square);
 	if (piece.type == 3) {
 		this.checks = [];
+		
+		this._setMoveBehindKing(direction, offset);
 		this._backtrackPinnedMoves(direction, --offset, this.checks);
 	}
 };
@@ -1666,7 +1680,13 @@ Piece.prototype._checkPinning = function(pinned, direction, offset) {
 			this.pinning[pinned] = [];
 			this._backtrackPinnedMoves(direction, offset, this.pinning[pinned]);
 		}
-		
+	}
+};
+
+Piece.prototype._setMoveBehindKing = function(direction, offset) {
+	var behind = this.idx + ((offset + 1) * direction);
+	if (this.canMoveTo(behind)) {
+		this.behindKing = behind;
 	}
 };
 
@@ -1676,7 +1696,7 @@ Piece.prototype._backtrackPinnedMoves = function(direction, offset, arr) {
 	if (target != this.idx) {
 		this._backtrackPinnedMoves(direction, --offset, arr);
 	}
-}
+};
 
 exports.Piece = Piece;
 });
@@ -1693,6 +1713,7 @@ var King = function(idx, color, board) {
 	this.type = 3;
 	this.moves = [];
 	this.attacks = [];
+	this.behindKing = null;
 	
 	this._castlingIdx = (this.color == 1) ? 4 : (4 + (16 * 7));
 	this._castling = (this.color == 1) ? {Q: -1, K: 1} : {q: -1, k: 1};
@@ -1702,7 +1723,9 @@ King.prototype = new Piece();
 
 King.prototype.calculate = function() {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
+	this.pinning = {};
 
 	this._addRegularMoves();
 	this._addCastlingMoves();
@@ -1734,13 +1757,20 @@ King.prototype.isProtected = function(idx) {
 King.prototype._addRegularMoves = function() {
 	__.each(this.DIRECTIONS, function(direction) {
 		var target = this.idx + direction;
-		if ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target))) {
+		if (!this.isSquareBehindCheckedKing(target) && ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target)))) {
 			this.moves.push(target);
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
 		}
 	}, this);
+};
+
+King.prototype.isSquareBehindCheckedKing = function(square) {
+	var currentColor = this.board._getCurrentColor();
+	return __.detect(this.board._getPieces(currentColor * -1), function(p) {
+		return p.behindKing == square;
+	});
 };
 
 King.prototype._addCastlingMoves = function() {
@@ -1797,7 +1827,11 @@ Knight.prototype = new Piece();
 
 Knight.prototype.calculate = function() {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
+	this.pinning = {};
+	this.behindKing = null;
+
 	this._addRegularMoves();
 	this._removePinnedMoves();
 	this._removeMovesNotHelpingCheckedKing();
@@ -1808,6 +1842,12 @@ Knight.prototype._addRegularMoves = function() {
 		var target = this.idx + direction;
 		if (this.canMoveTo(target) || this.canCapture(target)) {
 			this.moves.push(target);
+		}
+		if (this.canCapture(target)) {
+			var p = this.board._getPieceAt(target);
+			if (p.color != this.color && p.type == 3) {
+				this.checks = [this.idx];
+			}
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
@@ -1946,11 +1986,16 @@ Board.prototype = {
 	
 	move: function(from, to) {
 		var source = this._getPiece(from);
+		if (!source) {
+			throw 'there is no piece to move';
+		}
 		if (this._getCurrentColor() != source.color) {
 			throw 'cannot move out of order';
 		}
-		
 		var toIdx = this._posToIdx(to);
+		if (source.moves.indexOf(toIdx) == -1) {
+			throw 'illegal move';
+		}
 		if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
 			this._fen.move(from, to);
 			this._updateArray(from, to);
@@ -1994,7 +2039,7 @@ Board.prototype = {
 	isAttacked: function(idx) {
 		var currentColor = this._getCurrentColor();
 		return __.detect(this._getPieces(currentColor * -1), function(p) {
-			return p.moves.indexOf(idx) != -1;
+			return p.moves.indexOf(idx) != -1 || p.attacks.indexOf(idx) != -1;
 		});
 	},
 	

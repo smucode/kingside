@@ -12,7 +12,11 @@ Pawn.prototype = new Piece();
 
 Pawn.prototype.calculate = function() {
 	this.moves = [];
+	this.checks = [];
 	this.attacks = [];
+	this.pinning = {};
+	this.behindKing = null;
+	
 	this._addRegularMoves();
 	this._addCaptureMoves();
 	this._removePinnedMoves();
@@ -25,7 +29,7 @@ Pawn.prototype.canCaptureEnPassant = function(idx) {
 
 Pawn.prototype._addRegularMoves = function() {
 	var square = this.idx + (this.color * 16);
-	if(this.board.isEmpty(square)) {
+	if(this.board.isOnBoard(square) && this.board.isEmpty(square)) {
 		this.moves.push(square);
 		if((this.color == 1 && this.idx >= 16 && this.idx < 16 + 8) || (this.color == -1 && this.idx >= 96 && this.idx < 96 + 8)) {
 			square = this.idx + (this.color * 32);
@@ -41,6 +45,12 @@ Pawn.prototype._addCaptureMoves = function() {
 		var target = this.idx + (this.color * 16) + direction;
 		if (this.canCapture(target) || this.canCaptureEnPassant(target)) {
 			this.moves.push(target);
+		}
+		if (this.canCapture(target)) {
+			var p = this.board._getPieceAt(target);
+			if (p.color != this.color && p.type == 3) {
+				this.checks = [this.idx];
+			}
 		}
 		if (this.board.isOnBoard(target)) {
 			this.attacks.push(target);
