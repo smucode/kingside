@@ -59,8 +59,13 @@
 					}
 					
 					console.log(b._fen.fullmove, move);
+					var m = b.move.apply(b, move);
+					
+					if (m.status == 'promotion') {
+						move.push(true);
+					}
 					fb.move.apply(fb, move);
-					b.move.apply(b, move);
+					
 					__.delay(generateMove, 1);
 				} else {
 					console.log('mate!');

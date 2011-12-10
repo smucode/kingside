@@ -57,7 +57,7 @@ vows.describe('King').addBatch({
 			assert.equal(piece.moves.length, 4);
 		}
 	},
-	'kings with free path to the rooks and no castling rights' : {
+	'white king with free path to the rooks and no castling rights' : {
 		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1'),
 
 		'white king should have 2 moves' : function(topic) {
@@ -65,7 +65,7 @@ vows.describe('King').addBatch({
 			assert.equal(piece.moves.length, 2);
 		}
 	},
-	'kings with free path to the rooks and no castling rights' : {
+	'black king with free path to the rooks and no castling rights' : {
 		topic : new Board('r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b - - 0 1'),
 
 		'black king should have 2 moves' : function(topic) {

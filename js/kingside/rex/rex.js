@@ -1935,6 +1935,35 @@ Board.prototype = {
 	
 	_files: 'abcdefgh',
 	
+	move: function(from, to) {
+		var source = this._getPiece(from);
+		if (!source) {
+			throw 'there is no piece to move';
+		}
+		if (this._getCurrentColor() != source.color) {
+			throw 'cannot move out of order';
+		}
+		var toIdx = this._posToIdx(to);
+		if (source.moves.indexOf(toIdx) == -1) {
+			throw 'illegal move';
+		}
+		
+		if (source.type == 1 && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
+			this._fen.move(from, to);
+			this._updateArray(from, to);
+			this._board[toIdx] = Factory.create(source.color == '1' ? 'Q' : 'q', toIdx, this);
+			this._calculate();
+			return { status: 'promotion' };
+		} else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
+			this._fen.move(from, to);
+			this._updateArray(from, to);
+			this._calculate();
+			return { status: 'move' };
+		} else {
+			throw 'unable to move from ' + from + ' to ' + to;
+		}
+	},
+	
 	_posToIdx: function(pos) {
 		if (!pos || typeof pos != 'string' || !pos.match(/[a-h]{1}[0-8]{1}/)) {
 			throw 'illegal pos ' + pos;
@@ -1984,35 +2013,6 @@ Board.prototype = {
 		__.each(this._getPieces(currentColor), function(p) {
 			p.calculate();
 		});
-	},
-	
-	move: function(from, to) {
-		var source = this._getPiece(from);
-		if (!source) {
-			throw 'there is no piece to move';
-		}
-		if (this._getCurrentColor() != source.color) {
-			throw 'cannot move out of order';
-		}
-		var toIdx = this._posToIdx(to);
-		if (source.moves.indexOf(toIdx) == -1) {
-			throw 'illegal move';
-		}
-		
-		if (source.type == 1 && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
-			this._fen.move(from, to);
-			this._updateArray(from, to);
-			
-			this._board[toIdx] = Factory.create(source.color == '1' ? 'Q' : 'q', toIdx, this);
-			
-			this._calculate();
-		} else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
-			this._fen.move(from, to);
-			this._updateArray(from, to);
-			this._calculate();
-		} else {
-			throw 'unable to move from ' + from + ' to ' + to;
-		}
 	},
 	
 	_updateArray: function(from, to) {

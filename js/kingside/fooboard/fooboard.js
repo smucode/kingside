@@ -17,12 +17,16 @@ FooBoard.prototype.render = function(target) {
 	target.appendChild(this.table);
 };
 
-FooBoard.prototype.move = function(from, to) {
+FooBoard.prototype.move = function(from, to, promotion) {
 	var fp = this.squares[from];
 	var tp = this.squares[to];
 	
 	// move images
-	tp.innerHTML = fp.innerHTML;
+	if (promotion) {
+		tp.innerHTML = fp.innerHTML.indexOf('bp.png') != -1 ? '<img src="img/bq.png" />' : '<img src="img/wq.png" />'; 
+	} else {
+		tp.innerHTML = fp.innerHTML;
+	}
 	fp.innerHTML = '<img src="img/x.png" />';
 };
 

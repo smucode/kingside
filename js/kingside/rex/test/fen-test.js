@@ -57,20 +57,16 @@ vows.describe('Fen').addBatch({
 		'to a occupied square should reduce the number of pieces': function(topic) {
 			topic.move('b1', 'b2');
 			assert.equal(__.size(topic.pieces), 31);
-		}
-	},
-	'moving a piece' : {
-		topic : new Fen(),
-		
+		},
 		'should change the active color': function(topic) {
-			topic.move('a2', 'a3');
+			topic.move('c2', 'c3');
 			assert.equal(topic.activeColor, 'b');
 			
-			topic.move('a3', 'a4');
+			topic.move('c3', 'c4');
 			assert.equal(topic.activeColor, 'w');
 		}
 	},
-	'given a full board' : {
+	'given a full board 1' : {
 		topic : new Fen(),
 		
 		'all castling should be allowed': function(topic) {
@@ -108,7 +104,7 @@ vows.describe('Fen').addBatch({
 			assert.isFalse(topic.canCastle('q'));
 		}
 	},
-	'given a full board' : {
+	'given a full board 2' : {
 		topic : new Fen(),
 		
 		'moving white king should disable all white castling': function(topic) {
@@ -126,7 +122,7 @@ vows.describe('Fen').addBatch({
 			assert.isFalse(topic.canCastle('q'));
 		}
 	},
-	'given a full board' : {
+	'given a full board 3' : {
 		topic : new Fen(),
 		
 		'moving pawn at a2 to a4 should a3 should be marked as en passant square': function(topic) {
@@ -145,7 +141,7 @@ vows.describe('Fen').addBatch({
 			assert.equal(topic.enPassant, '-');
 		}
 	},
-	'given a full board' : {
+	'given a full board 4' : {
 		topic : new Fen(),
 		
 		'moving a pawn should reset the halfmove clock': function(topic) {
