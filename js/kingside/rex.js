@@ -1916,6 +1916,20 @@ require.define("/Board.js", function (require, module, exports, __dirname, __fil
 var Fen = require('./Fen').Fen;
 var Factory = require('./PieceFactory').PieceFactory;
 
+/*
+	todo: spilt board into game and board?
+	- game
+		everything related to rules of the game
+		public methods
+		
+		var g = name Game();
+		var status = g.initialize(fen);
+		status = g.move('foo', 'bar');
+		g.onMove(l);
+		
+	- board
+*/
+
 var Board = function(fen) {
 	this._fen = new Fen(fen);
 	this._board = new Array(128);
@@ -1925,6 +1939,7 @@ var Board = function(fen) {
 		this._board[idx] = Factory.create(piece, idx, this);
 	}, this);
 	
+	this._state = {};
 	this._calculate();
 };
 
@@ -1933,6 +1948,7 @@ Board.prototype = {
 	WHITE: 1,
 	BLACK: -1,
 	
+	_state: 'move',
 	_files: 'abcdefgh',
 	
 	move: function(from, to) {
@@ -1948,20 +1964,39 @@ Board.prototype = {
 			throw 'illegal move';
 		}
 		
+		this._state = {};
+		
 		if (source.type == 1 && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
 			this._fen.move(from, to);
 			this._updateArray(from, to);
-			this._board[toIdx] = Factory.create(source.color == '1' ? 'Q' : 'q', toIdx, this);
+			
+			var pieceType = source.color == '1' ? 'Q' : 'q';
+			this._board[toIdx] = Factory.create(pieceType, toIdx, this);
+			this._state.promotion = pieceType;
+			
 			this._calculate();
-			return { status: 'promotion' };
 		} else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
+			if (this._fen.enPassant == to) {
+				this._state.enPassantCapture = to[0] + from[1];
+			}
+			
 			this._fen.move(from, to);
 			this._updateArray(from, to);
-			this._calculate();
-			return { status: 'move' };
+			
+			if (this._fen.halfmove >= 50) {
+				this._state.finished = 'halfmoves';
+			} else {
+				this._calculate();
+			}
+			
 		} else {
 			throw 'unable to move from ' + from + ' to ' + to;
 		}
+		return this._state;
+	},
+	
+	getState: function() {
+		return this._state;
 	},
 	
 	_posToIdx: function(pos) {
@@ -2007,12 +2042,29 @@ Board.prototype = {
 	
 	_calculate: function() {
 		var currentColor = this._getCurrentColor();
+		
+		var moves = [];
+		var attacked = [];
+		
 		__.each(this._getPieces(currentColor * -1), function(p) {
 			p.calculate();
+			attacked = __.union(attacked, p.attacks);
 		});
 		__.each(this._getPieces(currentColor), function(p) {
 			p.calculate();
-		});
+			moves = moves.concat(p.moves);
+			if (p.type == 3 && attacked.indexOf(p.idx) != -1) {
+				this._state.check = true;
+			}
+		}, this);
+		
+		if (moves.length === 0) {
+			if (this._state.check) {
+				this._state.finished = 'checkmate';
+			} else {
+				this._state.finished = 'stalemate';
+			}
+		}
 	},
 	
 	_updateArray: function(from, to) {
@@ -2094,6 +2146,7 @@ Board.prototype = {
 };
 
 exports.Board = Board;
+
 
 });
 require("/Board.js");

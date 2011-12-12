@@ -31,7 +31,12 @@ vows.describe('Pawn').addBatch({
 		'it should have two valid moves' : function(topic) {
 			var pawn = topic._getPiece('a5');
 			assert.equal(pawn.moves.length, 2);
+		},
+		'capturing enpassant should give correct status' : function(topic) {
+			var status = topic.move('a5', 'b6');
+			assert.equal(status.enPassantCapture, 'b5');
 		}
+		
 	},
 	'given a board with a pinned pawn' : {
 		topic : new Board('r7/8/8/8/8/1p6/P7/K7 w KQkq - 0 1'),

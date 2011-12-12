@@ -8,9 +8,7 @@ var Pawn = require('../Pawn').Pawn;
 var Rook = require('../Rook').Rook;
 var Queen = require('../Queen').Queen;
 
-var suite = vows.describe('Board');
-
-suite.addBatch({
+vows.describe('Board').addBatch({
 	'when creating a board with empty ctor' : {
 		topic : new board.Board(),
 
@@ -36,10 +34,7 @@ suite.addBatch({
 				topic.move('a1', 'b8');
 			});
 		}
-	}
-});
-
-suite.addBatch({
+	},
 	'creating a board with the initial configuration' : {
 		topic : new board.Board(),
 
@@ -62,11 +57,8 @@ suite.addBatch({
 				topic.move('e5', 'e4');
 			});
 		}
-	}
-});
-
-suite.addBatch({
-	'creating a board with the initial configuration' : {
+	},
+	'testing scolars mate' : {
 		topic : new board.Board(),
 
 		'scholars mate should cause mate' : function(topic) {
@@ -76,18 +68,16 @@ suite.addBatch({
 			topic.move('b8', 'c6');
 			topic.move('f1', 'c4');
 			topic.move('g8', 'f6');
-			topic.move('h5', 'f7');
+			var move = topic.move('h5', 'f7');
 
 			var allMoves = __(topic._getPieces(-1)).chain().map(function(p) {
 				return p.moves;
 			}).flatten().value().length;
 
 			assert.equal(allMoves, 0);
+			assert.equal(move.finished, 'checkmate');
 		}
-	}
-});
-
-suite.addBatch({
+	},
 	'a board where pawn can promote' : {
 		topic : new board.Board('8/P7/8/8/8/8/8/8 w KQkq - 0 1'),
 
@@ -95,12 +85,35 @@ suite.addBatch({
 			var move = topic.move('a7', 'a8');
 			var p = topic._getPiece('a8');
 			assert.equal(p.moves.length, 21);
-			assert.equal(move.status, 'promotion');
+			assert.equal(move.promotion, 'Q');
 		}
-	}
-});
+	},
+	'a board where no piece can move' : {
+		topic : new board.Board('k7/2Q5/8/8/8/8/8/8 b KQkq - 0 1'),
 
-suite.addBatch({
+		'is stalemate' : function(topic) {
+			var p = topic._getPiece('a8');
+			assert.equal(p.moves.length, 0);
+			assert.equal(topic.getState().finished, 'stalemate');
+		}
+	},
+	'a board where king is attacked' : {
+		topic : new board.Board('k7/Q7/8/8/8/8/8/8 b KQkq - 0 1'),
+
+		'is in check' : function(topic) {
+			var p = topic._getPiece('a8');
+			assert.equal(p.moves.length, 1);
+			assert.isTrue(topic.getState().check);
+		}
+	},
+	'a board with no real move in 49 moves' : {
+		topic : new board.Board('k7/8/8/8/8/8/8/P7 b - - 49 1'),
+
+		'should be finished due to halfmoves' : function(topic) {
+			topic.move('a8', 'b8');
+			assert.equal(topic.getState().finished, 'halfmoves');
+		}
+	},
 	'creating a board' : {
 		topic : new board.Board('p6R/p7/p2p5/p7/8/8/8/k6Q w KQkq - 0 1'),
 
@@ -131,10 +144,7 @@ suite.addBatch({
 		'a5 should contain a piece' : function(topic) {
 			assert.instanceOf(topic._getPiece('a5'), Pawn);
 		}
-	}
-});
-
-suite.addBatch({
+	},
 	'when resolving pos to idx' : {
 		topic : new board.Board(),
 
@@ -160,10 +170,7 @@ suite.addBatch({
 				topic._posToIdx('x6');
 			});
 		}
-	}
-});
-
-suite.addBatch({
+	},
 	'testing move' : {
 		topic : new board.Board(),
 
@@ -174,12 +181,9 @@ suite.addBatch({
 		},
 		'a2a3 should work' : function(topic) {
 			var move = topic.move('a2', 'a3');
-			assert.equal(move.status, 'move');
+			assert.ok(move);
 		}
-	}
-});
-
-suite.addBatch({
+	},
 	'when resolving idx to pos' : {
 		topic : new board.Board(),
 
@@ -201,6 +205,4 @@ suite.addBatch({
 			});
 		}
 	}
-});
-
-suite["export"](module);
+})["export"](module);
