@@ -39,4 +39,4 @@ vows.describe('Bishop').addBatch({
 			assert.equal(piece.moves.length, 0);
 		}
 	}
-}).export(module);
+})["export"](module);

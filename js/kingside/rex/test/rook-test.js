@@ -65,4 +65,4 @@ vows.describe('Rook').addBatch({
 			assert.equal(piece.moves.length, 1);
 		}
 	}
-}).export(module);
+})["export"](module);

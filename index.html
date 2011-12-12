@@ -6,7 +6,7 @@
 		<script src="js/less/less.js" type="text/javascript"></script>
 		<script src="js/ender/ender.min.js" type="text/javascript"></script>
 		<script src="js/kingside/fooboard/fooboard.js" type="text/javascript"></script>
-		<script src="js/kingside/rex/rex.min.js" type="text/javascript"></script>
+		<script src="js/kingside/rex.min.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<script>
@@ -66,7 +66,7 @@
 					}
 					fb.move.apply(fb, move);
 					
-					__.delay(generateMove, 1);
+					__.delay(generateMove, 100);
 				} else {
 					console.log('mate!');
 				}

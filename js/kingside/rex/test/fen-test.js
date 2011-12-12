@@ -195,4 +195,4 @@ vows.describe('Fen').addBatch({
 		}
 	}	
 
-}).export(module);
+})["export"](module);

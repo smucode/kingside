@@ -73,4 +73,4 @@ vows.describe('Pawn').addBatch({
 			assert.equal(bishop.moves.length, 0);
 		}
 	}
-}).export(module);
+})["export"](module);

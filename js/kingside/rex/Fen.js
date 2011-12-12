@@ -129,7 +129,7 @@ Fen.prototype._parseActiveColor = function(col) {
 };
 
 Fen.prototype._parseCastling = function(str) {
-	if (str.match(/[wqWQ-].*/)) {
+	if (str.match(/[wqWQ\-].*/)) {
 		this.castling = str.split('');
 	} else {
 		throw new Exception('Illegal castling string: ' + str);

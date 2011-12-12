@@ -16,4 +16,4 @@ vows.describe('Piece').addBatch({
 			assert.equal(p.moves.length, 1);
 		}
 	}
-}).export(module);
+})["export"](module);

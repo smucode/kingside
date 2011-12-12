@@ -17,4 +17,4 @@ vows.describe('PieceFactory').addBatch({
 			assert.instanceOf(pawn, Pawn);
 		}
 	}
-}).export(module);
+})["export"](module);

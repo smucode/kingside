@@ -31,4 +31,4 @@ vows.describe('Queen').addBatch({
 			assert.equal(piece.moves.length, 3);
 		}
 	}
-}).export(module);
+})["export"](module);

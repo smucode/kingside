@@ -89,7 +89,7 @@ vows.describe('Pawn').addBatch({
 		'only king should be able to move' : function(topic) {
 			var bishop = topic._getPiece('b8');
 			assert.equal(bishop.moves.length, 0);
-		},
+		}
 	}
 
-}).export(module);
+})["export"](module);
