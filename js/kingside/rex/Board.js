@@ -78,6 +78,10 @@ Board.prototype = {
 		} else {
 			throw 'unable to move from ' + from + ' to ' + to;
 		}
+		
+		this._state.to = to;
+		this._state.from = from;
+		this._state.active = this._fen.activeColor;
 		return this._state;
 	},
 	

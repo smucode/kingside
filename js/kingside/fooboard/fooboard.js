@@ -21,13 +21,17 @@ FooBoard.prototype.move = function(from, to, promotion) {
 	var fp = this.squares[from];
 	var tp = this.squares[to];
 	
+	var toImg = $('img', tp);
+	var fromImg = $('img', fp);
+	
 	// move images
 	if (promotion) {
-		tp.innerHTML = fp.innerHTML.indexOf('bp.png') != -1 ? '<img src="img/bq.png" />' : '<img src="img/wq.png" />'; 
+		var src = fromImg.attr('src').indexOf('bp.png') != -1 ? 'img/bq.png' : 'img/wq.png'; 
+		toImg.attr('src', src);
 	} else {
-		tp.innerHTML = fp.innerHTML;
+		toImg.attr('src', fromImg.attr('src'));
 	}
-	fp.innerHTML = '<img src="img/x.png" />';
+	fromImg.attr('src', 'img/x.png');
 };
 
 FooBoard.prototype.highlight = function(squares) {

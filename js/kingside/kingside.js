@@ -1,67 +1,91 @@
 $.domReady(function() {
 	
+	// todo: add support for require.js (elns)
+	// desperately need some sort of package system
+	
 	var rex = require('./Board');
-	var b = new rex.Board();
 	
-	var fb = new FooBoard(b._fen.pieces);
-	fb.render(document.getElementsByTagName('body')[0]);
+	var ks = {};
 	
-	bean.add(fb, 'down', function(pos) {
-		var moves = b.getMoves(pos);
-		if (moves && moves.length > 0) {
-			moves.push(pos);
-		}
-		fb.highlight(moves);
-	});
+	// Board
 	
-	bean.add(fb, 'up', function() {
-		fb.highlight();
-	});
-	
-	bean.add(fb, 'over', function(pos) {
-		var moves = b.getMoves(pos);
-		if (moves && moves.length > 0) {
-			fb.highlight([pos]);
-		}
-	});
-	
-	bean.add(fb, 'out', function() {
-		fb.highlight();
-	});
-	
-	var generateMove = function() {
-		if (b._fen.halfmove > 50) {
-			console.log('halfmoves');
-			return;
-		}
-		var pieces = __.shuffle(b._getPieces(b._getCurrentColor()));
-		var piece = __.find(pieces, function(p) {
-			return p.moves.length > 0;
+	ks.Board = function() {
+		this.rex = new rex.Board();
+		var fb = new FooBoard(this.rex._fen.pieces);
+		fb.render(document.getElementsByTagName('body')[0]);
+		
+		bean.add(this, 'onMove', function(status) {
+			fb.move(status.from, status.to);
 		});
-		if (piece) {
-			var target = __.shuffle(piece.moves)[0];
-			
-			var move = __.map([piece.idx, target], b._idxToPos, b);
-			var x = b._getPieceAt(target);
-			if (x && x.type == 3) {
-				console.warn(move);
-				return;
+		
+		var getAn = function(img) {
+			return img.parentNode.getAttribute('xan');
+		};
+		
+		var that = this;
+		var source = null;
+		
+		$('img').dagron({
+			'target': 'img',
+			'start': function(img) {
+				var an = getAn(img);
+				source = an;
+			},
+			'drop': function(img) {
+				var an = getAn(img);
+				that.move(source, an);
+				// b.move(source, an);
+				// fb.move(source, an);
 			}
-			
-			console.log(b._fen.fullmove, move);
-			var m = b.move.apply(b, move);
-			
-			if (m.status == 'promotion') {
-				move.push(true);
-			}
-			fb.move.apply(fb, move);
-			
-			__.delay(generateMove, 100);
-		} else {
-			console.log('mate!');
+		});
+	};
+	
+	ks.Board.prototype.move = function(from, to) {
+		try {
+			var status = this.rex.move(from, to);
+			bean.fire(this, 'onMove', status);
+		} catch (err) {
+			console.error(err)
+			bean.fire(this, 'onError', err);
 		}
 	};
-			
-	generateMove();
+	
+	// Computer
+	
+	ks.Noobolainen = function(board) {
+		
+		var b = board.rex;
+		
+		bean.add(board, 'onMove', function(status) {
+			if (!status.finished && status.active == 'b') {
+				generateMove();
+			}
+		});
+		
+		var generateMove = function() {
+			var pieces = __.shuffle(b._getPieces(b._getCurrentColor()));
+			var piece = __.find(pieces, function(p) {
+				return p.moves.length > 0;
+			});
+			if (piece) {
+				var target = __.shuffle(piece.moves)[0];
+				
+				var move = __.map([piece.idx, target], b._idxToPos, b);
+				var x = b._getPieceAt(target);
+				if (x && x.type == 3) {
+					console.warn(move);
+					return;
+				}
+				
+				console.log(b._fen.fullmove, move);
+				board.move.apply(board, move);
+			} else {
+				alert('wtf!');
+			}
+		};
+	};
+	
+	var board = new ks.Board();
+	var cpu = new ks.Noobolainen(board);
 	
 });
