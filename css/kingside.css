@@ -19,24 +19,18 @@ table.foo-board {
 		display: block;
 	}
 	
-	.light {
+	.light, .dark {
+		width: 30px;
+		height: 30px;
 		cursor: default;
+	}
+	
+	.light {
 		background: #fff;
 	}
 	
 	.dark {
-		cursor: default;
 		background: #d6d6d6;
-	}
-	
-	.light-hl {
-		cursor: pointer;
-		background: #aaa;
-	}
-	
-	.dark-hl {
-		cursor: pointer;
-		background: #bbb;
 	}
 	
 	.legend {
