@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "underscore"], function(require, exports, module) {
 var __ = require('underscore');
 
 var Piece = function() {
@@ -107,3 +110,4 @@ Piece.prototype._backtrackPinnedMoves = function(direction, offset, arr) {
 };
 
 exports.Piece = Piece;
+});

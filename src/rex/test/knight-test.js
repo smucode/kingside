@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "underscore","vows","assert","../Knight","../Board"], function(require, exports, module) {
 var __ = require('underscore');
 
 var vows = require('vows');
@@ -93,3 +96,5 @@ vows.describe('Pawn').addBatch({
 	}
 
 })["export"](module);
+
+});

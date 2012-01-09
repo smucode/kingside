@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "underscore","./Piece"], function(require, exports, module) {
 var __ = require('underscore');
 var Piece = require('./Piece').Piece;
 
@@ -43,3 +46,5 @@ Knight.prototype._addRegularMoves = function() {
 Knight.prototype.DIRECTIONS = [16 - 2, 16 + 2, 32 - 1, 32 + 1, -16 - 2, -16 + 2, -32 - 1, -32 + 1];
 
 exports.Knight = Knight;
+
+});

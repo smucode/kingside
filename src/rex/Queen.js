@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "underscore","./Piece"], function(require, exports, module) {
 var __ = require('underscore');
 
 var Piece = require('./Piece').Piece;
@@ -18,3 +21,5 @@ Queen.prototype.calculate = function() {
 Queen.prototype.OFFSETS = [-1, 1, 16 - 1, 16, 16 + 1, -16 - 1, -16, -16 + 1];
 
 exports.Queen = Queen;
+
+});

@@ -1,14 +1,15 @@
-define('kingside', ['src/fooboard/fooboard', 'src/rex/Board'], function(FooBoard, bar) {
-	
-	console.log(bar);
-	
+define('kingside', ['src/fooboard/fooboard', 'src/rex/Board'], function(FooBoard, Rex) {
 	$(function() {
 		var fb = new FooBoard({
 			target: $('body')[0]
 		});
+		
+		var rex = new Rex.Board();
+		
 		fb.update({
-			board: {a2: 'p'}
+			board: rex._fen.pieces
 		});
+		
 	});
 });
 

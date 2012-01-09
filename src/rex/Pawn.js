@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "underscore","./Piece"], function(require, exports, module) {
 var __ = require('underscore');
 var Piece = require('./Piece').Piece;
 
@@ -62,3 +65,5 @@ Pawn.prototype._addCaptureMoves = function() {
 Pawn.prototype._CAPTURE_DIRECTIONS = [1, -1];
 
 exports.Pawn = Pawn;
+
+});

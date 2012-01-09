@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "vows","assert","../Pawn","../Board"], function(require, exports, module) {
 var vows = require('vows'), assert = require('assert');
 
 var Pawn = require('../Pawn').Pawn;
@@ -79,3 +82,5 @@ vows.describe('Pawn').addBatch({
 		}
 	}
 })["export"](module);
+
+});

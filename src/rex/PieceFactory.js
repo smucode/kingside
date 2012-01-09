@@ -1,3 +1,6 @@
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+define(["require", "exports", "module", "./Pawn","./King","./Rook","./Knight","./Bishop","./Queen"], function(require, exports, module) {
 var Pawn = require('./Pawn').Pawn;
 var King = require('./King').King;
 var Rook = require('./Rook').Rook;
@@ -60,3 +63,4 @@ var PieceFactory = (function (){
 }());
 
 exports.PieceFactory = PieceFactory;
+});
