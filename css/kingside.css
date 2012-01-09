@@ -21,7 +21,7 @@ table.foo-board {
 	
 	.light, .dark {
 		width: 30px;
-		height: 30px;
+		height: 32px;
 		cursor: default;
 	}
 	

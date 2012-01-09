@@ -53,11 +53,16 @@ define(['underscore'], function(_) {
 	};
 	
 	FooBoard.prototype._makeDroppable = function(node) {
+	    var that = this;
 	    $(node).droppable({
 	        drop: function(event, ui) {
                 var source = ui.draggable.parent().attr('_pos');
                 var target = $(this).attr('_pos');
-	            console.log(source, target);
+                
+                if (source != target) {
+    	            var img = ui.draggable.remove();
+    	            that._setImage(target, img.attr('_type'));
+                }
 	        }
 	    });
 	};
@@ -83,8 +88,10 @@ define(['underscore'], function(_) {
 	FooBoard.prototype._setImage = function(pos, piece) {
 		var td = this.squares[pos];
 		var type = this._imgMap[piece];
-		td.innerHTML = '<img src="img/' + type +'.png" />';
-		$(td).find('img').draggable();
+		td.innerHTML = '<img src="img/' + type +'.png" _type=' + piece + ' />';
+		$(td).find('img').draggable({
+		    revert: true
+		});
 	};
 
 	FooBoard.prototype._attachEvents = function() {
