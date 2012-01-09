@@ -1,5 +1,6 @@
 define('kingside', ['src/fooboard/fooboard', 'src/rex/Board'], function(FooBoard, Rex) {
 	$(function() {
+	    
 		var fb = new FooBoard({
 			target: $('body')[0]
 		});

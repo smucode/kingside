@@ -11,7 +11,6 @@ define(['underscore'], function(_) {
 		this.ranks = '87654321x'.split('');
 		
 		this._create();
-		this._attachEvents();
 		this.render();
 	};
 	
@@ -44,10 +43,23 @@ define(['underscore'], function(_) {
 			var tr = this._c('tr');
 			_.each(this.files, function(file) {
 				var td = this._createTd(file, rank);
+				if (file != 'x' || rank != 'x') {
+    				this._makeDroppable(td);
+				}
 				tr.appendChild(td);
 			}, this);
 			this.table.appendChild(tr);
 		}, this);
+	};
+	
+	FooBoard.prototype._makeDroppable = function(node) {
+	    $(node).droppable({
+	        drop: function(event, ui) {
+                var source = ui.draggable.parent().attr('_pos');
+                var target = $(this).attr('_pos');
+	            console.log(source, target);
+	        }
+	    });
 	};
 
 	FooBoard.prototype._createTd = function(file, rank) {
@@ -72,32 +84,11 @@ define(['underscore'], function(_) {
 		var td = this.squares[pos];
 		var type = this._imgMap[piece];
 		td.innerHTML = '<img src="img/' + type +'.png" />';
+		$(td).find('img').draggable();
 	};
 
 	FooBoard.prototype._attachEvents = function() {
-		$.bind(this.table, 'mousedown', _.bind(function(args) {
-			var target = args.target;
-			var pos = target.parentNode.getAttribute('xan');
-			if (pos) {
-				bean.fire(this, 'down', pos);
-			}
-		}, this));
-		
-		$.bind(this.table, 'mouseup', _.bind(function(args) {
-			bean.fire(this, 'up');
-		}, this));
-		
-		$.bind(this.table, 'mouseover', _.bind(function(args) {
-			var target = args.target;
-			var pos = target.parentNode.getAttribute('xan');
-			if (pos) {
-				bean.fire(this, 'over', pos);
-			}
-		}, this));
-		
-		$.bind(this.table, 'mouseout', _.bind(function(args) {
-			bean.fire(this, 'out');
-		}, this));
+		$(this.table).find('img').draggable();
 	};
 	
 	FooBoard.prototype._c = function(tagName) {
