@@ -25,31 +25,17 @@ define(["require", "underscore","./Fen","./PieceFactory"], function(require, __,
         
         move: function(from, to) {
             var source = this._getPiece(from);
-            if (!source) {
-                throw 'there is no piece to move';
-            }
-            if (this._getCurrentColor() != source.color) {
-                throw 'cannot move out of order';
-            }
+            this._verifyMove(source);
             var toIdx = this._posToIdx(to);
-            if (source.moves.indexOf(toIdx) == -1) {
-                throw 'illegal move';
-            }
+            this._verifyIndex(source, toIdx);
             
             this._state = {};
-            
-            if (source.type == 1 && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
-                this._fen.move(from, to);
-                this._updateArray(from, to);
-                
-                var pieceType = source.color == '1' ? 'Q' : 'q';
-                this._board[toIdx] = Factory.create(pieceType, toIdx, this);
-                this._state.promotion = pieceType;
-                
-                this._calculate();
+        
+            if (source.is('PAWN') && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
+                this._promotePawn(from, to, source, toIdx);
             } else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
                 if (this._fen.enPassant == to) {
-                    this._state.enPassantCapture = to[0] + from[1];
+                    this._moveEnPassant(to, from);
                 }
                 
                 this._fen.move(from, to);
@@ -70,7 +56,32 @@ define(["require", "underscore","./Fen","./PieceFactory"], function(require, __,
             this._state.active = this._fen.activeColor;
             return this._state;
         },
-        
+        _verifyMove: function(source) {
+            if (!source) {
+                throw 'there is no piece to move';
+            }
+            if (this._getCurrentColor() != source.color) {
+                throw 'cannot move out of order';
+            }
+        },
+        _verifyIndex: function(source, toIdx) {
+            if (source.moves.indexOf(toIdx) == -1) {
+                throw 'illegal move';
+            }
+        },
+        _promotePawn: function(from, to, source, toIdx) {
+            this._fen.move(from, to);
+            this._updateArray(from, to);
+            
+            var pieceType = source.color == '1' ? 'Q' : 'q';
+            this._board[toIdx] = Factory.create(pieceType, toIdx, this);
+            this._state.promotion = pieceType;
+            
+            this._calculate();
+        },
+        _moveEnPassant: function(to, from) {
+            this._state.enPassantCapture = to[0] + from[1];
+        },
         getState: function() {
             return this._state;
         },
