@@ -1,19 +1,11 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "exports", "module", "underscore","vows","assert","../Board","../King","../Pawn","../Rook","../Queen"], function(require, exports, module) {
-var __ = require('underscore');
-
-var vows = require('vows'), assert = require('assert');
-
-var board = require('../Board');
-var King = require('../King').King;
-var Pawn = require('../Pawn').Pawn;
-var Rook = require('../Rook').Rook;
-var Queen = require('../Queen').Queen;
+define(["require", "underscore", "vows", "assert", "../Board","../King","../Pawn","../Rook","../Queen"], function(require,
+            __, vows, assert, Board, King, Pawn, Rook, Queen) {
 
 vows.describe('Board').addBatch({
 	'when creating a board with empty ctor' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'it should not be null' : function(topic) {
 			assert.notEqual(null, topic);
@@ -39,7 +31,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'creating a board with the initial configuration' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'white should be able to move d2 -> d4' : function(topic) {
 			topic.move('d2', 'd4');
@@ -62,7 +54,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'testing scolars mate' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'scholars mate should cause mate' : function(topic) {
 			topic.move('e2', 'e4');
@@ -82,7 +74,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'a board where pawn can promote' : {
-		topic : new board.Board('8/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+		topic : new Board('8/P7/8/8/8/8/8/8 w KQkq - 0 1'),
 
 		'should be promoted to queen' : function(topic) {
 			var move = topic.move('a7', 'a8');
@@ -92,7 +84,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'a board where no piece can move' : {
-		topic : new board.Board('k7/2Q5/8/8/8/8/8/8 b KQkq - 0 1'),
+		topic : new Board('k7/2Q5/8/8/8/8/8/8 b KQkq - 0 1'),
 
 		'is stalemate' : function(topic) {
 			var p = topic._getPiece('a8');
@@ -101,7 +93,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'a board where king is attacked' : {
-		topic : new board.Board('k7/Q7/8/8/8/8/8/8 b KQkq - 0 1'),
+		topic : new Board('k7/Q7/8/8/8/8/8/8 b KQkq - 0 1'),
 
 		'is in check' : function(topic) {
 			var p = topic._getPiece('a8');
@@ -110,7 +102,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'a board with no real move in 49 moves' : {
-		topic : new board.Board('k7/8/8/8/8/8/8/P7 b - - 49 1'),
+		topic : new Board('k7/8/8/8/8/8/8/P7 b - - 49 1'),
 
 		'should be finished due to halfmoves' : function(topic) {
 			topic.move('a8', 'b8');
@@ -118,7 +110,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'creating a board' : {
-		topic : new board.Board('p6R/p7/p2p5/p7/8/8/8/k6Q w KQkq - 0 1'),
+		topic : new Board('p6R/p7/p2p5/p7/8/8/8/k6Q w KQkq - 0 1'),
 
 		'it should contain 8 pieces' : function(topic) {
 			assert.equal(topic._getPieces().length, 8);
@@ -149,7 +141,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'when resolving pos to idx' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'a1 should resolve to 0' : function(topic) {
 			assert.equal(topic._posToIdx('a1'), 0);
@@ -175,7 +167,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'testing move' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'a3a4 should throw' : function(topic) {
 			assert.throws(function() {
@@ -188,7 +180,7 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'when resolving idx to pos' : {
-		topic : new board.Board(),
+		topic : new Board(),
 
 		'0 should resolve to a1' : function(topic) {
 			assert.equal(topic._idxToPos(0), 'a1');

@@ -1,13 +1,7 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "exports", "module", "underscore","vows","assert","../Knight","../Board"], function(require, exports, module) {
-var __ = require('underscore');
-
-var vows = require('vows');
-var assert = require('assert');
-
-var Knight = require('../Knight').Knight;
-var Board = require('../Board').Board;
+define(["require", "underscore","vows","assert","../Knight","../Board"], function(require, __, vows, assert, Knight,
+            Board) {
 
 vows.describe('Pawn').addBatch({
 	'when creating a board with two knights' : {

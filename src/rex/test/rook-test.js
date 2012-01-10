@@ -1,11 +1,6 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "exports", "module", "vows","assert","../Rook","../Board"], function(require, exports, module) {
-var vows = require('vows');
-var assert = require('assert');
-
-var Rook = require('../Rook').Rook;
-var Board = require('../Board').Board;
+define(["require", "vows","assert","../Rook","../Board"], function(require, vows, assert, Rook, Board) {
 
 vows.describe('Rook').addBatch({
 	'when creating a board with two rooks' : {

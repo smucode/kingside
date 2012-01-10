@@ -1,11 +1,6 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "exports", "module", "vows","assert","underscore","../Fen"], function(require, exports, module) {
-var vows = require('vows');
-var assert = require('assert');
-
-var __ = require('underscore');
-var Fen = require('../Fen').Fen;
+define(["require", "vows", "assert", "underscore", "../Fen"], function(require, vows, assert, __, Fen) {
 
 vows.describe('Fen').addBatch({
 	'creating a new Fen object' : {

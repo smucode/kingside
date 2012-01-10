@@ -1,15 +1,11 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "exports", "module", "vows","assert","../PieceFactory","../Pawn"], function(require, exports, module) {
-var vows = require('vows');
-var assert = require('assert');
-
-var Factory = require('../PieceFactory').PieceFactory;
-var Pawn = require('../Pawn').Pawn;
+define(["require", "vows","assert","../PieceFactory","../Pawn"], function(require, vows, assert,
+            PieceFactory, Pawn) {
 
 vows.describe('PieceFactory').addBatch({
 	'given a factory' : {
-		topic : Factory,
+		topic : PieceFactory,
 
 		'it should be able to create white pawns' : function(topic) {
 			var pawn = topic.create('p');
