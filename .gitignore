@@ -1,6 +1,5 @@
 node_modules
-.bundle
-db/*.sqlite3
-*.log
 tmp/**/*
 .settings/
+.buildpath
+.project
