@@ -19,7 +19,6 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
             });
             return m;
         };
-        
         var generateMove = function() {
             var pieces = _.shuffle(rex._getPieces(rex._getCurrentColor()));
             var piece = _.find(pieces, function(p) {
@@ -30,6 +29,8 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
                 var move = _.map([piece.idx, target], rex._idxToPos, rex);
                 rex.move.apply(rex, move);
                 updateFB();
+            } else {
+                alert((rex._getCurrentColor() != 1 ? 'white' : 'black') + ' won');
             }
         };
         var updateFB = function() {
@@ -47,8 +48,6 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
         });
     });
 });
-
-
 // $.domReady(function() {
 //
 // // todo: add support for require.js (elns)

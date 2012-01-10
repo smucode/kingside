@@ -3,6 +3,7 @@ define(['underscore'], function(_) {
     var FooBoard = function(opts) {
         opts = opts || {};
 
+        this.board = {};
         this.squares = {};
         this.target = opts.target;
         this.pieces = opts.pieces || {};
@@ -13,7 +14,6 @@ define(['underscore'], function(_) {
         this._create();
         this.render();
     };
-    
     // public
 
     FooBoard.prototype.render = function(target) {
@@ -24,9 +24,14 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype.update = function(obj) {
+        _.each(this.squares, function(sq) {
+            sq.innerHTML = '';
+        });
+
         _.each(obj.board, function(piece, pos) {
             this._setImage(pos, piece);
         }, this);
+
         this.board = obj;
     };
     // private
@@ -58,12 +63,12 @@ define(['underscore'], function(_) {
                     return false;
                 }
 
-                $(that).trigger('onMove', [source, target]);
-
                 if(source != target) {
                     var img = ui.draggable.remove();
                     that._setImage(target, img.attr('_type'));
                 }
+
+                $(that).trigger('onMove', [source, target]);
             }
         });
     };
