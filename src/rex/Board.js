@@ -1,6 +1,6 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["require", "underscore","./Fen","./PieceFactory"], function(require, __, Fen, Factory) {
+define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
   
   var Board = function(fen) {
         this._fen = new Fen(fen);
