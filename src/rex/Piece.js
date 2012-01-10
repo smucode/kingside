@@ -4,6 +4,14 @@ define(["require", "underscore"], function(require, __) {
 
     var Piece = function() {
         this.attacks = [];
+        this.types = {
+                PAWN: 1,
+                KNIGHT: 2,
+                KING: 3,
+                BISHOP: 5,
+                ROOK: 6,
+                QUEEN: 7
+        };
     };
 
     Piece.prototype.canCapture = function(idx) {
@@ -106,6 +114,10 @@ define(["require", "underscore"], function(require, __) {
         if (target != this.idx) {
             this._backtrackPinnedMoves(direction, --offset, arr);
         }
+    };
+
+    Piece.prototype.is = function(type) {
+        return this.types[type] == this.type;
     };
 
     return Piece;
