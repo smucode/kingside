@@ -23,23 +23,12 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
         };
         
         var updateFB = function() {
+            var valid = gm();
             fb.update({
                 board : rex._fen.pieces,
-                valid_moves : gm()
+                valid_moves : valid
             });
-        };
-        
-        var generateMove = function() {
-            var pieces = _.shuffle(rex._getPieces(rex._getCurrentColor()));
-            var piece = _.find(pieces, function(p) {
-                return p.moves.length > 0;
-            });
-            if(piece) {
-                var target = _.shuffle(piece.moves)[0];
-                var move = _.map([piece.idx, target], rex._idxToPos, rex);
-                rex.move.apply(rex, move);
-                updateFB();
-            } else {
+            if (!_.size(valid)) {
                 alert((rex._getCurrentColor() != 1 ? 'white' : 'black') + ' won');
             }
         };
@@ -51,7 +40,6 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
             garbo.move(source, target);
             updateFB();
             
-            // generateMove();
             garbo.search(function(from, to) {
                 console.info('garbo: ', arguments);
                 rex.move(from, to);
