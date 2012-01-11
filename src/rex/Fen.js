@@ -13,7 +13,7 @@ define(["require", "underscore"], function(require, __) {
     Fen.prototype.move = function(from, to) {
         this._validateMove(from, to);
         this._updateActiveColor();
-        this._updateCastling(from);
+        this._updateCastling(from, to);
         this._updateEnPassant(from, to);
         this._updateHalfmoveClock(from, to);
         this._updateFullmoveNumber();
@@ -60,7 +60,7 @@ define(["require", "underscore"], function(require, __) {
         this.enPassant = '-';
     };
 
-    Fen.prototype._updateCastling = function(from) {
+    Fen.prototype._updateCastling = function(from, to) {
         if (!this.castling.length) {
             return false;
         }
@@ -69,8 +69,26 @@ define(["require", "underscore"], function(require, __) {
             case 'a8': this.castling = __.without(this.castling, 'q'); break;
             case 'h1': this.castling = __.without(this.castling, 'K'); break;
             case 'h8': this.castling = __.without(this.castling, 'k'); break;
-            case 'e1': this.castling = __.without(this.castling, 'Q', 'K'); break;
-            case 'e8': this.castling = __.without(this.castling, 'q', 'k'); break;
+            case 'e1': 
+                if (to == 'g1' && __.contains(this.castling, 'K')) {
+                    this.pieces.f1 = this.pieces.h1;
+                    delete this.pieces.h1;
+                } else if (to == 'c1' && __.contains(this.castling, 'Q')) {
+                    this.pieces.d1 = this.pieces.a1;
+                    delete this.pieces.a1;
+                }
+                this.castling = __.without(this.castling, 'Q', 'K'); 
+                break;
+            case 'e8':
+                if (to == 'g8' && __.contains(this.castling, 'k')) {
+                    this.pieces.f8 = this.pieces.h8;
+                    delete this.pieces.h8;
+                } else if (to == 'c8' && __.contains(this.castling, 'q')) {
+                    this.pieces.d8 = this.pieces.a8;
+                    delete this.pieces.a8;
+                }
+                this.castling = __.without(this.castling, 'q', 'k'); 
+                break;
         }
     };
 
@@ -131,10 +149,10 @@ define(["require", "underscore"], function(require, __) {
     };
 
     Fen.prototype._parseCastling = function(str) {
-        if (str.match(/[wqWQ\-].*/)) {
+        if (str.match(/[kqKQ\-].*/)) {
             this.castling = str.split('');
         } else {
-            throw new Exception('Illegal castling string: ' + str);
+            throw new Error('Illegal castling string: ' + str);
         }
     };
 

@@ -26,6 +26,7 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
         move: function(from, to) {
             var source = this._getPiece(from);
             this._verifyMove(source);
+            
             var toIdx = this._posToIdx(to);
             this._verifyIndex(source, toIdx);
             
