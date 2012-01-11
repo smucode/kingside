@@ -100,7 +100,12 @@ define(["require", "underscore"], function(require, __) {
     Fen.prototype._updatePiecePlacement = function(from, to) {
         var piece = this.pieces[from];
         delete(this.pieces[from]);
-        this.pieces[to] = piece;
+
+        if (this._isPawn(piece) && (to.charAt(1) ==  1 || to.charAt(1) == 8)) {
+            this.pieces[to] = (piece == 'P' ? 'Q' : 'q');
+        } else {
+            this.pieces[to] = piece;
+        }
     };
 
     Fen.prototype._updateActiveColor = function() {

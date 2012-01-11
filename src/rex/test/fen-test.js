@@ -251,6 +251,22 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
                 assert.equal(topic.pieces.a3, 'p');
                 assert.isUndefined(topic.pieces.a4);
             }
+        },
+        'given a board where white can be promoted': {
+            topic: new Fen('8/P7/8/8/8/8/8/8 w - - 0 1'),
+            
+            'pawn should be promoted to queen': function(topic) {
+                topic.move('a7', 'a8');
+                assert.equal(topic.pieces.a8, 'Q');
+            }
+        },
+        'given a board where black can be promoted': {
+            topic: new Fen('8/8/8/8/8/8/p7/8 b - - 0 1'),
+            
+            'pawn should be promoted to queen': function(topic) {
+                topic.move('a2', 'a1');
+                assert.equal(topic.pieces.a1, 'q');
+            }
         }
     
     })["export"](module);
