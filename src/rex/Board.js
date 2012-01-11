@@ -32,24 +32,24 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             
             this._state = {};
         
-            if (source.is('PAWN') && (toIdx < 9 || toIdx > 111) && source.canMoveTo(toIdx)) {
-                this._promotePawn(from, to, source, toIdx);
-            } else if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
-                if (this._fen.enPassant == to) {
-                    this._moveEnPassant(to, from);
-                }
-                
-                this._fen.move(from, to);
-                this._updateArray(from, to);
-                
-                if (this._fen.halfmove >= 50) {
-                    this._state.finished = 'halfmoves';
+            if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
+                if (source.is('PAWN') && (toIdx < 9 || toIdx > 111)) {
+                    this._promotePawn(from, to, source, toIdx);
                 } else {
-                    this._calculate();
+                    if (this._fen.enPassant == to) {
+                        this._moveEnPassant(to, from);
+                    }
+                    this._fen.move(from, to);
+                    this._updateArray(from, to);
                 }
-                
             } else {
                 throw 'unable to move from ' + from + ' to ' + to;
+            }
+            
+            if (this._fen.halfmove >= 50) {
+                this._state.finished = 'halfmoves';
+            } else {
+                this._calculate();
             }
             
             this._state.to = to;
@@ -72,13 +72,13 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
         },
         _promotePawn: function(from, to, source, toIdx) {
             this._fen.move(from, to);
-            this._updateArray(from, to);
+            
+            var fidx = this._posToIdx(from);
+            this._board[fidx] = null;
             
             var pieceType = source.color == '1' ? 'Q' : 'q';
             this._board[toIdx] = Factory.create(pieceType, toIdx, this);
             this._state.promotion = pieceType;
-            
-            this._calculate();
         },
         _moveEnPassant: function(to, from) {
             this._state.enPassantCapture = to[0] + from[1];

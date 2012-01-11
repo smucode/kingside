@@ -74,11 +74,21 @@ vows.describe('Board').addBatch({
 		}
 	},
 	'a board where pawn can promote' : {
-		topic : new Board('8/P7/8/8/8/8/8/8 w KQkq - 0 1'),
+		topic : new Board('6r1/P6P/8/8/8/8/8/8 w KQkq - 0 1'),
 
 		'should be promoted to queen' : function(topic) {
 			var move = topic.move('a7', 'a8');
 			var p = topic._getPiece('a8');
+			assert.equal(p.moves.length, 20);
+			assert.equal(move.promotion, 'Q');
+		}
+	},
+	'a board where pawn can capture and promote' : {
+		topic : new Board('6r1/P6P/8/8/8/8/8/8 w KQkq - 0 1'),
+		
+		'should be promoted to queen' : function(topic) {
+			var move = topic.move('h7', 'g8');
+			var p = topic._getPiece('g8');
 			assert.equal(p.moves.length, 21);
 			assert.equal(move.promotion, 'Q');
 		}

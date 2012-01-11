@@ -20,6 +20,12 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
             });
             return m;
         };
+        var updateFB = function() {
+            fb.update({
+                board : rex._fen.pieces,
+                valid_moves : gm()
+            });
+        };
         var generateMove = function() {
             var pieces = _.shuffle(rex._getPieces(rex._getCurrentColor()));
             var piece = _.find(pieces, function(p) {
@@ -33,12 +39,6 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
             } else {
                 alert((rex._getCurrentColor() != 1 ? 'white' : 'black') + ' won');
             }
-        };
-        var updateFB = function() {
-            fb.update({
-                board : rex._fen.pieces,
-                valid_moves : gm()
-            });
         };
         updateFB();
 
