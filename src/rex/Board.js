@@ -32,7 +32,7 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             
             this._state = {};
         
-            if (source && (source.canCapture(toIdx) || source.canMoveTo(toIdx))) {
+            if (source.canCapture(toIdx) || source.canMoveTo(toIdx)) {
                 if (source.is('PAWN') && (toIdx < 9 || toIdx > 111)) {
                     this._promotePawn(from, to, source, toIdx);
                 } else {
