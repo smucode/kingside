@@ -209,6 +209,16 @@ vows.describe('Board').addBatch({
 				topic._idxToPos('15');
 			});
 		}
+	},
+	'given a board where white can castle kingside': {
+        topic: new Board('8/8/8/8/8/8/8/4K2R w K - 0 1'),
+        
+        'castling should update internal board representation': function(topic) {
+            topic.move('e1', 'g1');
+            
+            assert.instanceOf(topic._board[topic._posToIdx('g1')], King);
+            assert.instanceOf(topic._board[topic._posToIdx('f1')], Rook);
+        }
 	}
 })["export"](module);
 

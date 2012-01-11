@@ -39,8 +39,8 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
                     if (this._fen.enPassant == to) {
                         this._moveEnPassant(to, from);
                     }
-                    this._fen.move(from, to);
                     this._updateArray(from, to);
+                    this._fen.move(from, to);
                 }
             } else {
                 throw 'unable to move from ' + from + ' to ' + to;
@@ -57,6 +57,7 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             this._state.active = this._fen.activeColor;
             return this._state;
         },
+
         _verifyMove: function(source) {
             if (!source) {
                 throw 'there is no piece to move';
@@ -163,6 +164,35 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             var tidx = this._posToIdx(to);
             fromPiece.idx = tidx;
             this._board[tidx] = fromPiece;
+            
+            this._updateCastling(from, to);
+        },
+        
+        _updateCastling: function(from, to) {
+            switch (from) {
+                case 'e1': 
+                    if (to == 'g1' && __.contains(this._fen.castling, 'K')) {
+                        this._board[this._posToIdx('f1')] = this._board[this._posToIdx('h1')];
+                        this._board[this._posToIdx('f1')].idx = this._posToIdx('f1');
+                        this._board[this._posToIdx('h1')] = null;
+                    } else if (to == 'c1' && __.contains(this._fen.castling, 'Q')) {
+                        this._board[this._posToIdx('d1')] = this._board[this._posToIdx('a1')];
+                        this._board[this._posToIdx('d1')].idx = this._posToIdx('d1');
+                        this._board[this._posToIdx('a1')] = null;
+                    }
+                    break;
+                case 'e8':
+                    if (to == 'g8' && __.contains(this._fen.castling, 'k')) {
+                        this._board[this._posToIdx('f8')] = this._board[this._posToIdx('h8')];
+                        this._board[this._posToIdx('f8')].idx = this._posToIdx('f8');
+                        this._board[this._posToIdx('h8')] = null;
+                    } else if (to == 'c8' && __.contains(this._fen.castling, 'q')) {
+                        this._board[this._posToIdx('d8')] = this._board[this._posToIdx('a8')];
+                        this._board[this._posToIdx('d8')].idx = this._posToIdx('d8');
+                        this._board[this._posToIdx('a8')] = null;
+                    }
+                    break;
+            }
         },
         
         getCheckingPieces: function() {
