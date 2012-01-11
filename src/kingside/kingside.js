@@ -5,6 +5,7 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board'], fun
             target : $('body')[0]
         });
 
+        // var rex = new Rex('8/8/8/8/Pp6/8/8/8 b - a3 0 1');
         var rex = new Rex();
 
         var gm = function() {

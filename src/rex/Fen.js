@@ -51,10 +51,15 @@ define(["require", "underscore"], function(require, __) {
     Fen.prototype._updateEnPassant = function(from, to) {
         var piece = this.pieces[from];
         if (this._isPawn(piece)) {
-            var len = to.charAt(1) - from.charAt(1);
-            if (Math.abs(len) == 2) {
-                this.enPassant = to.charAt(0) + (parseInt(from.charAt(1), 10) + (len / 2));
-                return;
+            if (this.enPassant == to) {
+                var dir = to.charAt(1) - from.charAt(1);
+                delete this.pieces[to.charAt(0) + (to.charAt(1) - dir)];
+            } else {
+                var len = to.charAt(1) - from.charAt(1);
+                if (Math.abs(len) == 2) {
+                    this.enPassant = to.charAt(0) + (parseInt(from.charAt(1), 10) + (len / 2));
+                    return;
+                }
             }
         }
         this.enPassant = '-';

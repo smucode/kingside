@@ -231,6 +231,26 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
                 assert.equal(topic.pieces.c8, 'k');
                 assert.equal(topic.pieces.d8, 'r');
             }
+        },
+        'given a board where white can capture enpassant': {
+            topic: new Fen('8/8/8/pP6/8/8/8/8 w - a6 0 1'),
+            
+            'capturing pawn should update board': function(topic) {
+                topic.move('b5', 'a6');
+                
+                assert.equal(topic.pieces.a6, 'P');
+                assert.isUndefined(topic.pieces.a5);
+            }
+        },
+        'given a board where black can capture enpassant': {
+            topic: new Fen('8/8/8/8/Pp6/8/8/8 b - a3 0 1'),
+            
+            'capturing pawn should update board': function(topic) {
+                topic.move('b4', 'a3');
+                
+                assert.equal(topic.pieces.a3, 'p');
+                assert.isUndefined(topic.pieces.a4);
+            }
         }
     
     })["export"](module);
