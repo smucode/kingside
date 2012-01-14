@@ -1,7 +1,20 @@
 // general styles
 
-body {
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
     font-family: georgia;
+}
+
+.content {
+    height: 100%;
+    padding: 100px;
+    text-align: center;
+    
+    .foo-board {
+        margin: 0 auto;
+    }
 }
 
 // foo board
@@ -12,7 +25,7 @@ table.foo-board {
     empty-cells: show;
     text-align: center;
     border-collapse: collapse;
-	
+    
 	img {
 		width: 30px;
 		height: 30px;

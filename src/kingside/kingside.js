@@ -1,9 +1,8 @@
-define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo', 'src/event/event'],
-        function(_, FooBoard, Rex, Garbo, Event) {
+define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo', 'src/event/event'], function(_, FooBoard, Rex, Garbo, Event) {
     $(function() {
 
         var fb = new FooBoard({
-            target : $('body')[0]
+            target : $('.content')[0]
         });
 
         var event = new Event();
