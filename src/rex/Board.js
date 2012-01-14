@@ -2,7 +2,8 @@ if (typeof define !== 'function') { var define = (require('amdefine'))(module); 
 
 define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
   
-  var Board = function(fen) {
+  var Board = function(fen, event) {
+        this._event = event;
         this._fen = new Fen(fen);
         this._board = new Array(128);
         
@@ -55,6 +56,9 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             this._state.to = to;
             this._state.from = from;
             this._state.active = this._fen.activeColor;
+            
+            this._event.fire('move');
+
             return this._state;
         },
 

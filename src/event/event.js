@@ -1,6 +1,6 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define("Event", ["underscore"], function(__) {
+define(["underscore"], function(__) {
 
     var Event = function() {
         var eventMap = {};

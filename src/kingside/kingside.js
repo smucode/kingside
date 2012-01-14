@@ -1,12 +1,18 @@
-define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo'], function(_, FooBoard, Rex, Garbo) {
+define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo', 'src/event/event'],
+        function(_, FooBoard, Rex, Garbo, Event) {
     $(function() {
 
         var fb = new FooBoard({
             target : $('body')[0]
         });
 
-        var rex = new Rex();
+        var event = new Event();
         
+        event.addListener('move', function() {
+        });
+
+        var rex = new Rex('', event);
+     
         var garbo = new Garbo();
 
         var gm = function() {
@@ -46,6 +52,6 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
                 updateFB();
             });
         });
-        
+
     });
 });
