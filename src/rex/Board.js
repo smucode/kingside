@@ -57,7 +57,7 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
             this._state.from = from;
             this._state.active = this._fen.activeColor;
             
-            this._event.fire('move');
+            this._fireEvent();
 
             return this._state;
         },
@@ -87,6 +87,9 @@ define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
         },
         _moveEnPassant: function(to, from) {
             this._state.enPassantCapture = to[0] + from[1];
+        },
+        _fireEvent: function() {
+            this._event.fire('event', this._state);  
         },
         getState: function() {
             return this._state;
