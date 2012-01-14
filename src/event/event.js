@@ -18,9 +18,10 @@ define(["underscore"], function(__) {
             return eventMap;
         };
 
-        this.fire = function(event) {
-            __.each(eventMap[event], function(f) {
-                f();
+        this.fire = function() {
+            var args = Array.prototype.slice.call(arguments);
+            __.each(eventMap[__.first(args)], function(f) {
+                f(__.rest(args));
             });
         };
 

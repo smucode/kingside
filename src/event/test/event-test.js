@@ -19,6 +19,16 @@ vows.describe('Event').addBatch({
             });
             topic.fire('event');
             assert.isTrue(val);
+        },
+        'fire with arguments' : function(topic) {
+            var arg;
+            topic.addListener('event', function(a) {
+                arg = a;
+            });
+
+            topic.fire('event', 'a', 'b');
+            assert.equal(arg[0], 'a');
+            assert.equal(arg[1], 'b');
         }
     },
     'add multiple listeners': {
