@@ -8,8 +8,7 @@ html, body {
 }
 
 .content {
-    height: 100%;
-    padding: 100px;
+    padding-top: 100px;
     text-align: center;
     
     .foo-board {
