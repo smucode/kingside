@@ -172,7 +172,8 @@ define([], function() {
                     return moves[i];
                 }
             }
-            alert("busted! ->" + moveString + " fen:" + GetFen());
+            // busted! ->f7f8 fen:8/P4P2/1k6/1N1p4/3N2K1/6P1/8/8 w - -
+            throw "busted! ->" + moveString + " fen:" + GetFen();
         }
         
         function PVFromHash(move, ply) {
@@ -2476,16 +2477,16 @@ define([], function() {
             },
             search: function(cb) {
                 postMessage = function(msg) {
-                    if (msg.length == 4) {
+                    if (msg.length <= 5) {
                         cb(msg.substr(0, 2), msg.substr(2, 2));
                     } else {
-                        console.log(msg);
+                        // console.log(msg);
                     }
                 };
                 Search(FinishMoveLocalTesting, 99, FinishPlyCallback);
             },
-            move: function(from, to) {
-                MakeMove(GetMoveFromString(from + to));
+            move: function(from, to, promotion) {
+                MakeMove(GetMoveFromString(from + to + (promotion ? promotion.toLowerCase() : '')));
             }
         };
         
