@@ -3,3 +3,4 @@ tmp/**/*
 .settings/
 .buildpath
 .project
+build/
