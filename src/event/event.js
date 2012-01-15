@@ -21,7 +21,7 @@ define(["underscore"], function(__) {
         this.fire = function() {
             var args = Array.prototype.slice.call(arguments);
             __.each(eventMap[__.first(args)], function(f) {
-                f(__.rest(args));
+                f.apply(this, __.rest(args));
             });
         };
 

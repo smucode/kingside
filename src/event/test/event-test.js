@@ -21,14 +21,15 @@ vows.describe('Event').addBatch({
             assert.isTrue(val);
         },
         'fire with arguments' : function(topic) {
-            var arg;
-            topic.addListener('event', function(a) {
-                arg = a;
+            var one, two;
+            topic.addListener('event', function(a, b) {
+                one = a;
+                two = b;
             });
 
             topic.fire('event', 'a', 'b');
-            assert.equal(arg[0], 'a');
-            assert.equal(arg[1], 'b');
+            assert.equal(one, 'a');
+            assert.equal(two, 'b');
         }
     },
     'add multiple listeners': {
