@@ -219,6 +219,32 @@ vows.describe('Board').addBatch({
             assert.instanceOf(topic._board[topic._posToIdx('g1')], King);
             assert.instanceOf(topic._board[topic._posToIdx('f1')], Rook);
         }
+	},
+	'given a default board to test events': {
+        topic: new Board(),
+        
+        'registering event should fire immediately': function(topic) {
+            var state = null;
+            topic.onMove(function(s) {
+                state = s;
+            });
+            assert.equal(state.active_color, 'w');
+            assert.equal(__.size(state.board), 32);
+            assert.equal(__.size(state.valid_moves), 10);
+        },
+        'moving a piece should fire event': function(topic) {
+            var state = false;
+            topic.onMove(function(s) {
+                state = s;
+            });
+            topic.move('d2', 'd4');
+            
+            assert.equal(state.active_color, 'b');
+            assert.equal(__.size(state.board), 32);
+            assert.equal(__.size(state.valid_moves), 10);
+            assert.equal(state.from, 'd2');
+            assert.equal(state.to, 'd4');
+        }
 	}
 })["export"](module);
 

@@ -3,8 +3,9 @@ if (typeof define !== 'function') { var define = (require('amdefine'))(module); 
 define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, Fen, Factory, Event) {
   
   var Board = function(fen) {
-        this._event = new Event();
+        this._state = {};
         this._fen = new Fen(fen);
+        this._event = new Event();
         this._board = new Array(128);
         
         __.each(this._fen.pieces, function(piece, pos) {
@@ -12,7 +13,6 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
             this._board[idx] = Factory.create(piece, idx, this);
         }, this);
         
-        this._state = {};
         this._calculate();
     };
     
@@ -55,7 +55,6 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
             
             this._state.to = to;
             this._state.from = from;
-            this._state.active = this._fen.activeColor;
             
             this._fireEvent();
 
@@ -92,10 +91,25 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
             this._event.fire('move', this._state);  
         },
         onMove: function(f) {
-          this._event.addListener('move', f);       
+            this._event.addListener('move', f);
+            f(this.getState());       
         },
+        
         getState: function() {
             return this._state;
+        },
+        
+        _calculateValidMoves: function() {
+            var m = {};
+            __.each(this._getPieces(this._getCurrentColor()), function(p) {
+                if (p.moves.length > 0) {
+                    var moves = __.map(p.moves, function(move) {
+                        return this._idxToPos(move);
+                    }, this);
+                    m[this._idxToPos(p.idx)] = moves;
+                }
+            }, this);
+            return m;
         },
         
         _posToIdx: function(pos) {
@@ -164,6 +178,12 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
                     this._state.finished = 'stalemate';
                 }
             }
+            
+            this._state.board = this._fen.pieces;
+            this._state.active_color = this._getCurrentColor() == 1 ? 'w' : 'b';
+            this._state.valid_moves = this._calculateValidMoves();
+            
+            return this._state;
         },
         
         _updateArray: function(from, to) {

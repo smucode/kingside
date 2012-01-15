@@ -1,11 +1,17 @@
-define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo', 'src/event/event'], function(_, FooBoard, Rex, Garbo, Event) {
+define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo', 'src/event/event', 'src/kingside/status'], function(_, FooBoard, Rex, Garbo, Event, Status) {
     $(function() {
 
+        var status = new Status({
+            target : $('.content')[0]
+        });
+        
         var fb = new FooBoard({
             target : $('.content')[0]
         });
 
-        var rex = new Rex('');
+        var rex = new Rex();
+        
+        rex.onMove(_.bind(status.update, status));
      
         var garbo = new Garbo();
 
@@ -24,13 +30,11 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
         
         var updateFB = function() {
             var valid = gm();
+            
             fb.update({
                 board : rex._fen.pieces,
                 valid_moves : valid
             });
-            if (!_.size(valid)) {
-                alert((rex._getCurrentColor() != 1 ? 'white' : 'black') + ' won');
-            }
         };
         
         updateFB();

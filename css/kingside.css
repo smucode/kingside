@@ -16,6 +16,12 @@ html, body {
     }
 }
 
+// status
+
+div.status {
+    padding: 20px;
+}
+
 // foo board
 
 table.foo-board {
