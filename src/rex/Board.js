@@ -1,9 +1,9 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(["underscore","./Fen","./PieceFactory"], function(__, Fen, Factory) {
+define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, Fen, Factory, Event) {
   
-  var Board = function(fen, event) {
-        this._event = event;
+  var Board = function(fen) {
+        this._event = new Event();
         this._fen = new Fen(fen);
         this._board = new Array(128);
         

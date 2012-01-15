@@ -5,12 +5,7 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
             target : $('.content')[0]
         });
 
-        var event = new Event();
-        
-        event.addListener('move', function() {
-        });
-
-        var rex = new Rex('', event);
+        var rex = new Rex('');
      
         var garbo = new Garbo();
 
