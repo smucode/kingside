@@ -89,7 +89,10 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
             this._state.enPassantCapture = to[0] + from[1];
         },
         _fireEvent: function() {
-            this._event.fire('event', this._state);  
+            this._event.fire('move', this._state);  
+        },
+        onMove: function(f) {
+          this._event.addListener('move', f);       
         },
         getState: function() {
             return this._state;
