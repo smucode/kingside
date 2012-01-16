@@ -4,7 +4,9 @@ define(['underscore'], function(_) {
         opts = opts || {};
 
         this.board = {};
+        this.pieces = {};
         this.squares = {};
+        
         this.target = opts.target;
         this.pieces = opts.pieces || {};
 
@@ -14,6 +16,7 @@ define(['underscore'], function(_) {
         this._create();
         this.render();
     };
+    
     // public
 
     FooBoard.prototype.render = function(target) {
@@ -24,16 +27,17 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype.update = function(obj) {
-        _.each(this.squares, function(sq) {
-            sq.innerHTML = '';
-        });
-
-        _.each(obj.board, function(piece, pos) {
-            this._setImage(pos, piece);
+        _.each(this.squares, function(td, pos) {
+            if (obj.board[pos]) {
+                this._setImage(pos, obj.board[pos]);
+            } else {
+                $(td).find('img').remove();
+                delete this.pieces[pos];
+            }
         }, this);
-
         this.board = obj;
     };
+    
     // private
 
     FooBoard.prototype._create = function() {
@@ -92,9 +96,23 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype._setImage = function(pos, piece) {
+        var current = this.pieces[pos];
+        if (current && current.getAttribute('_type') == piece) {
+            return;
+        } else if (current && current.getAttribute('_type') != piece) {
+            $(this.squares[pos]).find('img').remove();
+        }
+        
         var td = this.squares[pos];
         var type = this._imgMap[piece];
-        td.innerHTML = '<img src="img/' + type + '.png" _type=' + piece + ' />';
+        
+        var img = this._c('img');
+        img.setAttribute('src', 'img/' + type + '.png');
+        img.setAttribute('_type', piece);
+        td.appendChild(img);
+        
+        this.pieces[pos] = img;
+        
         $(td).find('img').draggable({
             revert : true
         });
