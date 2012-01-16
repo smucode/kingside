@@ -6,6 +6,7 @@ define(['underscore'], function(_) {
         this.board = {};
         this.pieces = {};
         this.squares = {};
+        this.selected = null;
         
         this.target = opts.target;
         this.pieces = opts.pieces || {};
@@ -54,6 +55,7 @@ define(['underscore'], function(_) {
             }, this);
             this.table.appendChild(tr);
         }, this);
+        this._attachEvents();
     };
 
     FooBoard.prototype._makeDroppable = function(node) {
@@ -72,6 +74,7 @@ define(['underscore'], function(_) {
                     that._setImage(target, img.attr('_type'));
                 }
 
+                this.selected = null;
                 $(that).trigger('onMove', [source, target]);
             }
         });
@@ -119,9 +122,28 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype._attachEvents = function() {
-        $(this.table).find('img').draggable();
+        $(this.table).bind('click', _.bind(function(evt) {
+            var square = (evt.target.tagName == 'IMG' ? evt.target.parentNode : evt.target).getAttribute('_pos');
+            if (this.board.valid_moves[square]) {
+                if (this.selected) {
+                    $(this.selected).css('background', '');
+                }
+                if (this.selected != evt.target) {
+                    $(evt.target).css('background', 'orange');
+                    this.selected = evt.target;
+                } else {
+                    this.selected = null;
+                }
+            } else if (this.selected) {
+                var from = this.selected.parentNode.getAttribute('_pos');
+                if(_.include(this.board.valid_moves[from], square)) {
+                    this.selected = null;
+                    $(this).trigger('onMove', [from, square]);
+                }
+            }
+        }, this));
     };
-
+    
     FooBoard.prototype._c = function(tagName) {
         return document.createElement(tagName);
     };
