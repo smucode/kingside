@@ -5,11 +5,10 @@ everyauth.googlehybrid
     .myHostname('http://kingsi.de:8000')
     .consumerKey('kingsi.de')
     .consumerSecret('cJ_R8LWwNLwV6z71S-OD3wam')
-    .scope(['https://www.googleapis.com/oauth2/v1/userinfo'])
+    .scope(['https://www.googleapis.com/auth/userinfo.profile'])
     .findOrCreateUser( function (session, userAttributes) {
-    })
-    .moduleErrback( function (err) {
-        console.log('Failed', err);
+        console.error('user', session, userAttributes);
+        return userAttributes.claimedIdentifier;
     })
 .redirectPath('/');
 
