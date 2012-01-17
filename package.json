@@ -1,0 +1,10 @@
+{
+    "name": "kingsi.de",
+    "version": "0.0.1",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "connect": ">= 1.8.5"
+    }
+}

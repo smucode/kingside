@@ -4,7 +4,10 @@ define(['underscore'], function(_) {
         opts = opts || {};
 
         this.board = {};
+        this.pieces = {};
         this.squares = {};
+        this.selected = null;
+        
         this.target = opts.target;
         this.pieces = opts.pieces || {};
 
@@ -14,6 +17,7 @@ define(['underscore'], function(_) {
         this._create();
         this.render();
     };
+    
     // public
 
     FooBoard.prototype.render = function(target) {
@@ -24,16 +28,17 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype.update = function(obj) {
-        _.each(this.squares, function(sq) {
-            sq.innerHTML = '';
-        });
-
-        _.each(obj.board, function(piece, pos) {
-            this._setImage(pos, piece);
+        _.each(this.squares, function(td, pos) {
+            if (obj.board[pos]) {
+                this._setImage(pos, obj.board[pos]);
+            } else {
+                $(td).find('img').remove();
+                delete this.pieces[pos];
+            }
         }, this);
-
         this.board = obj;
     };
+    
     // private
 
     FooBoard.prototype._create = function() {
@@ -50,6 +55,7 @@ define(['underscore'], function(_) {
             }, this);
             this.table.appendChild(tr);
         }, this);
+        this._attachEvents();
     };
 
     FooBoard.prototype._makeDroppable = function(node) {
@@ -68,6 +74,7 @@ define(['underscore'], function(_) {
                     that._setImage(target, img.attr('_type'));
                 }
 
+                this.selected = null;
                 $(that).trigger('onMove', [source, target]);
             }
         });
@@ -92,18 +99,51 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype._setImage = function(pos, piece) {
+        var current = this.pieces[pos];
+        if (current && current.getAttribute('_type') == piece) {
+            return;
+        } else if (current && current.getAttribute('_type') != piece) {
+            $(this.squares[pos]).find('img').remove();
+        }
+        
         var td = this.squares[pos];
         var type = this._imgMap[piece];
-        td.innerHTML = '<img src="img/' + type + '.png" _type=' + piece + ' />';
+        
+        var img = this._c('img');
+        img.setAttribute('src', 'img/' + type + '.png');
+        img.setAttribute('_type', piece);
+        td.appendChild(img);
+        
+        this.pieces[pos] = img;
+        
         $(td).find('img').draggable({
             revert : true
         });
     };
 
     FooBoard.prototype._attachEvents = function() {
-        $(this.table).find('img').draggable();
+        $(this.table).bind('click', _.bind(function(evt) {
+            var square = (evt.target.tagName == 'IMG' ? evt.target.parentNode : evt.target).getAttribute('_pos');
+            if (this.board.valid_moves[square]) {
+                if (this.selected) {
+                    $(this.selected).css('background', '');
+                }
+                if (this.selected != evt.target) {
+                    $(evt.target).css('background', 'orange');
+                    this.selected = evt.target;
+                } else {
+                    this.selected = null;
+                }
+            } else if (this.selected) {
+                var from = this.selected.parentNode.getAttribute('_pos');
+                if(_.include(this.board.valid_moves[from], square)) {
+                    this.selected = null;
+                    $(this).trigger('onMove', [from, square]);
+                }
+            }
+        }, this));
     };
-
+    
     FooBoard.prototype._c = function(tagName) {
         return document.createElement(tagName);
     };
