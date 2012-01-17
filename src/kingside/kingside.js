@@ -14,9 +14,10 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
         rex.onMove(function(o) {
             if (o.active_color == 'b') {
                 garbo.move(o.from, o.to, o.promotion);
-                garbo.search(function(from, to) {
-                    // console.info('garbo: ', arguments);
-                    rex.move(from, to);
+                _.defer(function() {
+                    garbo.search(function(from, to) {
+                        rex.move(from, to);
+                    });
                 });
             }
         });
