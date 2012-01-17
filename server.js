@@ -30,14 +30,14 @@ var server = connect(
     connect.cookieParser(),
     connect.session({secret: 'whodunnit'}),
     everyauth.middleware()
-).listen(
-    process.env.PORT || 8000
 );
-    
 //dnode 
 var dnode_server = dnode({
     user : function(cb) { 
         cb(userInfo);
     }
-}).listen(3000);
+}).listen(server);
 
+server.listen(
+    process.env.PORT || 8000
+);

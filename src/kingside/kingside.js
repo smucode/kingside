@@ -1,13 +1,17 @@
-define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo',
-        'src/event/event', 'src/kingside/status'], function(_, Dnode, FooBoard, Rex, Garbo, Event, Status) {
+console.log('--dnode--', DNode);
+
+define('dnode', function() {
+    return DNode;
+});
+
+define('kingside', ['underscore', 'dnode', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo',
+        'src/event/event', 'src/kingside/status'], function(_, dnode, FooBoard, Rex, Garbo, Event, Status) {
     $(function() {
         var target = $('.content')[0];
 
         var rex = new Rex();
 
-        var dnode = require('node_modules/dnode/browser/bundle.js');
-
-        dnode.connect(3000, function(remote) {
+        dnode.connect(8000, function(remote) {
             remote.user(function(info){
                 console.error('user info', info);
             });
