@@ -15,10 +15,26 @@ html, body {
     }
 }
 
+a {
+    color:  #369;
+    text-decoration: none;
+}
+
+a:hover {
+    color:  orange;
+}
+
 // status
 
 div.status {
     padding: 20px;
+}
+
+// login
+
+.login {
+    padding-top: 10px;
+    text-align: center;
 }
 
 // fooboard
