@@ -1,8 +1,16 @@
-define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src/garbo/garbo',
-        'src/event/event', 'src/kingside/status'], function(_, dnode, FooBoard, Rex, Garbo, Event, Status) {
+define('kingside', [
+    'underscore', 
+    'src/fooboard/fooboard',
+    'src/rex/Board',
+    'src/garbo/garbo',
+    'src/event/event',
+    'src/kingside/status',
+    'src/kingside/auth'
+    ], 
+    function(_, FooBoard, Rex, Garbo, Event, Status, Auth) {
     $(function() {
         var target = $('.content')[0];
-
+       
         var rex = new Rex();
 
         var status = new Status({ target: target });
@@ -22,11 +30,14 @@ define('kingside', ['underscore', 'src/fooboard/fooboard', 'src/rex/Board', 'src
                 });
             }
         });
-        
 
         $(fb).bind('onMove', function(x, source, target) {
             rex.move(source, target);
         });
+
+        var auth = new Auth();
+        var link = $('<a href="auth/google/">login</a>');
+        $('.login').append(link);
 
     });
 });
