@@ -5,7 +5,7 @@ var everyauth = require('everyauth');
 
 var port = process.env.PORT || 8000;
 
-var userInfo = {};
+var users = {};
 
 //google authorization
 everyauth.googlehybrid
@@ -13,8 +13,10 @@ everyauth.googlehybrid
     .consumerKey('kingsi.de')
     .consumerSecret('cJ_R8LWwNLwV6z71S-OD3wam')
     .scope(['https://www.googleapis.com/auth/userinfo.profile'])
-    .findOrCreateUser( function (session, userAttributes) {
-        userInfo = userAttributes;
+    .findOrCreateUser( function (session, userAttributes, ctx) {
+        var sid = ctx.req.sessionID;
+        console.log('g: ', sid);
+        users[sid] = userAttributes;
         return userAttributes.claimedIdentifier;
     })
     .redirectPath('/')
@@ -44,8 +46,14 @@ var parseCookie = function(cookies) {
 };
 
 io.sockets.on('connection', function (socket) {
-    console.log('SID: ' + socket.handshake.sessionID);
-    socket.emit('auth', userInfo);
+    var sid = socket.handshake.sessionID;
+    if (sid) {
+        console.log('s: ', sid);
+        var u = users[decodeURIComponent(sid)];
+        if (u) {
+            socket.emit('auth', u);
+        }
+    }
 });
 
 io.set('authorization', function (data, accept) {

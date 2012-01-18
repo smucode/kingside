@@ -14,10 +14,31 @@ define(['underscore', 'socket.io'], function(_, io) {
     };
     
     return function() {
-        console.log(document.cookie);
-        var socket = io.connect('http://localhost');
+        var fns = [];
+        var user = null;
+
+        var fire = function() {
+            if (user) {
+                _.each(fns, function(fn) {
+                    fn(user);
+                });
+            }
+        };
+        
+        var socket = io.connect('http://kingsi.de/');
         socket.on('auth', function (userinfo) {
             console.log('user', userinfo);
+            user = userinfo;
+            fire();
         });
+        
+        return {
+            onAuth: function(fn) {
+                fns.push(fn);
+                if (user) {
+                    fn(user);
+                }
+            }
+        }
     };
 });
