@@ -1,12 +1,7 @@
 var connect = require('connect');
 var everyauth = require('everyauth');
-var dnode = require('dnode');
 
 var port = process.env.PORT || 8000;
-
-var userInfo = {
-    user: 'No one'
-};
 
 //google authorization
 everyauth.googlehybrid
@@ -31,12 +26,6 @@ var server = connect(
     connect.session({secret: 'whodunnit'}),
     everyauth.middleware()
 );
-//dnode 
-var dnode_server = dnode({
-    user : function(cb) { 
-        cb(userInfo);
-    }
-}).listen(server);
 
 server.listen(
     process.env.PORT || 8000
