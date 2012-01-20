@@ -1,12 +1,8 @@
-define('socket.io', function() {
-    return io;
-});
-
-define(['underscore', 'socket.io'], function(_, io) {
+define(['underscore', 'src/kingside/socket'], function(_, socket) {
     
     var parseCookie = function(cookies) {
         var s = {};
-        _.each(cookies.split(';\ '), function(c) {
+        _.each(cookies.split(';\\ '), function(c) {
             var vals = c.split('=');
              s[vals[0]] = vals[1];
         });
@@ -24,8 +20,7 @@ define(['underscore', 'socket.io'], function(_, io) {
                 });
             }
         };
-        
-        var socket = io.connect('http://kingsi.de/');
+
         socket.on('auth', function (userinfo) {
             console.log('user', userinfo);
             user = userinfo;
@@ -39,6 +34,6 @@ define(['underscore', 'socket.io'], function(_, io) {
                     fn(user);
                 }
             }
-        }
+        };
     };
 });

@@ -1,21 +1,20 @@
 define(['underscore'], function(_) {
 
-    var FooBoard = function(opts) {
-        opts = opts || {};
-
+    var FooBoard = function(white, black, target) {
+        
         this.board = {};
         this.pieces = {};
         this.squares = {};
         this.selected = null;
         
-        this.target = opts.target;
-        this.pieces = opts.pieces || {};
+        this.target = target;
 
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
 
         this._create();
         this.render();
+        
     };
     
     // public

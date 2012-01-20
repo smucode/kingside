@@ -54,6 +54,11 @@ io.sockets.on('connection', function (socket) {
             socket.emit('auth', u);
         }
     }
+    
+    socket.on('/start_game', function() {
+        console.log('start game from ' + sid);
+    });
+    
 });
 
 io.set('authorization', function (data, accept) {
