@@ -25,7 +25,12 @@ define('kingside', [
         
         var auth = new Auth();
         auth.onAuth(function(user) {
-            link.html(user.email);
+            link.html(user.firstname + ' ' + user.lastname).CreateBubblePopup({
+                selectable: true,
+                themeName:  'grey',
+                innerHtml: user.email,
+                themePath: 'lib/jquery-bp/themes'
+            });
         });
     });
 });
