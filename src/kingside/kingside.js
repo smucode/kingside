@@ -8,6 +8,7 @@ define('kingside', [
     ],
     function(_, FooBoard, Status, Auth, Game, Player) {
     $(function() {
+        
         var target = $('.content')[0];
         var status = new Status({ target: target });
         

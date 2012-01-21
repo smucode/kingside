@@ -28,10 +28,6 @@ define(['underscore', 'src/rex/rex', 'src/fooboard/fooboard'], function(_, Rex, 
         return _.bind(obj[name], obj);
     };
     
-    // Game.prototype.start = function() {
-        // socket.emit('/request_game');
-    // };
-    
     return Game;
     
 });

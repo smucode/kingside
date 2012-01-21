@@ -15,7 +15,6 @@ everyauth.googlehybrid
     .scope(['https://www.googleapis.com/auth/userinfo.profile'])
     .findOrCreateUser( function (session, userAttributes, ctx) {
         var sid = ctx.req.sessionID;
-        console.log('g: ', sid);
         users[sid] = userAttributes;
         return userAttributes.claimedIdentifier;
     })
@@ -49,9 +48,9 @@ io.sockets.on('connection', function (socket) {
     var sid = socket.handshake.sessionID;
     if (sid) {
         sid = decodeURIComponent(sid);
-        console.log('s: ', sid);
         var u = users[sid];
         if (u) {
+            console.log('authenticated: ', u.email);
             socket.emit('auth', u);
         }
     }

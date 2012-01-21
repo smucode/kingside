@@ -2,27 +2,26 @@ define(['underscore', 'src/kingside/socket'], function(_, socket) {
     
     return function() {
         var fns = [];
-        var user = null;
 
         var fire = function() {
-            if (user) {
+            if (socket.user) {
                 _.each(fns, function(fn) {
-                    fn(user);
+                    fn(socket.user);
                 });
             }
         };
 
-        socket.on('auth', function (userinfo) {
-            console.log('user', userinfo);
-            user = userinfo;
+        socket.on('auth', function (user) {
+            console.log('user', user);
+            socket.user = user;
             fire();
         });
         
         return {
             onAuth: function(fn) {
                 fns.push(fn);
-                if (user) {
-                    fn(user);
+                if (socket.user) {
+                    fn(socket.user);
                 }
             }
         };

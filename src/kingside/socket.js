@@ -3,5 +3,9 @@ define('socket.io', function() {
 });
 
 define(['socket.io'], function(io) {
-    return io.connect('http://kingsi.de/');
+    var socket = io.connect('http://kingsi.de/');
+    socket.on('auth', function (user) {
+        socket.user = user;
+    });
+    return socket;
 });
