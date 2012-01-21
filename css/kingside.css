@@ -1,10 +1,28 @@
+// imports
+
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:700italic);
+
+
+// mixins
+
+.shadow (@x: 2px, @y: 2px, @spread: 5px, @color: #aaa) {
+            box-shadow: @x @y @spread @color;
+       -moz-box-shadow: @x @y @spread @color;
+    -webkit-box-shadow: @x @y @spread @color;
+}
+
+.hgrad (@start: #fafafa, @stop: #e0e0e0) {
+    background: -webkit-gradient(linear, left top, left bottom, from(@start), to(@stop));
+}
+
 // general styles
 
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: georgia;
+    background: url(img/bg.png);
+    font-family: 'PT Sans', sans-serif;
 }
 
 .content {
@@ -24,6 +42,44 @@ a:hover {
     color:  orange;
 }
 
+// header
+
+.header {
+    color: #eee;
+    height: 40px;
+    line-height: 40px;
+    
+    .hgrad(#999, #666);
+    .hgrad(#c35D49, #A33D29);
+    .shadow;
+    
+    .c {
+        width: 600px;
+        margin: 0 auto;
+    }
+    
+    .logo {
+        font-family: 'PT Sans';
+        font-weight: 700;
+        font-style: italic;
+        font-size: 25px;
+        text-shadow: 1px 1px 3px #666;
+    }
+    
+    .login {
+        float: right;
+        font-style: italic;
+        
+        a {
+            color: #eee;
+        }
+        
+        a:hover {
+            color: white;
+        }
+    }
+}
+
 // status
 
 div.status {
@@ -32,7 +88,7 @@ div.status {
 
 // login
 
-.login {
+.content .login {
     padding-top: 10px;
     text-align: center;
 }

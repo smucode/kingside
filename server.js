@@ -48,17 +48,13 @@ var parseCookie = function(cookies) {
 io.sockets.on('connection', function (socket) {
     var sid = socket.handshake.sessionID;
     if (sid) {
+        sid = decodeURIComponent(sid);
         console.log('s: ', sid);
-        var u = users[decodeURIComponent(sid)];
+        var u = users[sid];
         if (u) {
             socket.emit('auth', u);
         }
     }
-    
-    socket.on('/start_game', function() {
-        console.log('start game from ' + sid);
-    });
-    
 });
 
 io.set('authorization', function (data, accept) {
