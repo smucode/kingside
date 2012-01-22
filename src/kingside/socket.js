@@ -1,4 +1,4 @@
-define('socket.io', [], function() {
+define('socket.io', function() {
     return io;
 });
 

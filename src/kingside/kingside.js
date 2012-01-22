@@ -1,3 +1,7 @@
+define('underscore', function() {
+    return _;
+});
+
 define('kingside', [
         'underscore',
         './game', 
