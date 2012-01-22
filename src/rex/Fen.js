@@ -180,52 +180,55 @@ define(["require", "underscore"], function(require, __) {
 
     Fen.prototype.getString = function() {
         var fenString = this._readPlacement();   
+        fenString += ' ' + this._readColourToMove();
+        fenString += ' ' + this._readCasteling();
+        fenString += ' ' + this._readEnPassant();
+        fenString += ' ' + this._readHalfMoves();
+        fenString += ' ' + this._readFullMoves();
+        return fenString;
     };
 
     Fen.prototype._readPlacement = function() {
-        var board = this._generateBoard();
-        var string = __.map(this.pieces, function(piece, pos) {
-            board[pos[0]][pos[1]] = piece;
-        }, this);
-        var boardString = __.map(board, function(col, k) {
-            var pieces = __.map(col, function(piece, row) {
-                if(piece) {
-                    return piece;
+        var str = '', board = {};
+        __.each(__.range(8, 0, -1), function(rank) {
+            var emptyCounter = 0;
+            if(!__.isEmpty(str)) {
+                str += '/';
+            }
+            __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(file) {
+                var positions = __.keys(this.pieces);
+                var square = file + rank;
+                if(__.include(positions, square)){
+                    var piece = this.pieces[square];
+                    str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                } else {
+                    emptyCounter++;
                 }
-            });
-            return pieces;
-        });
+            }, this);
+            str += emptyCounter;
+        }, this);
 
-        var removeEmptyAndCount = function(arr) {
-            var emptyCounter = 0, str = '';
-            __.each(arr, function(col) {
-                __.each(col, function(piece) {
-                    console.log('p', piece, !piece); 
-                    if(!piece) {
-                        emptyCounter++;
-                    } else {
-                        str += emptyCounter > 1 ? emptyCounter + piece : piece;
-                    };
-                });
-                str += emptyCounter + '/';
-                emptyCounter = 0;
-            });
-            return str;
-        };
-
-
-        console.log(removeEmptyAndCount(boardString));
+        return str;
     };
 
-    Fen.prototype._generateBoard = function() {
-        var board = {};
-        __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(col) {
-            __.each(__.range(1, 9), function(row) {
-                board[col] = board[col] || {};
-                board[col][row] = false;   
-            });
-        });
-        return board;
+    Fen.prototype._readColourToMove = function() {
+        return this.activeColor;
+    };
+
+    Fen.prototype._readCasteling = function() {
+        return this.castling.join('');
+    };
+
+    Fen.prototype._readEnPassant = function() {
+        return this.enPassant;
+    };
+
+    Fen.prototype._readHalfMoves = function(){
+        return this.halfmove;
+    };
+
+    Fen.prototype._readFullMoves = function() {
+        return this.fullmove;
     };
 
     return Fen;

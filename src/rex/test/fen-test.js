@@ -269,26 +269,29 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
             }
         },
         'generate fens tring from the fen object': {
-            topic: new Fen('8/8/8/8/8/8/8/p7 b - - 0 1'),
+            topic: new Fen('8/8/8/8/8/8/8/p7 b KQkq c5 0 1'),
             'to string with no move' : function(topic) {
-                assert.equal(topic.getString(), '8/8/8/8/8/8/8/p7 b - - 0 1');
+                assert.equal(topic.getString(), '8/8/8/8/8/8/8/p7 b KQkq c5 0 1');
+            },
+            'test generate placement string': function(topic) {
+                assert.equal(topic._readPlacement(), '8/8/8/8/8/8/8/p7');
+            },
+            'colour to move': function(topic) {
+                assert.equal(topic._readColourToMove(), 'b');
+            },
+            'casteling': function(topic) {
+                assert.equal(topic._readCasteling(), 'KQkq');
+            },
+            'en passant': function(topic) {
+                assert.equal(topic._readEnPassant(), 'c5');
+            },
+            'half moves': function(topic) {
+                assert.equal(topic._readHalfMoves(), '0');
+            },
+            'full moves': function(topic) {
+                assert.equal(topic._readFullMoves(), '1');
             }
-        },
-        'helper function generates a cleared board': {
-            topic: new Fen(''),
-            'empty bard': function(topic) {
-                var board = topic._generateBoard();
-                assertEquals(board, {
-                    a: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    b: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    c: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    d: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    e: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    f: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    g: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
-                    h: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false}
-                });
-            }
+    
         }
     
     })["export"](module);
