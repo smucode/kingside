@@ -267,6 +267,31 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
                 topic.move('a2', 'a1');
                 assert.equal(topic.pieces.a1, 'q');
             }
+        },
+        'generate fens tring from the fen object': {
+            topic: new Fen('8/8/8/8/8/8/8/p7 b KQkq c5 0 1'),
+            'to string with no move' : function(topic) {
+                assert.equal(topic.getString(), '8/8/8/8/8/8/8/p7 b KQkq c5 0 1');
+            },
+            'test generate placement string': function(topic) {
+                assert.equal(topic._readPlacement(), '8/8/8/8/8/8/8/p7');
+            },
+            'colour to move': function(topic) {
+                assert.equal(topic._readColourToMove(), 'b');
+            },
+            'casteling': function(topic) {
+                assert.equal(topic._readCasteling(), 'KQkq');
+            },
+            'en passant': function(topic) {
+                assert.equal(topic._readEnPassant(), 'c5');
+            },
+            'half moves': function(topic) {
+                assert.equal(topic._readHalfMoves(), '0');
+            },
+            'full moves': function(topic) {
+                assert.equal(topic._readFullMoves(), '1');
+            }
+    
         }
     
     })["export"](module);

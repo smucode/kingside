@@ -176,6 +176,59 @@ define(["require", "underscore"], function(require, __) {
 
     Fen.prototype._parseFullmoveNumber = function(str) {
         this.fullmove = parseInt(str, 10);
+    };  
+
+    Fen.prototype.getString = function() {
+        var fenString = this._readPlacement();   
+        fenString += ' ' + this._readColourToMove();
+        fenString += ' ' + this._readCasteling();
+        fenString += ' ' + this._readEnPassant();
+        fenString += ' ' + this._readHalfMoves();
+        fenString += ' ' + this._readFullMoves();
+        return fenString;
+    };
+
+    Fen.prototype._readPlacement = function() {
+        var str = '', board = {};
+        __.each(__.range(8, 0, -1), function(rank) {
+            var emptyCounter = 0;
+            if(!__.isEmpty(str)) {
+                str += '/';
+            }
+            __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(file) {
+                var positions = __.keys(this.pieces);
+                var square = file + rank;
+                if(__.include(positions, square)){
+                    var piece = this.pieces[square];
+                    str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                } else {
+                    emptyCounter++;
+                }
+            }, this);
+            str += emptyCounter;
+        }, this);
+
+        return str;
+    };
+
+    Fen.prototype._readColourToMove = function() {
+        return this.activeColor;
+    };
+
+    Fen.prototype._readCasteling = function() {
+        return this.castling.join('');
+    };
+
+    Fen.prototype._readEnPassant = function() {
+        return this.enPassant;
+    };
+
+    Fen.prototype._readHalfMoves = function(){
+        return this.halfmove;
+    };
+
+    Fen.prototype._readFullMoves = function() {
+        return this.fullmove;
     };
 
     return Fen;
