@@ -1,6 +1,6 @@
 define([
         'underscore', 
-        'src/garbo/garbo'
+        '../../src/garbo/garbo'
     ], 
     function(_, Garbo) {
     

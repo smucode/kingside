@@ -1,4 +1,4 @@
-define(['underscore', 'src/rex/rex', 'src/fooboard/fooboard', 'src/kingside/status', 'src/kingside/player'], 
+define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './status', './player'], 
     function(_, Rex, FooBoard, Status, Player) {
     
     var Game = function(w, b) {

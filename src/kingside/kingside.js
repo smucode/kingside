@@ -1,8 +1,8 @@
 define('kingside', [
         'underscore',
-        'src/kingside/game', 
-        'src/kingside/login',
-        'src/kingside/menu'
+        './game', 
+        './login',
+        './menu'
     ],
     function(_, Game, Login, Menu) {
     $(function() {
@@ -15,6 +15,5 @@ define('kingside', [
             game.destroy();
             game = new Game(w, b);
         }, this));
-        
     });
 });

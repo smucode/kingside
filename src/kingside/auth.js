@@ -1,4 +1,4 @@
-define(['underscore', 'src/kingside/socket'], function(_, socket) {
+define(['underscore', './socket'], function(_, socket) {
     
     return function() {
         var fns = [];

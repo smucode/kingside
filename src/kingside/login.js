@@ -1,4 +1,4 @@
-define(['src/kingside/auth'], function(Auth) {
+define(['./auth'], function(Auth) {
     var Login = function() {
         var link = $('<a href="auth/google/">login</a>');
         $('.login').append(link);
