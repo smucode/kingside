@@ -1,8 +1,9 @@
 define([
         'underscore', 
-        '../../src/garbo/garbo'
+        '../../src/garbo/garbo',
+        './remote'
     ], 
-    function(_, Garbo) {
+    function(_, Garbo, Remote) {
     
     // local player
     
@@ -30,12 +31,14 @@ define([
     
     var Factory = function() {};
     
-    Factory.prototype.create = function(type, color, board) {
+    Factory.prototype.create = function(type, color, board, cb) {
         switch(type) {
             case 'garbo':
-                return this._createGarbo(color, board);
+                cb(this._createGarbo(color, board)); break;
             case 'local':
-                return this._createLocal(color, board);
+                cb(this._createLocal(color, board)); break;
+            case 'remote':
+                Remote.create(color, board, cb); break;
             default:
                 throw 'unknown player: ' + type;
         }

@@ -1,17 +1,8 @@
-define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './status', './player'], 
-    function(_, Rex, FooBoard, Status, Player) {
+define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player'], 
+    function(_, Rex, FooBoard, Player) {
     
-    var Game = function(w, b) {
-        var content = $('.content');
-        this.target = $('<div></div>');
-        content.append(this.target);
-        
-        var status = new Status({ target: this.target.get()[0] });
-        
-        var board = new FooBoard(w, b, this.target.get()[0]);
-        var white = Player.create(w, 'w', board);
-        var black = Player.create(b, 'b', board);
-        
+    var Game = function(white, black, target) {
+        this._target = target;
         this.rex = this._createRex();
         
         white.onMove(this._bind(this.rex, 'move'));
@@ -19,8 +10,6 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './sta
         
         this.rex.onMove(this._bind(white, 'update'));
         this.rex.onMove(this._bind(black, 'update'));
-        
-        this.onMove(_.bind(status.update, status));
     };
     
     Game.prototype.onMove = function(fn) {
@@ -28,7 +17,7 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './sta
     };
     
     Game.prototype.destroy = function() {
-        this.target.remove();
+        this._target.remove();
     };
     
     // private
@@ -40,7 +29,28 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './sta
     Game.prototype._bind = function(obj, name) {
         return _.bind(obj[name], obj);
     };
+        
+    // factory
     
-    return Game;
+    var Factory = function() {
+    };
+    
+    Factory.prototype.create = function(w, b, cb) {
+        var content = $('.content');
+        var target = $('<div></div>');
+        content.append(target);
+        
+        var board = new FooBoard(w, b, target.get()[0]);
+        
+        // lol..
+        Player.create(w, 'w', board, function(white) {
+            Player.create(b, 'b', board, function(black) {
+                cb(new Game(white, black, target));
+            });
+        });
+        
+    };
+    
+    return new Factory();
     
 });

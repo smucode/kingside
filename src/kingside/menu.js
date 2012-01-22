@@ -4,7 +4,8 @@ define(['underscore'], function(_) {
             'user/cpu': ['local', 'garbo'],
             'cpu/user': ['garbo', 'local'],
             'user/user': ['local', 'local'],
-            'cpu/cpu': ['garbo', 'garbo']
+            'cpu/cpu': ['garbo', 'garbo'],
+            'remote': ['local', 'remote']
         };
         
         var target = $('.menu');

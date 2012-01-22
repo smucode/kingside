@@ -54,6 +54,9 @@ io.sockets.on('connection', function (socket) {
             socket.emit('auth', u);
         }
     }
+    socket.on('request_game', function() {
+        socket.emit('game_ready');
+    });
 });
 
 io.set('authorization', function (data, accept) {
