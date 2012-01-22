@@ -11,7 +11,6 @@ define([
         this._color = color; 
         this._board = board;
          
-        // board.onMove(_.bind(this.move, this));
         var that = this;
         $(this._board).bind('onMove', function(x, source, target) {
             // todo check color
@@ -26,6 +25,11 @@ define([
     Local.prototype.onMove = function(fn) {
         this._listener = fn;
     };
+    
+    Local.prototype.getColor = function() {
+        return this._color;
+    };
+
 
     // player factory
     
@@ -38,7 +42,7 @@ define([
             case 'local':
                 cb(this._createLocal(color, board)); break;
             case 'remote':
-                Remote.create(color, board, cb); break;
+                Remote.create(board, cb); break;
             default:
                 throw 'unknown player: ' + type;
         }

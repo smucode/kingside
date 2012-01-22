@@ -1,33 +1,26 @@
 define(['underscore'], function(_) {
 
-    var FooBoard = function(w, b, target) {
+    var FooBoard = function(target) {
         this.board = {};
         this.pieces = {};
         this.squares = {};
         this.selected = null;
         
         this.target = target;
+    };
+    
+    // public
 
+    FooBoard.prototype.render = function(orientation) {
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
 
-        if (b == 'local' && w != 'local') {
+        if (orientation == 'b') {
             this.files.reverse();
             this.ranks.reverse();
         }
 
         this._create();
-        this.render();
-        
-    };
-    
-    // public
-
-    FooBoard.prototype.render = function(target) {
-        target = target || this.target;
-        if(target) {
-            target.appendChild(this.table);
-        }
     };
 
     FooBoard.prototype.update = function(obj) {
@@ -59,6 +52,7 @@ define(['underscore'], function(_) {
             this.table.appendChild(tr);
         }, this);
         this._attachEvents();
+        this.target.appendChild(this.table);
     };
 
     FooBoard.prototype._createSquare = function(file, rank) {

@@ -22,14 +22,17 @@ define(['underscore', './socket'], function(_, socket) {
         this._listener = fn;
     };
     
+    Remote.prototype.getColor = function() {
+        return this._color;
+    };
         
     // factory
     
     var Factory = function() {
     };
     
-    Factory.prototype.create = function(color, board, cb) {
-        socket.on('game_ready', function() {
+    Factory.prototype.create = function(board, cb) {
+        socket.on('game_ready', function(color) {
             cb(new Remote(color, board));
         });
         socket.emit('request_game');

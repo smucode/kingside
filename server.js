@@ -1,11 +1,12 @@
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
-define(['require', './src/auth/auth'], function(require, auth) {
+define(['require'], function(require) {
     
     var _ = require('underscore');
     var io = require('socket.io');
     var connect = require('connect');
     var everyauth = require('everyauth');
+    var auth = require('./src/auth/auth');
     
     var port = process.env.PORT || 8000;
     
@@ -18,10 +19,15 @@ define(['require', './src/auth/auth'], function(require, auth) {
         connect.session({secret: 'secret', key: 'express.sid'}),
         auth.middleware()
     );
-    
-    var io = require('socket.io').listen(server);
-    io.set('log level', 1);
-    
+
+    // socket.io helpers
+
+    var sockets = {};
+
+    var getSocket = function(userId) {
+        return sockets[userId];
+    };
+
     var parseCookie = function(cookies) {
         var s = {};
         _.each(cookies.split(';\ '), function(c) {
@@ -31,19 +37,59 @@ define(['require', './src/auth/auth'], function(require, auth) {
         return s;
     };
     
-    io.sockets.on('connection', function (socket) {
-        var sid = socket.handshake.sessionID;
+    var getSid = function(socket) {
+        return socket.handshake.sessionID;
+    };
+    
+    var getUser = function(socket) {
+        var sid = getSid(socket);
         if (sid) {
             sid = decodeURIComponent(sid);
-            var u = auth.getUser(sid);
-            if (u) {
-                console.log('authenticated: ', u.email);
-                socket.emit('auth', u);
+            return auth.getUser(sid);
+        }
+    };
+    
+    // game stuff
+    
+    var gameRequests = [];
+    
+    var processGameRequests = function() {
+        var whiteUser = gameRequests.pop();
+        var blackUser = gameRequests.pop();
+        if (whiteUser && blackUser) {
+            var socket = sockets[whiteUser];
+            socket.emit('game_ready', 'w');
+            
+            var socket = sockets[blackUser];
+            socket.emit('game_ready', 'b');
+        } else {
+            if (whiteUser) {
+                gameRequests.push(whiteUser);
+            }
+            if (blackUser) {
+                gameRequests.push(blackUser);
             }
         }
+    };
+    
+    // socket.io stuff
+    
+    var io = require('socket.io').listen(server);
+    io.set('log level', 1);
+    
+    io.sockets.on('connection', function (socket) {
+        var user = getUser(socket);
+        if (user) {
+            console.log('authenticated: ', user.email);
+            sockets[user.email] = socket;
+            socket.emit('auth', user);
+        }
+        
         socket.on('request_game', function() {
-            socket.emit('game_ready');
+            gameRequests.push(user.email);
+            processGameRequests();
         });
+        
     });
     
     io.set('authorization', function (data, accept) {

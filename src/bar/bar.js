@@ -5,7 +5,7 @@ define(['underscore'], function(_) {
 
     server
         io.on_request_game
-            add_to_game_queue(new fen)
+            add_to_game_queue(sid)
             process_queue
                 figure_out_players
                 determine_colors

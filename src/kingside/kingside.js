@@ -17,14 +17,14 @@ define('kingside', [
         this._createGame('local', 'garbo');
                 
         var menu = new Menu();
-        menu.onStart(_.bind(function(w, b) {
+        menu.onStart(_.bind(function(p1, p2) {
             this._game.destroy();
-            this._createGame(w, b);
+            this._createGame(p1, p2);
         }, this));
     };
     
-    Kingside.prototype._createGame = function(w, b) {
-        Game.create(w, b, _.bind(function(game) {
+    Kingside.prototype._createGame = function(p1, p2) {
+        Game.create(p1, p2, _.bind(function(game) {
             this._game = game;
             this._game.onMove(_.bind(this._status.update, this._status));
         }, this));

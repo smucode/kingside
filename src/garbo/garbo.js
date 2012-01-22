@@ -24,5 +24,9 @@ define(['underscore', './garbochess.js'], function(_, Engine) {
         this._listener = fn;
     };
     
+    Garbo.prototype.getColor = function() {
+        return this._color;
+    };
+
     return Garbo;
 });
