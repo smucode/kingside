@@ -1,36 +1,20 @@
 define('kingside', [
-        'underscore' , 
-        'src/fooboard/fooboard', 
-        'src/kingside/status', 
-        'src/kingside/auth', 
+        'underscore',
         'src/kingside/game', 
-        'src/kingside/player'
+        'src/kingside/login',
+        'src/kingside/menu'
     ],
-    function(_, FooBoard, Status, Auth, Game, Player) {
+    function(_, Game, Login, Menu) {
     $(function() {
+        var login = new Login();
         
-        var target = $('.content')[0];
-        var status = new Status({ target: target });
+        var game = new Game('local', 'garbo');
         
-        var board = new FooBoard(white, black, target);
-        var white = Player.create('local', 'w', board);
-        var black = Player.create('garbo', 'b', board);
-        var game = new Game(white, black);
+        var menu = new Menu();
+        menu.onStart(_.bind(function(w, b) {
+            game.destroy();
+            game = new Game(w, b);
+        }, this));
         
-        // todo: refactor below
-        game.onMove(_.bind(status.update, status));
-
-        var link = $('<a href="auth/google/">login</a>');
-        $('.login').append(link);
-        
-        var auth = new Auth();
-        auth.onAuth(function(user) {
-            link.html(user.firstname + ' ' + user.lastname).CreateBubblePopup({
-                selectable: true,
-                themeName:  'grey',
-                innerHtml: user.email,
-                themePath: 'lib/jquery-bp/themes'
-            });
-        });
     });
 });

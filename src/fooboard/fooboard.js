@@ -1,7 +1,6 @@
 define(['underscore'], function(_) {
 
-    var FooBoard = function(white, black, target) {
-        
+    var FooBoard = function(w, b, target) {
         this.board = {};
         this.pieces = {};
         this.squares = {};
@@ -11,6 +10,11 @@ define(['underscore'], function(_) {
 
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
+
+        if (b == 'local' && w != 'local') {
+            this.files.reverse();
+            this.ranks.reverse();
+        }
 
         this._create();
         this.render();

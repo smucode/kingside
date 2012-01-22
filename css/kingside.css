@@ -1,6 +1,5 @@
 // imports
 
-@import url(../lib/jquery-bp/jquery-bp.css);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans:700italic);
 
 
@@ -31,6 +30,21 @@ a {
     text-decoration: none;
 }
 
+ul, li {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    list-style-type: none;
+    font-size: 14px;
+    
+    a {
+        color: black;
+    }
+    a:hover {
+        color: #c35D49;
+    }
+}
+
 // header
 
 .header {
@@ -38,16 +52,17 @@ a {
     height: 40px;
     line-height: 40px;
     
-    .hgrad(#999, #666);
     .hgrad(#c35D49, #A33D29);
     .shadow;
     
     .c {
         width: 700px;
         margin: 0 auto;
+        text-align: center;
     }
     
     .logo {
+        float: left;
         font-family: 'PT Sans';
         font-weight: 700;
         font-style: italic;
@@ -58,14 +73,20 @@ a {
     .login {
         float: right;
         font-style: italic;
-        
+    }
+    
+    .menu {
         a {
-            color: #eee;
+            padding: 0 5px;
         }
-        
-        a:hover {
-            color: white;
-        }
+    }
+    
+    a {
+        color: #eee;
+    }
+    
+    a:hover {
+        color: white;
     }
 }
 
