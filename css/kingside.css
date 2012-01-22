@@ -1,7 +1,7 @@
 // imports
 
 @import url(http://fonts.googleapis.com/css?family=PT+Sans:700italic);
-
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans);
 
 // mixins
 
@@ -22,8 +22,9 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    font-size: 14px;
     background: url(img/bg.png);
-    font-family: 'PT Sans', sans-serif;
+    font-family: 'Droid Sans', sans-serif;
 }
 
 a {
@@ -48,7 +49,7 @@ a {
     
     .logo {
         float: left;
-        font-family: 'PT Sans';
+        font-family: 'PT Sans', sans-serif;
         font-weight: 700;
         font-style: italic;
         font-size: 25px;
@@ -57,7 +58,6 @@ a {
     
     .login {
         float: right;
-        font-style: italic;
     }
     
     .menu {
@@ -89,6 +89,7 @@ a {
 
 div.status {
     padding: 20px;
+    font-size: 18px;
 }
 
 // login
