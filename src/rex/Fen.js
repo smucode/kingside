@@ -176,6 +176,56 @@ define(["require", "underscore"], function(require, __) {
 
     Fen.prototype._parseFullmoveNumber = function(str) {
         this.fullmove = parseInt(str, 10);
+    };  
+
+    Fen.prototype.getString = function() {
+        var fenString = this._readPlacement();   
+    };
+
+    Fen.prototype._readPlacement = function() {
+        var board = this._generateBoard();
+        var string = __.map(this.pieces, function(piece, pos) {
+            board[pos[0]][pos[1]] = piece;
+        }, this);
+        var boardString = __.map(board, function(col, k) {
+            var pieces = __.map(col, function(piece, row) {
+                if(piece) {
+                    return piece;
+                }
+            });
+            return pieces;
+        });
+
+        var removeEmptyAndCount = function(arr) {
+            var emptyCounter = 0, str = '';
+            __.each(arr, function(col) {
+                __.each(col, function(piece) {
+                    console.log('p', piece, !piece); 
+                    if(!piece) {
+                        emptyCounter++;
+                    } else {
+                        str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                    };
+                });
+                str += emptyCounter + '/';
+                emptyCounter = 0;
+            });
+            return str;
+        };
+
+
+        console.log(removeEmptyAndCount(boardString));
+    };
+
+    Fen.prototype._generateBoard = function() {
+        var board = {};
+        __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(col) {
+            __.each(__.range(1, 9), function(row) {
+                board[col] = board[col] || {};
+                board[col][row] = false;   
+            });
+        });
+        return board;
     };
 
     return Fen;

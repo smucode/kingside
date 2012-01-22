@@ -267,6 +267,28 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
                 topic.move('a2', 'a1');
                 assert.equal(topic.pieces.a1, 'q');
             }
+        },
+        'generate fens tring from the fen object': {
+            topic: new Fen('8/8/8/8/8/8/8/p7 b - - 0 1'),
+            'to string with no move' : function(topic) {
+                assert.equal(topic.getString(), '8/8/8/8/8/8/8/p7 b - - 0 1');
+            }
+        },
+        'helper function generates a cleared board': {
+            topic: new Fen(''),
+            'empty bard': function(topic) {
+                var board = topic._generateBoard();
+                assertEquals(board, {
+                    a: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    b: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    c: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    d: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    e: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    f: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    g: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false},
+                    h: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false}
+                });
+            }
         }
     
     })["export"](module);
