@@ -32,6 +32,10 @@ define(['underscore'], function(_) {
         }
     };
     
+    Status.prototype.setMessage = function(message) {
+        this.dom.innerHTML = message;
+    };
+    
     Status.prototype.update = function(obj) {
         if (!obj.finished) {
             var castling = this._isCastling(obj.from, obj.to, obj.board);

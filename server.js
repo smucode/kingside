@@ -51,17 +51,22 @@ define(['require'], function(require) {
     
     // game stuff
     
+    var games = {};
     var gameRequests = [];
     
     var processGameRequests = function() {
         var whiteUser = gameRequests.pop();
         var blackUser = gameRequests.pop();
         if (whiteUser && blackUser) {
+            var gameId = Math.floor(Math.random() * 1000000000000000).toString(16);
             var socket = sockets[whiteUser];
-            socket.emit('game_ready', 'w');
+            socket.emit('game_ready', 'w', gameId);
             
             var socket = sockets[blackUser];
-            socket.emit('game_ready', 'b');
+            socket.emit('game_ready', 'b', gameId);
+            
+            games[gameId] = [whiteUser, blackUser];
+            
         } else {
             if (whiteUser) {
                 gameRequests.push(whiteUser);
@@ -79,6 +84,7 @@ define(['require'], function(require) {
     
     io.sockets.on('connection', function (socket) {
         var user = getUser(socket);
+        
         if (user) {
             console.log('authenticated: ', user.email);
             sockets[user.email] = socket;
@@ -88,6 +94,16 @@ define(['require'], function(require) {
         socket.on('request_game', function() {
             gameRequests.push(user.email);
             processGameRequests();
+        });
+        
+        socket.on('move', function(gameId, from, to) {
+            var game = games[gameId];
+            _.each(game, function(email) {
+                if (user.email != email) {
+                    var otherSocket = sockets[email];
+                    otherSocket.emit('move', from, to);
+                }
+            });
         });
         
     });

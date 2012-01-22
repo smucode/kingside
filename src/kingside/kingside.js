@@ -24,6 +24,7 @@ define('kingside', [
     };
     
     Kingside.prototype._createGame = function(p1, p2) {
+        this._status.setMessage('Waiting for opponent...');
         Game.create(p1, p2, _.bind(function(game) {
             this._game = game;
             this._game.onMove(_.bind(this._status.update, this._status));
