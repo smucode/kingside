@@ -2,6 +2,10 @@ define('underscore', function() {
     return _;
 });
 
+define('socket.io', function() {
+    return io;
+});
+
 define('kingside', [
         'underscore',
         './game', 
