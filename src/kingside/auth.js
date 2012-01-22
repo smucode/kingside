@@ -1,6 +1,6 @@
 define(['underscore', './socket'], function(_, socket) {
     
-    return function() {
+    return (function() {
         var fns = [];
 
         var fire = function() {
@@ -23,7 +23,10 @@ define(['underscore', './socket'], function(_, socket) {
                 if (socket.user) {
                     fn(socket.user);
                 }
+            },
+            getUser: function() {
+                return socket.user;
             }
         };
-    };
+    }());
 });

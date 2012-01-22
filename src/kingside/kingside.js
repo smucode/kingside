@@ -7,9 +7,10 @@ define('kingside', [
         './game', 
         './login',
         './menu',
-        './status'
+        './status',
+        './auth'
     ],
-    function(_, Game, Login, Menu, Status) {
+    function(_, Game, Login, Menu, Status, auth) {
         
     var Kingside = function() {
         this._status = new Status({ target: $('.content').get()[0] });
@@ -24,11 +25,15 @@ define('kingside', [
     };
     
     Kingside.prototype._createGame = function(p1, p2) {
-        this._status.setMessage('Waiting for opponent...');
-        Game.create(p1, p2, _.bind(function(game) {
-            this._game = game;
-            this._game.onMove(_.bind(this._status.update, this._status));
-        }, this));
+        if (p2 == 'remote' && !auth.getUser()) {
+            this._status.setMessage('You must log in to play online...');
+        } else {
+            this._status.setMessage('Waiting for opponent...');
+            Game.create(p1, p2, _.bind(function(game) {
+                this._game = game;
+                this._game.onMove(_.bind(this._status.update, this._status));
+            }, this));
+        }
     };
         
     $(function() {
