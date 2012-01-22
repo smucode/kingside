@@ -11,6 +11,7 @@ cp -R src/ga ../kingside-build/src/ga
 cp favicon.ico ../kingside-build
 cp index.html ../kingside-build
 cp server.js ../kingside-build
+cp package.json ../kingside-build
 
 mkdir ../kingside-build/src/kingside
 

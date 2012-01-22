@@ -5,6 +5,8 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "connect": ">= 1.8.5"
+        "connect": ">= 1.8.5",
+        "socket.io": ">= 0.8.7",
+        "socket.io-client": ">= 0.8.7"
     }
 }
