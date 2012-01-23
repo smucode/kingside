@@ -4,3 +4,5 @@ tmp/**/*
 .buildpath
 .project
 build/
+*.swp
+*.idea
