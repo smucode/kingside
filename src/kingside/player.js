@@ -10,12 +10,10 @@ define([
     var Local = function(color, board) {
         this._color = color; 
         this._board = board;
-         
-        var that = this;
-        $(this._board).bind('onMove', function(x, source, target) {
-            // todo check color
-            that._listener(source, target);
-        });
+        
+        this._board[color == 'w' ? 'onWhiteMove' : 'onBlackMove'](_.bind(function(source, target) {
+            this._listener(source, target);
+        }, this));
     };
     
     Local.prototype.update = function(obj) {

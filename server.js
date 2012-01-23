@@ -4,6 +4,7 @@ var connect = require('connect');
 var everyauth = require('everyauth');
 var auth = require('./src/auth/auth').auth;
 
+var debug = true;
 var port = process.env.PORT || 8000;
 
 console.log('starting kingside on port ' + port);
@@ -76,9 +77,15 @@ var processGameRequests = function() {
 // socket.io stuff
 
 var io = require('socket.io').listen(server);
-io.set('log level', 1);
-io.set("transports", ["xhr-polling", "websocket"]); 
-io.set("polling duration", 10); 
+if (!debug) {
+    io.set('log level', 1);
+}
+if (process.env.PORT) {
+    io.set("transports", ["xhr-polling"]); 
+    io.set("polling duration", 10); 
+} else {
+    io.set("transports", ["websocket"]); 
+}
 
 io.sockets.on('connection', function (socket) {
     var user = getUser(socket);
@@ -95,10 +102,12 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('move', function(gameId, from, to) {
+        log('move', arguments);
         var game = games[gameId];
         _.each(game, function(email) {
             if (user.email != email) {
                 var otherSocket = sockets[email];
+                log('emit move', email, typeof otherSocket);
                 otherSocket.emit('move', from, to);
             }
         });
@@ -113,5 +122,11 @@ io.set('authorization', function (data, accept) {
     }
     accept(null, true);
 });
+
+var log = function() {
+    if (debug) {
+        console.log.apply(console.log, arguments);
+    }
+};
 
 server.listen(port);

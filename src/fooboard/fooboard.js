@@ -11,11 +11,11 @@ define(['underscore'], function(_) {
     
     // public
 
-    FooBoard.prototype.render = function(orientation) {
+    FooBoard.prototype.render = function(opts) {
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
 
-        if (orientation == 'b') {
+        if (opts.orientation == 'b') {
             this.files.reverse();
             this.ranks.reverse();
         }
@@ -32,6 +32,14 @@ define(['underscore'], function(_) {
             }
         }, this);
         this.board = obj;
+    };
+    
+    FooBoard.prototype.onWhiteMove = function(fn) {
+        this._whiteListener = fn;
+    };
+    
+    FooBoard.prototype.onBlackMove = function(fn) {
+        this._blackListener = fn;
     };
     
     // private
@@ -97,7 +105,10 @@ define(['underscore'], function(_) {
 
     FooBoard.prototype._fireEvent = function(from, to) {
         this.selected = null;
-        $(this).trigger('onMove', [from, to]);
+        var listener = this.board.active_color == 'w' ? this._whiteListener : this._blackListener;
+        if (listener) {
+            listener(from, to);
+        }
     };
     
     FooBoard.prototype._getClassName = function(file, rank) {

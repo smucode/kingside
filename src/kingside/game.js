@@ -38,6 +38,7 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     Factory.prototype.create = function(p1, p2, cb) {
         var content = $('.content');
         var target = $('<div></div>');
+        
         content.append(target);
         
         var board = new FooBoard(target.get()[0]);
@@ -45,13 +46,14 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
         var p1Col = 'w';
         var p2Col = 'b';
         
-        // lol..
         Player.create(p2, p2Col, board, function(player2) {
             if (player2.getColor() != p2Col) {
                 p1Col = p2Col;
             }
             Player.create(p1, p1Col, board, function(player1) {
-                board.render(p1Col);
+                board.render({
+                    orientation: p1Col
+                });
                 cb(new Game(player1, player2, target));
             });
         });

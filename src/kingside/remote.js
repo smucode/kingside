@@ -2,17 +2,14 @@ define(['underscore', './socket'], function(_, socket) {
     
     // remote
     
-    var Remote = function(color, board, gameId) {
+    var Remote = function(color, board, gameId, socket) {
         this._color = color; 
         this._board = board;
         this._gameId = gameId;
-         
-        // board.onMove(_.bind(this.move, this));
-        // var that = this;
-        // $(this._board).bind('onMove', function(x, source, target) {
-            // todo check color
-        //     that._listener(source, target);
-        // });
+        
+        socket.on('move', _.bind(function(from, to) {
+            this._listener(from, to);
+        }, this));
     };
     
     Remote.prototype.update = function(obj) {
@@ -36,15 +33,12 @@ define(['underscore', './socket'], function(_, socket) {
     };
     
     Factory.prototype.create = function(board, cb) {
-        var remote = null;
         
         socket.on('game_ready', function(color, gameId) {
-            remote = new Remote(color, board, gameId);
+            var remote = new Remote(color, board, gameId, socket);
             cb(remote);
         });
-        socket.on('move', function(from, to) {
-            remote._listener(from, to);
-        });
+        
         socket.emit('request_game');
     };
     
