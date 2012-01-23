@@ -8,7 +8,7 @@ var Auth = function() {
 Auth.prototype._googleAuth = function() {
     var that = this;
     everyauth.googlehybrid
-        .myHostname('http://kingsi.de')
+        .myHostname('http://kingsi.de:8000')
         .consumerKey('kingsi.de')
         .consumerSecret('cJ_R8LWwNLwV6z71S-OD3wam')
         .scope(['https://www.googleapis.com/auth/userinfo.profile'])
