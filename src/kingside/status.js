@@ -37,22 +37,25 @@ define(['underscore'], function(_) {
     };
     
     Status.prototype.update = function(obj) {
-        if (!obj.finished) {
-            var castling = this._isCastling(obj.from, obj.to, obj.board);
-            var last_move = obj.active_color == 'b' ? 'white' : 'black';
-            if (castling) {
-                this.dom.innerHTML = last_move + ' castled ' + castling;
-            }
-            else if (obj.to) {
-                this.dom.innerHTML = last_move + ' moved ' + this._pieceAt(obj.to, obj.board) + ' on ' + obj.from + ' to ' + obj.to;
-                
-            } else {
-                var to_move = obj.active_color == 'w' ? 'white' : 'black';
-                this.dom.innerHTML = to_move + ' to move';
-            }
+        var castling = this._isCastling(obj.from, obj.to, obj.board);
+        var last_move = obj.active_color == 'b' ? 'white' : 'black';
+        if (castling) {
+            this.dom.innerHTML = last_move + ' castled ' + castling;
+        }
+        else if (obj.to) {
+            this.dom.innerHTML = last_move + ' moved ' + this._pieceAt(obj.to, obj.board) + ' on ' + obj.from + ' to ' + obj.to;
         } else {
-            var winner = obj.active_color == 'b' ? 'white' : 'black';
-            this.dom.innerHTML = winner + ' won';
+            var to_move = obj.active_color == 'w' ? 'white' : 'black';
+            this.dom.innerHTML = to_move + ' to move';
+        }
+        if (obj.check) {
+            if (obj.finished) {
+                this.dom.innerHTML += ', checkmate!!';
+            } else {
+                this.dom.innerHTML += ', check!';
+            }
+        } else if (obj.finished) {
+            this.dom.innerHTML += ', stalemate!';
         }
     };
     
