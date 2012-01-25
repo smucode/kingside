@@ -34,12 +34,8 @@ define(['underscore'], function(_) {
         this.board = obj;
     };
     
-    FooBoard.prototype.onWhiteMove = function(fn) {
-        this._whiteListener = fn;
-    };
-    
-    FooBoard.prototype.onBlackMove = function(fn) {
-        this._blackListener = fn;
+    FooBoard.prototype.onMove = function(fn) {
+        this._listener = fn;
     };
     
     // private
@@ -105,10 +101,7 @@ define(['underscore'], function(_) {
 
     FooBoard.prototype._fireEvent = function(from, to) {
         this.selected = null;
-        var listener = this.board.active_color == 'w' ? this._whiteListener : this._blackListener;
-        if (listener) {
-            listener(from, to);
-        }
+        this._listener(from, to);
     };
     
     FooBoard.prototype._getClassName = function(file, rank) {

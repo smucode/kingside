@@ -7,51 +7,45 @@ define([
     
     // local player
     
-    var Local = function(color, board) {
+    var Local = function(color) {
         this._color = color; 
-        this._board = board;
-        
-        this._board[color == 'w' ? 'onWhiteMove' : 'onBlackMove'](_.bind(function(source, target) {
-            this._listener(source, target);
-        }, this));
     };
     
-    Local.prototype.update = function(obj) {
-        this._board.update(obj);
+    Local.prototype.update = function() {
+        // game handles updates
     };
     
-    Local.prototype.onMove = function(fn) {
-        this._listener = fn;
+    Local.prototype.onMove = function() {
+        // game handles moves
     };
     
     Local.prototype.getColor = function() {
         return this._color;
     };
 
-
     // player factory
     
     var Factory = function() {};
     
-    Factory.prototype.create = function(type, color, board, cb) {
+    Factory.prototype.create = function(type, color, cb) {
         switch(type) {
             case 'garbo':
-                cb(this._createGarbo(color, board)); break;
+                cb(this._createGarbo(color)); break;
             case 'local':
-                cb(this._createLocal(color, board)); break;
+                cb(this._createLocal(color)); break;
             case 'remote':
-                Remote.create(board, cb); break;
+                Remote.create(cb); break;
             default:
                 throw 'unknown player: ' + type;
         }
     };
     
-    Factory.prototype._createGarbo = function(color, board) {
-        return new Garbo(color, board);
+    Factory.prototype._createGarbo = function(color) {
+        return new Garbo(color);
     };
     
-    Factory.prototype._createLocal = function(color, board) {
-        return new Local(color, board);
+    Factory.prototype._createLocal = function(color) {
+        return new Local(color);
     };
     
     return new Factory();
