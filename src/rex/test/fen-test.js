@@ -268,10 +268,10 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
                 assert.equal(topic.pieces.a1, 'q');
             }
         },
-        'generate fens tring from the fen object': {
+        'generate fen string from the fen object': {
             topic: new Fen('8/8/8/8/8/8/8/p7 b KQkq c5 0 1'),
             'to string with no move' : function(topic) {
-                assert.equal(topic.getString(), '8/8/8/8/8/8/8/p7 b KQkq c5 0 1');
+                assert.equal(topic.toString(), '8/8/8/8/8/8/8/p7 b KQkq c5 0 1');
             },
             'test generate placement string': function(topic) {
                 assert.equal(topic._readPlacement(), '8/8/8/8/8/8/8/p7');
@@ -279,8 +279,8 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
             'colour to move': function(topic) {
                 assert.equal(topic._readColourToMove(), 'b');
             },
-            'casteling': function(topic) {
-                assert.equal(topic._readCasteling(), 'KQkq');
+            'castling': function(topic) {
+                assert.equal(topic._readCastling(), 'KQkq');
             },
             'en passant': function(topic) {
                 assert.equal(topic._readEnPassant(), 'c5');
@@ -291,7 +291,13 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
             'full moves': function(topic) {
                 assert.equal(topic._readFullMoves(), '1');
             }
-    
+        },
+        'generate fen string from where castling is invalidated': {
+            topic: new Fen('8/8/8/8/8/8/8/4K2R b K - 0 1'),
+            'to string with no move' : function(topic) {
+                topic.move('e1', 'g1');
+                assert.equal(topic._readCastling(), '-');
+            }
         }
     
     })["export"](module);

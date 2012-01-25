@@ -178,10 +178,10 @@ define(["require", "underscore"], function(require, __) {
         this.fullmove = parseInt(str, 10);
     };  
 
-    Fen.prototype.getString = function() {
+    Fen.prototype.toString = function() {
         var fenString = this._readPlacement();   
         fenString += ' ' + this._readColourToMove();
-        fenString += ' ' + this._readCasteling();
+        fenString += ' ' + this._readCastling();
         fenString += ' ' + this._readEnPassant();
         fenString += ' ' + this._readHalfMoves();
         fenString += ' ' + this._readFullMoves();
@@ -215,8 +215,8 @@ define(["require", "underscore"], function(require, __) {
         return this.activeColor;
     };
 
-    Fen.prototype._readCasteling = function() {
-        return this.castling.join('');
+    Fen.prototype._readCastling = function() {
+        return this.castling.length == 0 ? '-' : this.castling.join('');
     };
 
     Fen.prototype._readEnPassant = function() {
