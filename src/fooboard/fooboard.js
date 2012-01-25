@@ -38,6 +38,10 @@ define(['underscore'], function(_) {
         this._listener = fn;
     };
     
+    FooBoard.prototype.destroy = function(fn) {
+        $(this.target).remove();
+    };
+    
     // private
 
     FooBoard.prototype._create = function() {

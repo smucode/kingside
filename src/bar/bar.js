@@ -25,7 +25,7 @@ x        - some games on server
                     // we have the colors, create the game
                     cb(new Game(p1, p2));
                 })
-            }); 
+            });
         }
         
         Game(p1, p2) {
@@ -37,14 +37,16 @@ x        - some games on server
                 // re-render and determine if a move is allowed
                 board.update(evt: evt, w: p1, b: p2);
             });
-            
+
             // update rex if cpu/remote moves
             p1.onMove(rex.playerMoved);
             p2.onMove(rex.playerMoved);
-            
+
+
             // board and rex just communicates, no need to involve local
             // if local_remote, fire event to server?
             board.onMove(rex.playerMoved);
+
         };
     
     Player

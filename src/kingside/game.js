@@ -2,7 +2,6 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     function(_, Rex, FooBoard, Player) {
     
     var Game = function(p1, p2, board) {
-        this._board = board;
         this.rex = this._createRex();
         
         p1.onMove(this._bind(this.rex, 'move'));
@@ -17,10 +16,6 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     Game.prototype.onMove = function(fn) {
         this.rex.onMove(fn);
     };    
-    
-    Game.prototype.destroy = function() {
-        this._board.target.remove();
-    };
     
     // private
     
@@ -37,8 +32,7 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     var Factory = function() {
     };
     
-    Factory.prototype.create = function(p1Type, p2Type, cb) {
-        var board = this._createFooBoard();
+    Factory.prototype.create = function(p1Type, p2Type, board, cb) {
         
         Player.create(p2Type, 'b', function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
@@ -49,13 +43,6 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
                 cb(new Game(player1, player2, board));
             });
         });
-    };
-    
-    Factory.prototype._createFooBoard = function() {
-        var content = $('.content');
-        var target = $('<div></div>');
-        content.append(target);
-        return new FooBoard(target.get()[0]);
     };
     
     return new Factory();
