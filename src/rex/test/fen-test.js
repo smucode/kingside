@@ -205,6 +205,11 @@ define(["require", "vows", "assert", "underscore", "../Fen"], function(require, 
         'given a board where white can castle queenside': {
             topic: new Fen('8/8/8/8/8/8/8/R3K3 w Q - 0 1'),
             
+            'toString should yield the same': function(topic) {
+                assert.equal(topic.toString(), '8/8/8/8/8/8/8/R3K3 w Q - 0 1');
+            },
+
+            
             'castling should update internal board representation': function(topic) {
                 topic.move('e1', 'c1');
                 

@@ -192,7 +192,7 @@ define(["require", "underscore"], function(require, __) {
         var str = '', board = {};
         __.each(__.range(8, 0, -1), function(rank) {
             var emptyCounter = 0;
-            if(!__.isEmpty(str)) {
+            if(!__.isEmpty(str)) {  
                 str += '/';
             }
             __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(file) {
@@ -201,6 +201,7 @@ define(["require", "underscore"], function(require, __) {
                 if(__.include(positions, square)){
                     var piece = this.pieces[square];
                     str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                    emptyCounter = 0;
                 } else {
                     emptyCounter++;
                 }
