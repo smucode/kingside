@@ -1,24 +1,21 @@
 define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player'], 
     function(_, Rex, FooBoard, Player) {
     
-    var Game = function(p1, p2, target) {
-        this._target = target;
+    var Game = function(p1, p2, board) {
         this.rex = this._createRex();
         
         p1.onMove(this._bind(this.rex, 'move'));
         p2.onMove(this._bind(this.rex, 'move'));
+        board.onMove(this._bind(this.rex, 'move'));
         
         this.rex.onMove(this._bind(p1, 'update'));
         this.rex.onMove(this._bind(p2, 'update'));
+        this.rex.onMove(this._bind(board, 'update'));
     };
     
     Game.prototype.onMove = function(fn) {
         this.rex.onMove(fn);
-    };
-    
-    Game.prototype.destroy = function() {
-        this._target.remove();
-    };
+    };    
     
     // private
     
@@ -35,29 +32,17 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     var Factory = function() {
     };
     
-    Factory.prototype.create = function(p1, p2, cb) {
-        var content = $('.content');
-        var target = $('<div></div>');
+    Factory.prototype.create = function(p1Type, p2Type, board, cb) {
         
-        content.append(target);
-        
-        var board = new FooBoard(target.get()[0]);
-        
-        var p1Col = 'w';
-        var p2Col = 'b';
-        
-        Player.create(p2, p2Col, board, function(player2) {
-            if (player2.getColor() != p2Col) {
-                p1Col = p2Col;
-            }
-            Player.create(p1, p1Col, board, function(player1) {
+        Player.create(p2Type, 'b', function(player2) {
+            var col = player2.color == 'w' ? 'b' : 'w';
+            Player.create(p1Type, col, function(player1) {
                 board.render({
-                    orientation: p1Col
+                    orientation: col
                 });
-                cb(new Game(player1, player2, target));
+                cb(new Game(player1, player2, board));
             });
         });
-        
     };
     
     return new Factory();

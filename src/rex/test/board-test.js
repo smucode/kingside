@@ -245,7 +245,13 @@ vows.describe('Board').addBatch({
             assert.equal(state.from, 'd2');
             assert.equal(state.to, 'd4');
         }
-	}
+	},
+    'given a edgecase board': {
+        topic: new Board('34r6r6/pk3n3p4/2p4p6/p3p6/4P7/PN2P3K4/PP4P5/3R6R6 w - - 2 20'),
+        'h1-h8 is valid': function(topic) {
+            topic.move('h1', 'h8');
+        }
+    }
 })["export"](module);
 
 });

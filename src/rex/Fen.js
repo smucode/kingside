@@ -178,10 +178,10 @@ define(["require", "underscore"], function(require, __) {
         this.fullmove = parseInt(str, 10);
     };  
 
-    Fen.prototype.getString = function() {
+    Fen.prototype.toString = function() {
         var fenString = this._readPlacement();   
         fenString += ' ' + this._readColourToMove();
-        fenString += ' ' + this._readCasteling();
+        fenString += ' ' + this._readCastling();
         fenString += ' ' + this._readEnPassant();
         fenString += ' ' + this._readHalfMoves();
         fenString += ' ' + this._readFullMoves();
@@ -192,7 +192,7 @@ define(["require", "underscore"], function(require, __) {
         var str = '', board = {};
         __.each(__.range(8, 0, -1), function(rank) {
             var emptyCounter = 0;
-            if(!__.isEmpty(str)) {
+            if(!__.isEmpty(str)) {  
                 str += '/';
             }
             __.each(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], function(file) {
@@ -201,6 +201,7 @@ define(["require", "underscore"], function(require, __) {
                 if(__.include(positions, square)){
                     var piece = this.pieces[square];
                     str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                    emptyCounter = 0;
                 } else {
                     emptyCounter++;
                 }
@@ -215,8 +216,8 @@ define(["require", "underscore"], function(require, __) {
         return this.activeColor;
     };
 
-    Fen.prototype._readCasteling = function() {
-        return this.castling.join('');
+    Fen.prototype._readCastling = function() {
+        return this.castling.length == 0 ? '-' : this.castling.join('');
     };
 
     Fen.prototype._readEnPassant = function() {

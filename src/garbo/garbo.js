@@ -1,7 +1,6 @@
 define(['underscore', './garbochess.js'], function(_, Engine) {
-    var Garbo = function(color, board) {
+    var Garbo = function(color) {
         this._color = color;
-        this._board = board;
         this._engine = new Engine();
     };
     
@@ -15,8 +14,6 @@ define(['underscore', './garbochess.js'], function(_, Engine) {
                     this._listener(from, to);
                 }, this));
             }, this));
-        } else {
-            this._board.update(obj);
         }
     };
     
