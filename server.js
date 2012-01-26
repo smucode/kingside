@@ -3,6 +3,7 @@ var io = require('socket.io');
 var connect = require('connect');
 var everyauth = require('everyauth');
 var auth = require('./src/auth/auth').auth;
+var dao = require('./src/dao/db').Db;
 
 var debug = true;
 var port = process.env.PORT || 8000;
@@ -16,6 +17,8 @@ var server = connect(
     connect.session({secret: 'secret', key: 'express.sid'}),
     auth.middleware()
 );
+
+dao.connect();
 
 // socket.io helpers
 
@@ -46,6 +49,18 @@ var getUser = function(socket) {
     }
 };
 
+var saveUser = function(user) {
+    dao.findUser({email: user.email}, function(err, users) {
+        if(_.isEmpty(users)) {
+            dao.saveUser({name: user.firstname + ' ' + user.lastname, email: user.email},
+                function() {
+                    console.log('user saved', user);
+                }
+            );
+        }
+    });
+};
+
 // game stuff
 
 var games = {};
@@ -59,7 +74,7 @@ var processGameRequests = function() {
         var socket = sockets[whiteUser];
         socket.emit('game_ready', 'w', gameId);
         
-        var socket = sockets[blackUser];
+        socket = sockets[blackUser];
         socket.emit('game_ready', 'b', gameId);
         
         games[gameId] = [whiteUser, blackUser];
@@ -89,9 +104,9 @@ if (process.env.PORT) {
 
 io.sockets.on('connection', function (socket) {
     var user = getUser(socket);
-    
     if (user) {
         console.log('authenticated: ', user.email);
+        saveUser(user);
         sockets[user.email] = socket;
         socket.emit('auth', user);
     }
