@@ -19,8 +19,8 @@ var Game = new Schema({
 var Db = function() {};
 
 Db.prototype._userModel = mongoose.model('User', User);
-Db.prototype.saveUser = function(user, cb) {
-   var user = new this._userModel({name: user.name, email: user.email});
+Db.prototype.saveUser = function(userIn, cb) {
+   var user = new this._userModel({name: userIn.name, email: userIn.email});
    return user.save(function(err) {
         if(err) {
             console.error('Could not persist user', user, err);
@@ -34,7 +34,7 @@ Db.prototype.findUser = function(data, cb) {
         console.log(err, data);
         cb(err, data);
     });
-}
+};
 
 Db.prototype._gameModel = mongoose.model('Game', Game);
 Db.prototype.saveGame = function(player1, player2, fen, cb) {
