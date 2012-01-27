@@ -26,6 +26,10 @@ define(['underscore', './socket'], function(_, socket) {
     Remote.prototype.getColor = function() {
         return this._color;
     };
+
+    Remote.prototype.getGameId = function() {
+        return this._gameId;
+    };
         
     // factory
     

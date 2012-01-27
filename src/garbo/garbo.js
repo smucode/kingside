@@ -25,5 +25,9 @@ define(['underscore', './garbochess.js'], function(_, Engine) {
         return this._color;
     };
 
+    Garbo.prototype.getGameId = function() {
+        return 'garboId';
+    };
+
     return Garbo;
 });

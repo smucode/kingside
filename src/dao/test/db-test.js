@@ -63,7 +63,7 @@ vows.describe('db').addBatch({
             var db = new Db();
             var cb = this.callback;
             db.removeGames({player1: 'player1'}, function() {
-                db.saveGame('player1', 'player2', 'fenelen', cb);
+                db.saveGame('id', 'player1', 'player2', 'fenelen', cb);
             });
         },
         'save game' : function(err, stat) {
@@ -84,7 +84,7 @@ vows.describe('db').addBatch({
             var db = new Db();
             var cb = this.callback;
             db.removeGames({player1: 'player1'}, function() {
-                db.saveGame('player1', 'player2', 'fenelen', function(done) {
+                db.saveGame('id', 'player1', 'player2', 'fenelen', function(done) {
                     if(done) {
                         db.findGame({player1: 'player1'}, cb);
                     }

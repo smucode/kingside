@@ -66,11 +66,15 @@ var saveUser = function(user) {
 var games = {};
 var gameRequests = [];
 
+var generateGameId = function() {
+    return Math.floor(Math.random() * 1000000000000000).toString(16);
+}
+
 var processGameRequests = function() {
     var whiteUser = gameRequests.pop();
     var blackUser = gameRequests.pop();
     if (whiteUser && blackUser) {
-        var gameId = Math.floor(Math.random() * 1000000000000000).toString(16);
+        var gameId = _generateGameId();
         var socket = sockets[whiteUser];
         socket.emit('game_ready', 'w', gameId);
         
@@ -125,6 +129,23 @@ io.sockets.on('connection', function (socket) {
                 log('emit move', email, typeof otherSocket);
                 otherSocket.emit('move', from, to);
             }
+        });
+    });
+
+    socket.on('save_game', function(gameId, p1, p2, fen) {
+        var id = games[gameId] ? gameId : generateGameId();
+        dao.saveGame(id, p1, p2, fen, function() {
+            socket.emit('save_game', id);
+        });
+    });
+
+    socket.on('find_game', function(gameId) {
+        console.log('looking for game ', gameId);
+        dao.findGame({gameId: gameId}, function(err, games) {
+            if(!games || games.length == 0) {
+                return;
+            }
+            socket.emit('find_game', _.first(games).fen);
         });
     });
     

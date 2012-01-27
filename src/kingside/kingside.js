@@ -21,7 +21,7 @@ define('kingside', [
         this._status = new Status({ target: $('.content').get()[0] });
         
         this._createGame('local', 'garbo');
-                
+
         var menu = new Menu();
         menu.onStart(_.bind(function(p1, p2) {
             this._createGame(p1, p2);

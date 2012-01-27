@@ -295,6 +295,10 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
                 }, this);
             }
             return [];
+        },
+
+        toString: function() {
+            return this._fen.toString();
         }
     };
     

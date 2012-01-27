@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    Connection = mongoose.Connection;
+    Schema = mongoose.Schema;
 
 var User = new Schema({
     name : {type: String},
@@ -9,6 +8,7 @@ var User = new Schema({
 });
 
 var Game = new Schema({
+    gameId: {type: String},
     player1: {type: String},
     player2: {type: String}, 
     fen: {type: String},
@@ -55,15 +55,15 @@ Db.prototype.removeUsers = function(key, cb) {
 };
 
 Db.prototype._gameModel = mongoose.model('Game', Game);
-Db.prototype.saveGame = function(player1, player2, fen, cb) {
+Db.prototype.saveGame = function(id, player1, player2, fen, cb) {
     cb = cb || function() {};
-    if(!player1 || !player2 || !fen) {
+    if(!id || !player1 || !player2 || !fen) {
         console.error("Could not persist game incorrect parameters", player1, player2, fen);
         cb(false);
         return;
     }
 
-    var game = new this._gameModel({player1: player1, player2: player2, fen: fen});
+    var game = new this._gameModel({gameId: id, player1: player1, player2: player2, fen: fen});
     return game.save(function(err){
         if(err) {
             console.error('Could not persist game', player1, player2, fen);

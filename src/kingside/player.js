@@ -23,6 +23,10 @@ define([
         return this._color;
     };
 
+    Local.prototype.getGameId = function() {
+        return 'localGameId';
+    };
+
     // player factory
     
     var Factory = function() {};

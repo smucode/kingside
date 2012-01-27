@@ -1,5 +1,5 @@
-define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player'], 
-    function(_, Rex, FooBoard, Player) {
+define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player', './save_game'],
+    function(_, Rex, FooBoard, Player, SaveGame) {
     
     var Game = function(p1, p2, board) {
         this.rex = this._createRex();
@@ -11,6 +11,9 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
         this.rex.onMove(this._bind(p1, 'update'));
         this.rex.onMove(this._bind(p2, 'update'));
         this.rex.onMove(this._bind(board, 'update'));
+
+        //Get in some user ids here
+        this.saveGame = new SaveGame(p2.getGameId(), 'p1', 'p2',  this.rex);
     };
     
     Game.prototype.onMove = function(fn) {
