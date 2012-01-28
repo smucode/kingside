@@ -247,8 +247,8 @@ vows.describe('Board').addBatch({
         }
 	},
     'given a edgecase board': {
-        topic: new Board('34r6r6/pk3n3p4/2p4p6/p3p6/4P7/PN2P3K4/PP4P5/3R6R6 w - - 2 20'),
-        'h1-h8 is valid': function(topic) {
+        topic: new Board('r6r/1pk2np1/2p2p2/1p2p3/4P3/P1N1P1K1/1PP3P1/3R3R w - - 2 20'),
+        'assert move is valid': function(topic) {
             topic.move('h1', 'h8');
         }
     }

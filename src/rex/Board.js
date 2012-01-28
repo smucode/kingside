@@ -29,11 +29,7 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
             this._verifyMove(source);
             
             var toIdx = this._posToIdx(to);
-            if (!this._verifyIndex(source, toIdx)) {
-                console.error('oh noes, illegal move: ', from , to);
-                console.error(this._fen.toString());
-                throw 'illegal move';
-            }
+            this._verifyIndex(source, toIdx);
             
             this._state = {};
         
@@ -75,9 +71,8 @@ define(["underscore","./Fen","./PieceFactory", "../event/event"], function(__, F
         },
         _verifyIndex: function(source, toIdx) {
             if (source.moves.indexOf(toIdx) == -1) {
-                return false;
+                throw 'there is no piece at ' + this._idxToPos(toIdx) + ': ' + this._fen.toString();  
             }
-            return true;
         },
         _promotePawn: function(from, to, source, toIdx) {
             this._fen.move(from, to);

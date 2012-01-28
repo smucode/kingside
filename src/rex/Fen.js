@@ -200,13 +200,16 @@ define(["require", "underscore"], function(require, __) {
                 var square = file + rank;
                 if(__.include(positions, square)){
                     var piece = this.pieces[square];
-                    str += emptyCounter > 1 ? emptyCounter + piece : piece;
+                    str += emptyCounter > 0 ? emptyCounter + piece : piece;
                     emptyCounter = 0;
                 } else {
                     emptyCounter++;
                 }
             }, this);
-            str += emptyCounter;
+            
+            if (emptyCounter) {
+                str += emptyCounter;
+            }
         }, this);
 
         return str;
