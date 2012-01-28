@@ -74,7 +74,7 @@ var processGameRequests = function() {
     var whiteUser = gameRequests.pop();
     var blackUser = gameRequests.pop();
     if (whiteUser && blackUser) {
-        var gameId = _generateGameId();
+        var gameId = generateGameId();
         var socket = sockets[whiteUser];
         socket.emit('game_ready', 'w', gameId);
         
@@ -132,9 +132,11 @@ io.sockets.on('connection', function (socket) {
         });
     });
 
-    socket.on('save_game', function(gameId, p1, p2, fen) {
-        var id = games[gameId] ? gameId : generateGameId();
-        dao.saveGame(id, p1, p2, fen, function() {
+    socket.on('save_game', function(gameId, player, fen) {
+        var remoteGame = games[gameId];
+        console.log('remote', remoteGame, games, gameId, player);
+        var id = remoteGame ? gameId : generateGameId();
+        dao.saveGame(id, 'p1', 'p2', fen, function() {
             socket.emit('save_game', id);
         });
     });

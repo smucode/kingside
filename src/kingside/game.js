@@ -1,4 +1,4 @@
-define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player', './save_game'],
+define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player'],
     function(_, Rex, FooBoard, Player, SaveGame) {
     
     var Game = function(p1, p2, board) {
@@ -11,11 +11,8 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
         this.rex.onMove(this._bind(p1, 'update'));
         this.rex.onMove(this._bind(p2, 'update'));
         this.rex.onMove(this._bind(board, 'update'));
-
-        //Get in some user ids here
-        this.saveGame = new SaveGame(p2.getGameId(), 'p1', 'p2',  this.rex);
     };
-    
+
     Game.prototype.onMove = function(fn) {
         this.rex.onMove(fn);
     };    
@@ -37,9 +34,9 @@ define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './pla
     
     Factory.prototype.create = function(p1Type, p2Type, board, cb) {
         
-        Player.create(p2Type, 'b', function(player2) {
+        Player.create(p2Type, 'b', board, function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
-            Player.create(p1Type, col, function(player1) {
+            Player.create(p1Type, col, board, function(player1) {
                 board.render({
                     orientation: col
                 });

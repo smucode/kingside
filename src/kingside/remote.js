@@ -37,7 +37,6 @@ define(['underscore', './socket'], function(_, socket) {
     };
     
     Factory.prototype.create = function(board, cb) {
-        
         socket.on('game_ready', function(color, gameId) {
             var remote = new Remote(color, board, gameId, socket);
             cb(remote);

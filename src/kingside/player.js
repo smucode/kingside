@@ -31,14 +31,14 @@ define([
     
     var Factory = function() {};
     
-    Factory.prototype.create = function(type, color, cb) {
+    Factory.prototype.create = function(type, color, board, cb) {
         switch(type) {
             case 'garbo':
                 cb(this._createGarbo(color)); break;
             case 'local':
                 cb(this._createLocal(color)); break;
             case 'remote':
-                Remote.create(cb); break;
+                Remote.create(board, cb); break;
             default:
                 throw 'unknown player: ' + type;
         }

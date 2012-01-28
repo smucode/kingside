@@ -1,8 +1,7 @@
 define(['underscore', './socket', '../../src/rex/rex'], function(_, socket) {
-    var SaveGame = function(gameId, p1, p2, rex) {
-        this._gameId = gameId;
+    var SaveGame = function(p1, rex) {
+        this._gameId = "no id";
         this._p1 = p1;
-        this._p2 = p2;
         this._rex = rex;
 
         this._gamesSaved = [];
@@ -12,11 +11,11 @@ define(['underscore', './socket', '../../src/rex/rex'], function(_, socket) {
 
     SaveGame.prototype._saveGame = function() {
         $('.save_game').click(_.bind(function () {
-            socket.emit('save_game', this._gameId, this._p1, this._p2, this._rex.toString());
+            socket.emit('save_game', this._gameId, this._player, this._rex.toString());
         }, this));
 
+        //Need a way to get the game_id from remot, maybe the time te use the event bus...
         socket.on('save_game', _.bind(function (gameId) {
-            console.log('new game id', gameId);
             this._gamesSaved.push(gameId);
             this._gameId = gameId;
         }, this));

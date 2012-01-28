@@ -4,6 +4,7 @@ define(['./auth'], function(auth) {
         $('.login').append(link);
         
         auth.onAuth(function(user) {
+            this.user = user;
             link.html(user.firstname + ' ' + user.lastname);
         });
     };
