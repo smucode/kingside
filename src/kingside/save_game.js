@@ -1,7 +1,7 @@
 define(['underscore', './socket', '../../src/rex/rex'], function(_, socket) {
-    var SaveGame = function(p1, rex) {
+    var SaveGame = function(player, rex) {
         this._gameId = "no id";
-        this._p1 = p1;
+        this._player = player;
         this._rex = rex;
 
         this._gamesSaved = [];
@@ -23,11 +23,16 @@ define(['underscore', './socket', '../../src/rex/rex'], function(_, socket) {
 
     SaveGame.prototype._loadGame = function() {
         $('.load_game').click(_.bind(function () {
-            socket.emit('find_game', this._gameId);
+            var searchFilter = {gameId: this._gameId};
+            if(this._player) {
+                searchFilter = {player: this._player};
+            }
+            socket.emit('find_game', searchFilter);
         }, this));
 
-        socket.on('find_game',   _.bind(function (fen) {
-            console.log('found game ', fen);
+        socket.on('find_game', _.bind(function (fens) {
+            //list out all the possible games for this user
+            console.log('found game ', fens);
         }, this));
     };
 

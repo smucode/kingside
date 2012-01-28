@@ -66,10 +66,6 @@ var saveUser = function(user) {
 var games = {};
 var gameRequests = [];
 
-var generateGameId = function() {
-    return Math.floor(Math.random() * 1000000000000000).toString(16);
-}
-
 var processGameRequests = function() {
     var whiteUser = gameRequests.pop();
     var blackUser = gameRequests.pop();
@@ -134,20 +130,22 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('save_game', function(gameId, player, fen) {
         var remoteGame = games[gameId];
-        console.log('remote', remoteGame, games, gameId, player);
         var id = remoteGame ? gameId : generateGameId();
-        dao.saveGame(id, 'p1', 'p2', fen, function() {
+        dao.saveGame(id, player, 'p2', fen, function() {
             socket.emit('save_game', id);
         });
     });
 
-    socket.on('find_game', function(gameId) {
-        console.log('looking for game ', gameId);
-        dao.findGame({gameId: gameId}, function(err, games) {
+    socket.on('find_game', function(filterIn) {
+        var filter = {};
+        filter = setIfDefined(filterIn.player, filter, 'player1');
+        filter = setIfDefined(filterIn.gameId, filter, 'gameId');
+        dao.findGame(filter, function(err, games) {
             if(!games || games.length == 0) {
                 return;
             }
-            socket.emit('find_game', _.first(games).fen);
+
+            socket.emit('find_game', _.pluck(games, 'fen'));
         });
     });
     
@@ -165,6 +163,18 @@ var log = function() {
     if (debug) {
         console.log.apply(console.log, arguments);
     }
+};
+
+var generateGameId = function() {
+    return Math.floor(Math.random() * 1000000000000000).toString(16);
+};
+
+var setIfDefined = function(par, obj, name) {
+    if(par) {
+        obj[name] = par;
+    };
+
+    return obj;
 };
 
 server.listen(port);
