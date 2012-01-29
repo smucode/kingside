@@ -2,8 +2,10 @@ define(['underscore'], function(_) {
     
     var Status = function(opts) {
         this.dom = document.createElement('div');
+        
         this.dom.className = 'status';
         this.dom.innerHTML = 'awesome chess powa...';
+        
         opts.target.appendChild(this.dom);
     };
     
@@ -37,26 +39,38 @@ define(['underscore'], function(_) {
     };
     
     Status.prototype.update = function(obj) {
-        var castling = this._isCastling(obj.from, obj.to, obj.board);
-        var last_move = obj.active_color == 'b' ? 'white' : 'black';
+        var state = obj.state;
+        
+        var message = '';
+        
+        var castling = this._isCastling(state.from, state.to, state.board);
+        var last_move = state.active_color == 'b' ? obj.w.name : obj.b.name;
         if (castling) {
-            this.dom.innerHTML = last_move + ' castled ' + castling;
+            message = last_move + ' castled ' + castling;
         }
-        else if (obj.to) {
-            this.dom.innerHTML = last_move + ' moved ' + this._pieceAt(obj.to, obj.board) + ' on ' + obj.from + ' to ' + obj.to;
+        else if (state.to) {
+            message = last_move + ' moved ' + this._pieceAt(state.to, state.board) + ' on ' + state.from + ' to ' + state.to;
         } else {
-            var to_move = obj.active_color == 'w' ? 'white' : 'black';
-            this.dom.innerHTML = to_move + ' to move';
-        }
-        if (obj.check) {
-            if (obj.finished) {
-                this.dom.innerHTML += ', checkmate!!';
+            if (obj[state.active_color].type == 'local') {
+                message = 'It\'s your move...';
             } else {
-                this.dom.innerHTML += ', check!';
+                var to_move = state.active_color == 'w' ? obj.white.name : obj.black.name;
+                message = to_move + ' to move';
             }
-        } else if (obj.finished) {
-            this.dom.innerHTML += ', stalemate!';
         }
+        if (state.check) {
+            if (state.finished) {
+                message += ', checkmate!!';
+            } else {
+                message += ', check!';
+            }
+        } else if (state.finished) {
+            message += ', stalemate!';
+        }
+        
+        message = 'Playing against ' + (obj.w.type == 'local' ? obj.b.name : obj.w.name) + ', ' + message;
+        
+        this.dom.innerHTML = message;
     };
     
     return Status;

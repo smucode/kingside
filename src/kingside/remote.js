@@ -2,10 +2,12 @@ define(['underscore', './socket'], function(_, socket) {
     
     // remote
     
-    var Remote = function(color, board, gameId, socket) {
+    var Remote = function(color, board, gameId, name) {
         this._color = color; 
         this._board = board;
         this._gameId = gameId;
+        
+        this.name = name;
         
         socket.on('move', _.bind(function(from, to) {
             this._listener(from, to);
@@ -37,8 +39,8 @@ define(['underscore', './socket'], function(_, socket) {
     };
     
     Factory.prototype.create = function(board, cb) {
-        socket.on('game_ready', function(color, gameId) {
-            var remote = new Remote(color, board, gameId, socket);
+        socket.on('game_ready', function(color, gameId, name) {
+            var remote = new Remote(color, board, gameId, name);
             cb(remote);
         });
         

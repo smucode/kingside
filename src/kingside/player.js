@@ -1,28 +1,27 @@
 define([
         'underscore', 
         '../../src/garbo/garbo',
-        './remote'
+        './remote',
+        './auth',
     ], 
-    function(_, Garbo, Remote) {
+    function(_, Garbo, Remote, auth) {
     
     // local player
     
     var Local = function(color) {
-        this._color = color; 
+        this._color = color;
+        this.name = auth.getUser() ? auth.getUser().name : 'You';
+        this.type = 'local';
     };
     
-    Local.prototype.update = function() {
-        // game handles updates
-    };
+    Local.prototype.update = function() {};
     
-    Local.prototype.onMove = function() {
-        // game handles moves
-    };
+    Local.prototype.onMove = function() {};
     
     Local.prototype.getColor = function() {
         return this._color;
     };
-
+    
     Local.prototype.getGameId = function() {
         return 'localGameId';
     };

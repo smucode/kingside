@@ -5,7 +5,7 @@ var everyauth = require('everyauth');
 var auth = require('./src/auth/auth').auth;
 var dao = require('./src/dao/db').Db;
 
-var debug = true;
+var debug = false;
 var port = process.env.PORT || 8000;
 
 console.log('starting kingside on port ' + port);
@@ -71,11 +71,12 @@ var processGameRequests = function() {
     var blackUser = gameRequests.pop();
     if (whiteUser && blackUser) {
         var gameId = generateGameId();
+        
         var socket = sockets[whiteUser];
-        socket.emit('game_ready', 'w', gameId);
+        socket.emit('game_ready', 'w', gameId, blackUser);
         
         socket = sockets[blackUser];
-        socket.emit('game_ready', 'b', gameId);
+        socket.emit('game_ready', 'b', gameId, whiteUser);
         
         games[gameId] = [whiteUser, blackUser];
         

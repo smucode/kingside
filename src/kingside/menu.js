@@ -3,7 +3,6 @@ define(['underscore'], function(_) {
         var links = {
             'user/cpu': ['local', 'garbo'],
             'cpu/user': ['garbo', 'local'],
-            'user/user': ['local', 'local'],
             'cpu/cpu': ['garbo', 'garbo'],
             'remote': ['local', 'remote']
         };
