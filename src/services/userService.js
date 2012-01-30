@@ -1,18 +1,22 @@
-var db = require('../dao/db').Db;
+var dao = require('../dao/db').Db;
 var _ = require('underscore');
 
 var UserService = function() {};
 
 UserService.prototype.saveUser = function(user) {
-    db.findUser({email: user.email}, function(err, users) {
+    dao.findUser({email: user.email}, function(err, users) {
         if(_.isEmpty(users)) {
-            db.saveUser({name: user.firstname + ' ' + user.lastname, email: user.email},
+            dao.saveUser({name: user.firstname + ' ' + user.lastname, email: user.email},
                 function() {
                     console.log('user saved', user);
                 }
             );
         }
     });
+};
+
+UserService.prototype.setDao = function(inDao) {
+    dao = inDao;
 };
 
 exports.UserService = new UserService();

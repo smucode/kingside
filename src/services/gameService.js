@@ -15,12 +15,13 @@ GameService.prototype.saveGame = function(from, to, gameId, game) {
         fen.move(from, to);
         dao.saveGame(gameId, game.w, game.b, fen.toString());
     } catch (e) {
-        console.error('Invalid move', from, to);
+        console.error('Invalid move', from, to, e);
     }
 
 };
 
 GameService.prototype.findUserGames = function(user, cb) {
+    cb = cb || function() {};
     dao.findUserGames(user, function(err, res) {
         if(err) {
             console.error('Could not find users games', user, err);
@@ -29,5 +30,8 @@ GameService.prototype.findUserGames = function(user, cb) {
     });
 };
 
+GameService.prototype.setDao = function(inDao) {
+    dao = inDao;
+};
 
 exports.GameService = new GameService();

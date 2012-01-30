@@ -1,23 +1,21 @@
 var vows = require('vows');
 var assert = require('assert');
-var Db = require('../db.js').Db;
+var db = require('../db.js').Db;
 
 vows.describe('db').addBatch({
     'persist user data and read it back out' : {
      topic: function() {
-        var db = new Db();
         var cb = this.callback;
         db.removeUsers({name: 'Testur'}, function() {
             db.saveUser({name: 'Testur', email: 'testur@gmail.com'}, cb);
         });
-                                                                                         },
+     },
      'result from user save' : function(err, stat) {
         assert.isTrue(stat);
      }
     },
     'handles missing user data' : {
         topic: function() {
-            var db = new Db();
             db.saveUser(undefined, this.callback);
         },
         'result from user save' : function(err, stat) {
@@ -26,7 +24,6 @@ vows.describe('db').addBatch({
     },
     'find user with email as key' : {
         topic: function() {
-            var db = new Db();
             var cb = this.callback;
             db.removeUsers({name: 'Testur'}, function() {
                 db.saveUser({name: 'Testur', email: 'testur@gmail.com'}, function(done){
@@ -43,7 +40,6 @@ vows.describe('db').addBatch({
     },
     'find user with name as key' : {
         topic: function() {
-            var db = new Db();
             var cb = this.callback;
             db.removeUsers({name: 'Testur'}, function() {
                 db.saveUser({name: 'Testur', email: 'testur@gmail.com'}, function(done){
@@ -60,10 +56,9 @@ vows.describe('db').addBatch({
     },
     'persist game with players' : {
         topic: function() {
-            var db = new Db();
             var cb = this.callback;
-            db.removeGames({player1: 'player1'}, function() {
-                db.saveGame('id', 'player1', 'player2', 'fenelen', cb);
+            db.removeGames({w: 'w'}, function() {
+                db.saveGame('id', 'w', 'b', 'fenelen', cb);
             });
         },
         'save game' : function(err, stat) {
@@ -72,8 +67,7 @@ vows.describe('db').addBatch({
     },
     'handles missing game data' : {
         topic: function() {
-            var db = new Db();
-            db.saveGame(undefined, 'player2', 'fen', this.callback);
+            db.saveGame(undefined, 'w', 'b', 'fen', this.callback);
         },
         'result from game save' : function(err, stat) {
             assert.isFalse(stat);
@@ -81,20 +75,21 @@ vows.describe('db').addBatch({
     },
     'find game with one player' : {
         topic: function() {
-            var db = new Db();
             var cb = this.callback;
-            db.removeGames({player1: 'player1'}, function() {
-                db.saveGame('id', 'player1', 'player2', 'fenelen', function(done) {
+            db.removeGames({w: 'w'}, function() {
+                db.saveGame('id', 'w', 'b', 'fenelen', function(done) {
                     if(done) {
-                        db.findGame({player1: 'player1'}, cb);
+                        db.findUserGames('w', cb);
                     }
                 });
             });
         },
         'game found' : function(err, usr) {
-            assert.equal(usr[0].player1, 'player1');
-            assert.equal(usr[0].player2, 'player2');
+            assert.equal(usr[0].w, 'w');
+            assert.equal(usr[0].b, 'b');
             assert.equal(usr[0].fen, 'fenelen');
         }
     }
 })["export"](module);
+
+db.disconnect();

@@ -131,7 +131,7 @@ io.sockets.on('connection', function (socket) {
             if(!games || games.length == 0) {
                 return;
             }
-            socket.emit('find_game', _.pluck(games, 'fen'));
+            socket.emit('find_game', games);
         });
     });
 });
