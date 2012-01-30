@@ -54,7 +54,7 @@ define(['underscore'], function(_) {
             if (obj[state.active_color].type == 'local') {
                 message = 'It\'s your move...';
             } else {
-                var to_move = state.active_color == 'w' ? obj.white.name : obj.black.name;
+                var to_move = state.active_color == 'w' ? obj.w.name : obj.b.name;
                 message = to_move + ' to move';
             }
         }

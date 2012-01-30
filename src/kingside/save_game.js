@@ -7,7 +7,7 @@ define(['underscore', './socket', '../../src/rex/rex'], function(_, socket) {
         this._gamesSaved = [];
         this._saveGame();
         this._loadGame();
-    }
+    };
 
     SaveGame.prototype._saveGame = function() {
         $('.save_game').click(_.bind(function () {

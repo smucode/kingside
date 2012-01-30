@@ -42,7 +42,7 @@ a {
     .shadow;
     
     .c {
-        width: 700px;
+        width: 500px;
         margin: 0 auto;
         text-align: center;
     }
@@ -64,15 +64,30 @@ a {
         a {
             padding: 0 5px;
         }
+        
+        .panel {
+            .shadow;
+            
+            z-index: 10;
+            display: none;
+            text-align: left;
+            background: #A33D29;
+            position: absolute;
+            
+            a {
+                padding: 0 20px;
+                display: block;
+            }
+            
+            a:hover {
+                background: black;
+            }
+        }
     }
     
-    a {
-        color: #eee;
-    }
-    
-    a:hover {
-        color: white;
-    }
+    a { color: #eee; }
+    a:hover { color: white; }
+ 
 }
 
 // content

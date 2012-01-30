@@ -206,7 +206,6 @@ define(["require", "underscore"], function(require, __) {
                     emptyCounter++;
                 }
             }, this);
-            
             if (emptyCounter) {
                 str += emptyCounter;
             }
@@ -220,7 +219,7 @@ define(["require", "underscore"], function(require, __) {
     };
 
     Fen.prototype._readCastling = function() {
-        return this.castling.length == 0 ? '-' : this.castling.join('');
+        return !this.castling.length ? '-' : this.castling.join('');
     };
 
     Fen.prototype._readEnPassant = function() {

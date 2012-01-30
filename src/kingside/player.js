@@ -2,7 +2,7 @@ define([
         'underscore', 
         '../../src/garbo/garbo',
         './remote',
-        './auth',
+        './auth'
     ], 
     function(_, Garbo, Remote, auth) {
     
