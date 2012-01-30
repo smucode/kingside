@@ -15,7 +15,9 @@ var Game = new Schema({
     date: {type: Date, default: Date.now}
 });
 
-var Db = function() {};
+var Db = function() {
+    this.connect();
+};
 
 Db.prototype.connect = function() {
     mongoose.connect('mongodb://kingside:queenside@ds029847.mongolab.com:29847/kingside');
@@ -29,7 +31,6 @@ Db.prototype.saveUser = function(userIn, cb) {
        cb(false);
        return;
    }
-   console.log('saving user', userIn);
    var user = new this._userModel({name: userIn.name, email: userIn.email});
    return user.save(function(err) {
         if(err) {
@@ -79,6 +80,14 @@ Db.prototype.findGame = function(data, cb) {
         }
         cb(err, data);
     });
+};
+
+Db.prototype.findUserGames = function(user, cb) {
+    if(!user) {
+        console.error('User must be defined in order to find its games');
+        return;
+    }
+    this._gameModel.find({$or: [{player1: user}, {player2: user}]}, cb);
 };
 
 Db.prototype.removeGames = function(key, cb) {
