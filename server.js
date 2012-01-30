@@ -2,8 +2,10 @@ var _ = require('underscore');
 var io = require('socket.io');
 var connect = require('connect');
 var everyauth = require('everyauth');
+var Fen = require('./src/rex/Fen');
 var auth = require('./src/auth/auth').auth;
-var dao = require('./src/dao/db').Db;
+var gameService = require('./src/services/gameService').GameService;
+var userService = require('./src/services/userService').UserService;
 
 var debug = false;
 var port = process.env.PORT || 8000;
@@ -17,8 +19,6 @@ var server = connect(
     connect.session({secret: 'secret', key: 'express.sid'}),
     auth.middleware()
 );
-
-dao.connect();
 
 // socket.io helpers
 
@@ -49,18 +49,6 @@ var getUser = function(socket) {
     }
 };
 
-var saveUser = function(user) {
-    dao.findUser({email: user.email}, function(err, users) {
-        if(_.isEmpty(users)) {
-            dao.saveUser({name: user.firstname + ' ' + user.lastname, email: user.email},
-                function() {
-                    console.log('user saved', user);
-                }
-            );
-        }
-    });
-};
-
 // game stuff
 
 var games = {};
@@ -78,7 +66,12 @@ var processGameRequests = function() {
         socket = sockets[blackUser];
         socket.emit('game_ready', 'b', gameId, whiteUser);
         
-        games[gameId] = [whiteUser, blackUser];
+        games[gameId] = {
+            w: whiteUser,
+            b: blackUser
+        };
+
+        gameService.push(gameId);
         
     } else {
         if (whiteUser) {
@@ -105,14 +98,16 @@ if (process.env.PORT) {
 
 io.sockets.on('connection', function (socket) {
     var user = getUser(socket);
+
     if (user) {
         console.log('authenticated: ', user.email);
-        saveUser(user);
+        userService.saveUser(user);
         sockets[user.email] = socket;
         socket.emit('auth', user);
     }
     
     socket.on('request_game', function() {
+        console.log('request_game', user);
         gameRequests.push(user.email);
         processGameRequests();
     });
@@ -120,36 +115,25 @@ io.sockets.on('connection', function (socket) {
     socket.on('move', function(gameId, from, to) {
         log('move', arguments);
         var game = games[gameId];
-        _.each(game, function(email) {
+        _.each(game, function(email, side) {
             if (user.email != email) {
                 var otherSocket = sockets[email];
                 log('emit move', email, typeof otherSocket);
                 otherSocket.emit('move', from, to);
             }
         });
+
+        gameService.saveGame(from, to, gameId, game);
     });
 
-    socket.on('save_game', function(gameId, player, fen) {
-        var remoteGame = games[gameId];
-        var id = remoteGame ? gameId : generateGameId();
-        dao.saveGame(id, player, 'p2', fen, function() {
-            socket.emit('save_game', id);
-        });
-    });
-
-    socket.on('find_game', function(filterIn) {
-        var filter = {};
-        filter = setIfDefined(filterIn.player, filter, 'player1');
-        filter = setIfDefined(filterIn.gameId, filter, 'gameId');
-        dao.findGame(filter, function(err, games) {
+    socket.on('find_game', function(user) {
+        gameService.findUserGames(user, function(games) {
             if(!games || games.length == 0) {
                 return;
             }
-
             socket.emit('find_game', _.pluck(games, 'fen'));
         });
     });
-    
 });
 
 io.set('authorization', function (data, accept) {
@@ -168,14 +152,6 @@ var log = function() {
 
 var generateGameId = function() {
     return Math.floor(Math.random() * 1000000000000000).toString(16);
-};
-
-var setIfDefined = function(par, obj, name) {
-    if(par) {
-        obj[name] = par;
-    };
-
-    return obj;
 };
 
 server.listen(port);
