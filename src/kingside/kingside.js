@@ -14,9 +14,10 @@ define('kingside', [
         './save_game',
         './status',
         './auth',
-        '../../src/fooboard/fooboard'
+        '../../src/fooboard/fooboard',
+        './games'
     ],
-    function(_, Game, Login, Menu, SaveGame, Status, auth, FooBoard) {
+    function(_, Game, Login, Menu, SaveGame, Status, auth, FooBoard, Games) {
         
     var Kingside = function() {
         this._status = new Status({ target: $('.content').get()[0] });
@@ -27,6 +28,8 @@ define('kingside', [
         menu.onStart(_.bind(function(p1, p2) {
             this._createGame(p1, p2);
         }, this));
+        
+        var games = new Games();
     };
     
     Kingside.prototype._createGame = function(p1, p2) {

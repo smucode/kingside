@@ -12,7 +12,6 @@ define(['underscore', './socket'], function(_, socket) {
         };
 
         socket.on('auth', function (user) {
-            console.log('user', user);
             socket.user = user;
             fire();
         });

@@ -10,6 +10,8 @@ define(['socket.io'], function(io) {
     
     socket.on('auth', function (user) {
         socket.user = user;
+    }).on('find_game', function () {
+        console.info(arguments);
     });
     
     return socket;
