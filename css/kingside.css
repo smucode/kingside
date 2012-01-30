@@ -150,8 +150,16 @@ div.fooboard {
         background-color: rgba(@light, @light, @light, @square_opacity);
     }
     
+    .light.hl {
+        background-color: rgba(@light - 50, @light, @light - 50, @square_opacity);
+    }
+    
     .dark {
         background-color: rgba(@dark, @dark, @dark, @square_opacity);
+    }
+    
+    .dark.hl {
+        background-color: rgba(@dark, @dark + 50, @dark, @square_opacity);
     }
 
     .piece {

@@ -24,6 +24,14 @@ define(['underscore'], function(_) {
     };
 
     FooBoard.prototype.update = function(obj) {
+        if (this.board.from) {
+            this._removeClass(this.squares[this.board.from], 'hl');
+        }
+        
+        if (this.board.to) {
+            this._removeClass(this.squares[this.board.to], 'hl');
+        }
+        
         _.each(this.pieces, function(p, pos) {
             if (obj.board[pos]) {
                 this._updatePiece(pos, obj.board[pos]);
@@ -31,7 +39,23 @@ define(['underscore'], function(_) {
                 p.className = '';
             }
         }, this);
+        
+        if (obj.from) {
+            this.squares[obj.from].className += ' hl';
+        }
+        
+        if (obj.to) {
+            this.squares[obj.to].className += ' hl';
+        }
+        
         this.board = obj;
+    };
+    
+    FooBoard.prototype._removeClass = function(node, name) {
+        var pos = node.className.indexOf(name);
+        if (pos >= 0) {
+            node.className = node.className.slice(0, pos);
+        }
     };
     
     FooBoard.prototype.onMove = function(fn) {

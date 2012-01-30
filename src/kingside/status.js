@@ -41,35 +41,25 @@ define(['underscore'], function(_) {
     Status.prototype.update = function(obj) {
         var state = obj.state;
         
-        var message = '';
+        var me = obj.w.type == 'local' ? 'w' : 'b';
+        var op = obj.w.type == 'local' ? 'b' : 'w';
         
-        var castling = this._isCastling(state.from, state.to, state.board);
-        var last_move = state.active_color == 'b' ? obj.w.name : obj.b.name;
-        if (castling) {
-            message = last_move + ' castled ' + castling;
-        }
-        else if (state.to) {
-            message = last_move + ' moved ' + this._pieceAt(state.to, state.board) + ' on ' + state.from + ' to ' + state.to;
+        if (state.finished) {
+            if (state.check) {
+                if (obj.state.active_color == me) {
+                    this._msg('checkmate, you lost');
+                } else {
+                    this._msg('checkmate, you won');
+                }
+            } else {
+                this._msg('it\'s a draw');
+            }
         } else {
-            if (obj[state.active_color].type == 'local') {
-                message = 'It\'s your move...';
-            } else {
-                var to_move = state.active_color == 'w' ? obj.w.name : obj.b.name;
-                message = to_move + ' to move';
-            }
+            this._msg('playing against ' + obj[op].name);
         }
-        if (state.check) {
-            if (state.finished) {
-                message += ', checkmate!!';
-            } else {
-                message += ', check!';
-            }
-        } else if (state.finished) {
-            message += ', stalemate!';
-        }
-        
-        message = 'Playing against ' + (obj.w.type == 'local' ? obj.b.name : obj.w.name) + ', ' + message;
-        
+    };
+    
+    Status.prototype._msg = function(message) {
         this.dom.innerHTML = message;
     };
     

@@ -37,7 +37,6 @@ define(['underscore', './timer'], function(_, Timer) {
     };
     
     Menu.prototype._hidePanel = function() {
-        console.log(this);
         this._timer.delay(_.bind(this._panel.slideUp, this._panel));
     };
     

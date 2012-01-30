@@ -2,7 +2,7 @@ define(['underscore', './garbochess.js'], function(_, Engine) {
     var Garbo = function(color) {
         this._color = color;
         this._engine = new Engine();
-        this.name = 'Computer';
+        this.name = 'the computer';
     };
     
     Garbo.prototype.update = function(obj) {
