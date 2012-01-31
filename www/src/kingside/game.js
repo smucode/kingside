@@ -1,4 +1,4 @@
-define(['underscore', '../../src/rex/rex', '../../src/fooboard/fooboard', './player'],
+define(['underscore', '../../../src/rex/rex', '../../src/fooboard/fooboard', './player'],
     function(_, Rex, FooBoard, Player, SaveGame) {
     
     var Game = function(white, black, board) {

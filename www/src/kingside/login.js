@@ -1,6 +1,6 @@
 define(['./auth'], function(auth) {
     var Login = function() {
-        var link = $('<a href="auth/google/">Login</a>');
+        var link = $('<a href="/auth/google/">Login</a>');
         $('.login').append(link);
         
         auth.onAuth(function(user) {

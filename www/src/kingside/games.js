@@ -17,7 +17,7 @@ define(['underscore', './timer', './panel', './auth', './socket'], function(_, T
         this._panel = new Panel(this._link, this._target, this._links);
         
         socket.on('find_game', function() {
-            console.log(arguments);
+            console.log('xxx', arguments);
         });
     };
     
