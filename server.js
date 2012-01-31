@@ -1,19 +1,16 @@
 var _ = require('underscore');
 var io = require('socket.io');
 var connect = require('connect');
-var everyauth = require('everyauth');
 var Fen = require('./src/rex/Fen');
+var conf = require('./src/conf/conf');
 var auth = require('./src/auth/auth').auth;
 var gameService = require('./src/services/gameService').GameService;
 var userService = require('./src/services/userService').UserService;
 
 var debug = false;
-var port = process.env.PORT || 8000;
-
-console.log('starting kingside on port ' + port);
 
 var server = connect(
-    connect.static(__dirname),
+    connect.static(conf.http.server_root),
     connect.bodyParser(),
     connect.cookieParser(),
     connect.session({secret: 'secret', key: 'express.sid'}),
@@ -86,9 +83,11 @@ var processGameRequests = function() {
 // socket.io stuff
 
 var io = require('socket.io').listen(server);
+
 if (!debug) {
     io.set('log level', 1);
 }
+
 if (process.env.PORT) {
     io.set("transports", ["xhr-polling"]); 
     io.set("polling duration", 10); 
@@ -154,4 +153,6 @@ var generateGameId = function() {
     return Math.floor(Math.random() * 1000000000000000).toString(16);
 };
 
-server.listen(port);
+server.listen(conf.http.port);
+
+console.log('started server on port ' + conf.http.port);
