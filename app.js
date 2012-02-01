@@ -1,6 +1,8 @@
 var express = require('express');
-var auth = require('./src/auth/auth').auth;
 var util = require('./src/util/httputils');
+
+var auth = require('./src/auth/auth').auth;
+var gameService = require('./src/services/gameService').GameService;
 
 var app = express.createServer();
 
@@ -25,6 +27,19 @@ app.get('/user', function(req, res, next){
     var user = auth.getUser(sid);
     res.contentType('json'); 
     res.send(user ? JSON.stringify(user) : '');
+});
+
+app.get('/games', function(req, res, next){
+    var sid = util.parseCookie(req.headers.cookie)['express.sid'];
+    var user = auth.getUser(sid);
+    res.contentType('json');
+    if(user) {
+        gameService.findUserGames(user.email, function(games) {
+            res.send(games ? JSON.stringify(games) : '');
+        });
+    } else {
+        res.send('');
+    }
 });
 
 app.listen(8000);
