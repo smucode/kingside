@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var dao = require('../dao/db').Db;
 var Fen = require('../rex/Fen');
 
@@ -9,15 +10,26 @@ GameService.prototype.push = function(gameId) {
     games[gameId] = new Fen().toString();
 };
 
+GameService.prototype._getFenString = function(gameId, from, to) {
+    var fen = new Fen(games[gameId]);
+    fen.move(from, to);
+    return fen.toString();
+};
+
 GameService.prototype.saveGame = function(from, to, gameId, game) {
     try {
-        var fen = new Fen(games[gameId]);
-        fen.move(from, to);
-        dao.saveGame(gameId, game.w, game.b, fen.toString());
+        var fenString = this._getFenString(gameId, from, to);
+        var game = {gameId: gameId, w: game.w, b: game.b, fen: fenString};
+        dao.findGame(game, function(games){
+            if(_.isEmpty(games)) {
+                dao.saveGame(game);
+            } else {
+                dao.updateGame(game);
+            }
+        });
     } catch (e) {
         console.error('Invalid move', from, to, e);
     }
-
 };
 
 GameService.prototype.findUserGames = function(user, cb) {
