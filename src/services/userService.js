@@ -4,19 +4,31 @@ var dao = require('../dao/db').Db;
 var UserService = function() {};
 
 UserService.prototype.saveUser = function(user) {
+    var that = this;
     dao.findUser({email: user.email}, function(err, users) {
+        var userIn = {name: user.firstname + ' ' + user.lastname, email: user.email};
         if(_.isEmpty(users)) {
-            dao.saveUser({name: user.firstname + ' ' + user.lastname, email: user.email},
-                function() {
-                    console.log('user saved', user);
-                }
-            );
+            that._saveUser(userIn, user);
+        } else {
+            that._updateUser(userIn, user);
         }
     });
 };
 
 UserService.prototype.setDao = function(inDao) {
     dao = inDao;
+};
+
+UserService.prototype._updateUser = function(userIn, user) {
+    dao.updateUser(userIn, function () {
+        console.log('user saved', user);
+    });
+};
+
+UserService.prototype._saveUser = function(userIn, user) {
+    dao.saveUser(userIn, function () {
+        console.log('user saved', user);
+    });
 };
 
 exports.UserService = new UserService();

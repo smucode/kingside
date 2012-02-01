@@ -58,7 +58,7 @@ vows.describe('db').addBatch({
         topic: function() {
             var cb = this.callback;
             db.removeGames({w: 'w'}, function() {
-                db.saveGame('id', 'w', 'b', 'fenelen', cb);
+                db.saveGame({gameId: 'id', w: 'w', b: 'b', fen: 'fenelen'}, cb);
             });
         },
         'save game' : function(err, stat) {
@@ -77,7 +77,7 @@ vows.describe('db').addBatch({
         topic: function() {
             var cb = this.callback;
             db.removeGames({w: 'w'}, function() {
-                db.saveGame('id', 'w', 'b', 'fenelen', function(done) {
+                db.saveGame({id: 'id', w: 'w', b: 'b', fen: 'fenelen'}, function(done) {
                     if(done) {
                         db.findUserGames('w', cb);
                     }

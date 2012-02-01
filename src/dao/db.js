@@ -32,7 +32,7 @@ Db.prototype.saveUser = function(userIn, cb) {
        cb(false);
        return;
    }
-   var user = new this._userModel({name: userIn.name, email: userIn.email});
+   var user = new this._userModel(userIn);
    return user.save(function(err) {
         if(err) {
             console.error('Could not persist user', user, err);
@@ -57,25 +57,34 @@ Db.prototype.removeUsers = function(key, cb) {
 };
 
 Db.prototype._gameModel = mongoose.model('Game', Game);
-Db.prototype.saveGame = function(id, w, b, fen, cb) {
+Db.prototype.saveGame = function(data, cb) {
     cb = cb || function() {};
-    if(!id || !w || !b || !fen) {
+    if(!data) {
         console.error("Could not persist game incorrect parameters", w, b, fen);
         cb(false);
         return;
     }
 
-    var game = new this._gameModel({gameId: id, w: w, b: b, fen: fen});
+    var game = new this._gameModel(data);
     return game.save(function(err){
         if(err) {
-            console.error('Could not persist game', w, b, fen);
+            console.error('Could not persist game', data);
             cb(false);
          }
          cb(true);
     });
 };
+
+Db.prototype.updateGame = function(data, cb) {
+    this._gameModel.update(data, function(err, data) {
+        if(err) {
+            console.error('Could not search for game', err);
+        }
+        cb(err, data);
+    });
+};
+
 Db.prototype.findGame = function(data, cb) {
-    console.log('looking for game', data, cb);
     this._gameModel.find(data, function(err, data) {
         if(err) {
             console.error('Could not search for game', err);
@@ -94,7 +103,6 @@ Db.prototype.findUserGames = function(user, cb) {
 
 Db.prototype.removeGames = function(key, cb) {
     this.findGame(key, function(err, games) {
-        console.log('looking for games');
         if(err) {
             console.log('Could not remove games');
             cb();

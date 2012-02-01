@@ -25,11 +25,14 @@ vows.describe('db').addBatch({
             assert.equal(testUser.email, lookingForUser.email);
             assert.isTrue(daoCalled);
         },
-        'if user does exist do not save it' : function() {
-            var daoCalled = false, lookingForUser;
+        'if user does exist do not update it' : function() {
+            var saveCalled = false, updateCalled = false, lookingForUser;
             service.setDao({
                 saveUser: function(user) {
-                    daoCalled = true;
+                    saveCalled = true;
+                },
+                updateUser: function(user) {
+                    updateCalled = true;
                 },
                 findUser: function(user, cb) {
                     lookingForUser = user;
@@ -38,7 +41,8 @@ vows.describe('db').addBatch({
             });
             var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
             service.saveUser(testUser);
-            assert.isFalse(daoCalled);
+            assert.isFalse(saveCalled);
+            assert.isTrue(updateCalled);
         }
     }
 
