@@ -7,6 +7,8 @@ define(['underscore', './timer'], function(_, Timer) {
         this._panel = this._createPanel();
         this._target.append(this._panel);
         
+        this.renderLinks(data);
+        
         // attach events
         
         this._timer = new Timer(500);
@@ -18,6 +20,20 @@ define(['underscore', './timer'], function(_, Timer) {
         this._panel.on('mouseout', _.bind(this._hidePanel, this));
         
         this._panel.on('mouseover', _.bind(this._timer.cancel, this._timer));
+    };
+    
+    Panel.prototype.renderLinks = function(data) {
+        this._data = data;
+        this._panel.empty();
+        _.each(this._data, function(v, k) {
+            var that = this;
+            var link = $('<a href="#" id="' + k + '">' + k + '</a>').click(function() {
+                var id = $(this).attr('id');
+                that.listener(that._data[id]);
+                that._panel.hide();
+            });
+            this._panel.append(link);
+        }, this);
     };
     
     Panel.prototype._showPanel = function() {
@@ -36,20 +52,8 @@ define(['underscore', './timer'], function(_, Timer) {
     };
     
     Panel.prototype._createPanel = function() {
-        var panel = $('<div></div>')
+        return $('<div></div>')
             .addClass('panel');
-        
-        _.each(this._data, function(v, k) {
-            var that = this;
-            var link = $('<a href="#" id="' + k + '">' + k + '</a>').click(function() {
-                var id = $(this).attr('id');
-                that.listener.apply(that.listener, that._data[id]);
-                panel.hide();
-            });
-            panel.append(link);
-        }, this);
-        
-        return panel;
     };
     
     Panel.prototype.onClick = function(fn) {

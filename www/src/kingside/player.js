@@ -10,7 +10,7 @@ define([
     
     var Local = function(color) {
         this._color = color;
-        this.name = auth.getUser() ? auth.getUser().name : 'You';
+        this.name = auth.user ? auth.user.name : 'You';
         this.type = 'local';
     };
     

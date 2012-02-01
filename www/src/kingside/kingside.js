@@ -29,10 +29,13 @@ define('kingside', [
         }, this));
         
         var games = new Games();
+        games.onClick(function(game) {
+            console.info(game);
+        });
     };
     
     Kingside.prototype._createGame = function(p1, p2) {
-        var loggedInUser = auth.getUser();
+        var loggedInUser = auth.user;
         if (p2 == 'remote' && !loggedInUser) {
             this._status.setMessage('You must log in to play online...');
         } else {
@@ -57,7 +60,9 @@ define('kingside', [
     };
 
     $(function() {
-        new Login();
-        new Kingside();
+        auth.getUser(function() {
+            new Login();
+            new Kingside();
+        });
     });
 });
