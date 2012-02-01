@@ -8,12 +8,14 @@ define(['underscore', './timer', './panel', './auth', './socket'], function(_, T
         this._target.append(this._panel);
         
         this._links = {};
-        if (!auth.getUser()) {
+        var user = auth.getUser();
+        if (!user) {
             this._links['Please log in to see your active games'] = {};
         } else {
+            socket.emit('find_game', user.email);
             this._links['bla di bla'] = {};
         }
-        
+
         this._panel = new Panel(this._link, this._target, this._links);
         
         socket.on('find_game', function() {

@@ -11,13 +11,12 @@ define('kingside', [
         './game', 
         './login',
         './menu',
-        './save_game',
         './status',
         './auth',
         '../../src/fooboard/fooboard',
         './games'
     ],
-    function(_, Game, Login, Menu, SaveGame, Status, auth, FooBoard, Games) {
+    function(_, Game, Login, Menu, Status, auth, FooBoard, Games) {
         
     var Kingside = function() {
         this._status = new Status({ target: $('.content').get()[0] });
@@ -46,7 +45,6 @@ define('kingside', [
                 //Get in some user ids here
                 this._game = game;
                 this._game.onMove(_.bind(this._status.update, this._status));
-                this._createSaveGame(game);
             }, this));
         }
     };
@@ -56,14 +54,6 @@ define('kingside', [
         var target = $('<div></div>');
         content.append(target);
         return new FooBoard(target.get()[0]);
-    };
-
-    Kingside.prototype._createSaveGame = function(game) {
-        var loggedInUser = auth.getUser();
-        if(!game || !loggedInUser) {
-            return;
-        }
-        new SaveGame(loggedInUser.email, game.rex);
     };
 
     $(function() {
