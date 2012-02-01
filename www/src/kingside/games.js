@@ -14,7 +14,7 @@ define(['underscore', './timer', './panel', './auth', './socket'], function(_, T
             var map = {};
             _.each(games, function(game, i) {
                 var id = (i + 1) + ': ' + this._getGameDesc(game);
-                map[id] = game;
+                map[id] = [game];
             }, this);
             this._panel.renderLinks(map);
         }, this));

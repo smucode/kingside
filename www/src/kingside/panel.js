@@ -29,7 +29,7 @@ define(['underscore', './timer'], function(_, Timer) {
             var that = this;
             var link = $('<a href="#" id="' + k + '">' + k + '</a>').click(function() {
                 var id = $(this).attr('id');
-                that.listener(that._data[id]);
+                that.listener.apply(that.listener, that._data[id]);
                 that._panel.hide();
             });
             this._panel.append(link);
