@@ -1,4 +1,5 @@
 var everyauth = require('everyauth');
+var util = require('../util/httputils');
 
 var Auth = function() {
     this._users = {};
@@ -13,7 +14,7 @@ Auth.prototype._googleAuth = function() {
     console.log('auth: hostname ' + hostname);
 
     everyauth.everymodule.moduleErrback(function (err) {
-        console.log(err);
+        console.log('err', err);
     });
     
     everyauth.googlehybrid
@@ -22,7 +23,7 @@ Auth.prototype._googleAuth = function() {
         .consumerSecret('cJ_R8LWwNLwV6z71S-OD3wam')
         .scope(['https://www.googleapis.com/auth/userinfo.profile'])
         .findOrCreateUser(function (session, user, ctx) {
-            var sid = ctx.req.sessionID;
+            var sid = util.parseCookie(ctx.req.headers.cookie)['express.sid'];
             that._users[sid] = user;
             return user.claimedIdentifier;
         })
