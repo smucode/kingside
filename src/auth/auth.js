@@ -24,6 +24,7 @@ Auth.prototype._googleAuth = function() {
         .scope(['https://www.googleapis.com/auth/userinfo.profile'])
         .findOrCreateUser(function (session, user, ctx) {
             var sid = util.parseCookie(ctx.req.headers.cookie)['express.sid'];
+            console.log('sid', sid);
             that._users[sid] = user;
             return user.claimedIdentifier;
         })

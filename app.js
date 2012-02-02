@@ -3,10 +3,12 @@ var util = require('./src/util/httputils');
 
 var auth = require('./src/auth/auth').auth;
 var gameService = require('./src/services/gameService').GameService;
+var RemoteGameService = require('./src/game/remoteGameService').RemoteGameService;
 
 var app = express.createServer();
 
 var io = require('socket.io').listen(app);
+var remoteGameService = new RemoteGameService(io);
 
 app.configure(function(){
     app.use(express.methodOverride());
@@ -42,4 +44,18 @@ app.get('/games', function(req, res, next){
     }
 });
 
+app.get('/request_game/', function(req, res, next){
+    var sid = util.parseCookie(req.headers.cookie)['express.sid'];
+    var user = auth.getUser(sid);
+    res.contentType('json');
+    if(user) {
+        gameService.findUserGames(user.email, function(games) {
+            res.send(games ? JSON.stringify(games) : '');
+        });
+    } else {
+        res.send('');
+    }
+});
+
 app.listen(8000);
+remoteGameService.listen();
