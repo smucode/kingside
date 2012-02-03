@@ -2,28 +2,30 @@ var _ = require('underscore');
 var dao = require('../dao/db').Db;
 var Fen = require('../rex/Fen');
 
-var GameService = function() {};
-
-var games = {};
+var GameService = function() {
+    this._games = {};
+};
 
 GameService.prototype.push = function(gameId) {
-    games[gameId] = new Fen().toString();
+    this._games[gameId] = new Fen().toString();
 };
 
 GameService.prototype._getFenString = function(gameId, from, to) {
-    var fen = new Fen(games[gameId]);
+    var fen = new Fen(this._games[gameId]);
     fen.move(from, to);
     return fen.toString();
 };
 
-GameService.prototype.saveGame = function(from, to, gameId, game) {
+GameService.prototype.saveGame = function(from, to, gameId, gameIn) {
     try {
         var fenString = this._getFenString(gameId, from, to);
-        var game = {gameId: gameId, w: game.w, b: game.b, fen: fenString};
-        dao.findGame(game, function(games){
-            if(_.isEmpty(games)) {
+        var game = {gameId: gameId, w: gameIn.w, b: gameIn.b};
+        dao.findGame(game, function(err, games) {
+            game.fen = fenString;
+            if(!games ||_.isEmpty(games)) {
                 dao.saveGame(game);
             } else {
+                console.log('update', game);
                 dao.updateGame(game);
             }
         });

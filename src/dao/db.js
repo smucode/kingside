@@ -76,7 +76,9 @@ Db.prototype.saveGame = function(data, cb) {
 };
 
 Db.prototype.updateGame = function(data, cb) {
-    this._gameModel.update(data, function(err, data) {
+    cb = cb || function(){};
+    var query = {gameId: data.gameId};
+    this._gameModel.update(query, data, { multi: true }, function(err, data) {
         if(err) {
             console.error('Could not search for game', err);
         }
