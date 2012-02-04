@@ -1,25 +1,33 @@
 define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player', '../../../src/event/pubsub'],
     function(_, Rex, FooBoard, Player, pubsub) {
     
-    var Game = function(white, black, board) {
+    var Game = function(white, black) {
         this.rex = this._createRex();
         
         white.onMove(this._bind(this.rex, 'move'));
         black.onMove(this._bind(this.rex, 'move'));
         
-        // board.onMove(this._bind(this.rex, 'move'));
-        pubsub.sub('/fooboard/move', _.bind(function(obj) {
+        this._fbMoveHandler = _.bind(function(obj) {
             this.rex.move(obj.from, obj.to);
-        }, this));
+        }, this);
+        
+        pubsub.sub('/fooboard/move', this._fbMoveHandler);
         
         this.rex.onMove(this._bind(white, 'update'));
         this.rex.onMove(this._bind(black, 'update'));
-        this.rex.onMove(this._bind(board, 'update'));
+        
+        this.rex.onMove(function(state) {
+            pubsub.pub('/game/updated', state);
+        });
         
         this._white = white;
         this._black = black;
     };
 
+    Game.prototype.destroy = function() {
+        pubsub.desub('/fooboard/move', this._fbMoveHandler);
+    };
+    
     Game.prototype.onMove = function(fn) {
         var that = this;
         this.rex.onMove(function(state) {
@@ -45,17 +53,14 @@ define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player'
     
     var Factory = function() {};
     
-    Factory.prototype.create = function(p1Type, p2Type, board, cb) {
-        Player.create(p2Type, 'b', board, function(player2) {
+    Factory.prototype.create = function(p1Type, p2Type, cb) {
+        Player.create(p2Type, 'b', function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
-            Player.create(p1Type, col, board, function(player1) {
-                board.render({
-                    orientation: col
-                });
+            Player.create(p1Type, col, function(player1) {
                 if (col == 'w') {
-                    cb(new Game(player1, player2, board));
+                    cb(new Game(player1, player2));
                 } else {
-                    cb(new Game(player2, player1, board));
+                    cb(new Game(player2, player1));
                 }
             });
         });

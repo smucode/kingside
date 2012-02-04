@@ -19,13 +19,19 @@ define('kingside', [
     function(_, Game, Login, Menu, Status, auth, FooBoard, Games) {
         
     var Kingside = function() {
-        this._status = new Status({ target: $('.content').get()[0] });
+        this._status = new Status({ 
+            target: $('.content').get()[0] 
+        });
         
         this._createGame('local', 'garbo');
 
         var menu = new Menu();
         menu.onStart(_.bind(function(p1, p2) {
-            this._createGame(p1, p2);
+            if (p2 == 'remote' && !auth.user) {
+                this._status.setMessage('You must log in to play online...');
+            } else {
+                this._createGame(p1, p2);
+            }
         }, this));
         
         var games = new Games();
@@ -33,31 +39,21 @@ define('kingside', [
             console.info(game);
         });
     };
-    
-    /*
-    {
-        gameId: foo,
-        w: 'email',
-        b: 'email',
-        fen: 'foo'
-    }
-    */
-    
+
     Kingside.prototype._createGame = function(p1, p2) {
-        if (p2 == 'remote' && !auth.user) {
-            this._status.setMessage('You must log in to play online...');
-            return;
-        }
-        
         if (this._board) {
             this._board.destroy();
         }
         
         this._board = this._createFooBoard();
+        this._board.render();
+        
         this._status.setMessage('Waiting for opponent...');
         
-        Game.create(p1, p2, this._board, _.bind(function(game) {
-            //Get in some user ids here
+        Game.create(p1, p2, _.bind(function(game) {
+            if (this._game) {
+                this._game.destroy();
+            }
             this._game = game;
             this._game.onMove(_.bind(this._status.update, this._status));
         }, this));

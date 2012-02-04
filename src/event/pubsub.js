@@ -28,5 +28,12 @@ define(["underscore"], function(__) {
         this.topics[topic].push(callback);
     };
     
+    PubSub.prototype.desub = function(topic, callback) {
+        if (this.debug) {
+            console.log('desub. topic: ' + topic + '. callback: ', callback);
+        }
+        this.topics[topic] = __.without(this.topics[topic], callback);
+    };
+    
     return new PubSub();
 });

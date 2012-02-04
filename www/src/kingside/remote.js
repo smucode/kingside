@@ -2,7 +2,7 @@ define(['underscore', './socket'], function(_, socket) {
     
     // remote
     
-    var Remote = function(color, board, gameId, name) {
+    var Remote = function(color, gameId, name) {
         this._color = color; 
         this._board = board;
         this._gameId = gameId;
@@ -18,7 +18,7 @@ define(['underscore', './socket'], function(_, socket) {
         if (obj.from) {
             socket.emit('move', this._gameId, obj.from, obj.to);
         }
-        this._board.update(obj);
+        // this._board.update(obj);
     };
     
     Remote.prototype.onMove = function(fn) {
@@ -38,9 +38,9 @@ define(['underscore', './socket'], function(_, socket) {
     var Factory = function() {
     };
     
-    Factory.prototype.create = function(board, cb) {
+    Factory.prototype.create = function(cb) {
         socket.on('game_ready', function(color, gameId, name) {
-            var remote = new Remote(color, board, gameId, name);
+            var remote = new Remote(color, gameId, name);
             cb(remote);
         });
         

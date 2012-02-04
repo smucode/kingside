@@ -5,8 +5,9 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.pieces = {};
         this.squares = {};
         this.selected = null;
-        
         this.target = target;
+        
+        pubsub.sub('/game/updated', _.bind(this.update, this));
     };
     
     // public
@@ -15,7 +16,7 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
 
-        if (opts.orientation == 'b') {
+        if (opts && opts.orientation == 'b') {
             this.files.reverse();
             this.ranks.reverse();
         }
