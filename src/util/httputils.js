@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var conf = require('../conf/conf');
 
 exports.parseCookie = function(cookie) {
     var s = {};
@@ -9,4 +10,8 @@ exports.parseCookie = function(cookie) {
         });
     }
     return s;
+};
+
+exports.getSid = function(cookie) {
+    return exports.parseCookie(cookie)[conf.http.session.sid];
 };

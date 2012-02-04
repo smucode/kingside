@@ -1,4 +1,5 @@
 var express = require('express');
+var conf = require('./src/conf/conf');
 var util = require('./src/util/httputils');
 
 var auth = require('./src/auth/auth').auth;
@@ -15,7 +16,10 @@ app.configure(function(){
     app.use(express.bodyParser());
     app.use(app.router);
     app.use(express.cookieParser());
-    app.use(express.session({ secret: "keyboard cat", key: 'express.sid' }));
+    app.use(express.session({
+        key: conf.http.session.sid,
+        secret: conf.http.session.secret 
+    }));
     app.use(auth.middleware());
 });
 
@@ -25,14 +29,14 @@ app.configure('development', function(){
 });
 
 app.get('/user', function(req, res, next){
-    var sid = util.parseCookie(req.headers.cookie)['express.sid'];
+    var sid = util.getSid(req.headers.cookie);
     var user = auth.getUser(sid);
     res.contentType('json'); 
     res.send(user ? JSON.stringify(user) : '');
 });
 
 app.get('/games', function(req, res, next){
-    var sid = util.parseCookie(req.headers.cookie)['express.sid'];
+    var sid = util.getSid(req.headers.cookie);
     var user = auth.getUser(sid);
     res.contentType('json');
     if(user) {
@@ -45,7 +49,7 @@ app.get('/games', function(req, res, next){
 });
 
 app.get('/request_game/', function(req, res, next){
-    var sid = util.parseCookie(req.headers.cookie)['express.sid'];
+    var sid = util.getSid(req.headers.cookie);
     var user = auth.getUser(sid);
     res.contentType('json');
     if(user) {
