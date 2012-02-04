@@ -19,9 +19,13 @@ define('kingside', [
     function(_, Game, Login, Menu, Status, auth, FooBoard, Games) {
         
     var Kingside = function() {
+        
         this._status = new Status({ 
-            target: $('.content').get()[0] 
+            target: $('.content').get()[0]
         });
+        
+        var board = this._createFooBoard();
+        board.render();
         
         this._createGame('local', 'garbo');
 
@@ -38,16 +42,10 @@ define('kingside', [
         games.onClick(function(game) {
             console.info(game);
         });
+
     };
 
     Kingside.prototype._createGame = function(p1, p2) {
-        if (this._board) {
-            this._board.destroy();
-        }
-        
-        this._board = this._createFooBoard();
-        this._board.render();
-        
         this._status.setMessage('Waiting for opponent...');
         
         Game.create(p1, p2, _.bind(function(game) {
@@ -57,6 +55,7 @@ define('kingside', [
             this._game = game;
             this._game.onMove(_.bind(this._status.update, this._status));
         }, this));
+        
     };
     
     Kingside.prototype._createFooBoard = function() {
