@@ -1,5 +1,4 @@
 define(['underscore', './socket'], function(_, socket) {
-    
     return (function() {
         return {
             getUser: function(cb) {

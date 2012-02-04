@@ -13,5 +13,9 @@ exports.parseCookie = function(cookie) {
 };
 
 exports.getSid = function(cookie) {
-    return exports.parseCookie(cookie)[conf.http.session.sid];
+    var sid = exports.parseCookie(cookie)[conf.http.session.sid];
+    if (conf.debug) {
+        console.log('got sid: ', sid);
+    }
+    return sid;
 };

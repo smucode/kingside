@@ -1,6 +1,7 @@
 var _ = require('underscore');
 
 var conf = {
+    debug: true,
     http: {
         port: process.env.PORT || 8000,
         server_root: __dirname + '/../../',

@@ -61,9 +61,11 @@ app.get('/request_game/', function(req, res, next){
     }
 });
 
-app.listen(8000);
+app.listen(conf.http.port);
+
 remoteGameService.onMove(function(from, to, gameId, game) {
     gameService.saveGame(from, to, gameId, game);
 
 });
+
 remoteGameService.listen();

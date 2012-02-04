@@ -34,22 +34,33 @@ define('kingside', [
         });
     };
     
+    /*
+    {
+        gameId: foo,
+        w: 'email',
+        b: 'email',
+        fen: 'foo'
+    }
+    */
+    
     Kingside.prototype._createGame = function(p1, p2) {
-        var loggedInUser = auth.user;
-        if (p2 == 'remote' && !loggedInUser) {
+        if (p2 == 'remote' && !auth.user) {
             this._status.setMessage('You must log in to play online...');
-        } else {
-            if (this._board) {
-                this._board.destroy();
-            }
-            this._board = this._createFooBoard();
-            this._status.setMessage('Waiting for opponent...');
-            Game.create(p1, p2, this._board, _.bind(function(game) {
-                //Get in some user ids here
-                this._game = game;
-                this._game.onMove(_.bind(this._status.update, this._status));
-            }, this));
+            return;
         }
+        
+        if (this._board) {
+            this._board.destroy();
+        }
+        
+        this._board = this._createFooBoard();
+        this._status.setMessage('Waiting for opponent...');
+        
+        Game.create(p1, p2, this._board, _.bind(function(game) {
+            //Get in some user ids here
+            this._game = game;
+            this._game.onMove(_.bind(this._status.update, this._status));
+        }, this));
     };
     
     Kingside.prototype._createFooBoard = function() {

@@ -1,12 +1,16 @@
-define(['underscore', '../../../src/rex/rex', '../../src/fooboard/fooboard', './player'],
-    function(_, Rex, FooBoard, Player, SaveGame) {
+define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player', '../../../src/event/pubsub'],
+    function(_, Rex, FooBoard, Player, pubsub) {
     
     var Game = function(white, black, board) {
         this.rex = this._createRex();
         
         white.onMove(this._bind(this.rex, 'move'));
         black.onMove(this._bind(this.rex, 'move'));
-        board.onMove(this._bind(this.rex, 'move'));
+        
+        // board.onMove(this._bind(this.rex, 'move'));
+        pubsub.sub('/fooboard/move', _.bind(function(obj) {
+            this.rex.move(obj.from, obj.to);
+        }, this));
         
         this.rex.onMove(this._bind(white, 'update'));
         this.rex.onMove(this._bind(black, 'update'));

@@ -1,4 +1,4 @@
-define(['underscore'], function(_) {
+define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
 
     var FooBoard = function(target) {
         this.board = {};
@@ -56,10 +56,6 @@ define(['underscore'], function(_) {
         if (pos >= 0) {
             node.className = node.className.slice(0, pos);
         }
-    };
-    
-    FooBoard.prototype.onMove = function(fn) {
-        this._listener = fn;
     };
     
     FooBoard.prototype.destroy = function(fn) {
@@ -129,7 +125,10 @@ define(['underscore'], function(_) {
 
     FooBoard.prototype._fireEvent = function(from, to) {
         this.selected = null;
-        this._listener(from, to);
+        pubsub.pub('/fooboard/move', {
+            from: from,
+            to: to
+        });
     };
     
     FooBoard.prototype._getClassName = function(file, rank) {
