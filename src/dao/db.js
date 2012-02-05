@@ -12,7 +12,7 @@ var Game = new Schema({
     w: {type: String},
     b: {type: String},
     fen: {type: String},
-    date: {type: Date, default: Date.now}
+    date: {type: Date, 'default': Date.now}
 });
 
 var Db = function() {

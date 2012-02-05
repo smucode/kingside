@@ -1,8 +1,6 @@
 #!/bin/bash
-jshint src/rex/*
-jshint src/event/*
-jshint src/services/*
 
+jshint src/*
 jshint www/src/*
 
 vows src/rex/test/*

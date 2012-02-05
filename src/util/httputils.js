@@ -4,7 +4,7 @@ var conf = require('../conf/conf');
 exports.parseCookie = function(cookie) {
     var s = {};
     if (cookie) {
-        _.each(cookie.split(';\ '), function(c) {
+        _.each(cookie.split(';\\ '), function(c) {
             var vals = c.split('=');
              s[vals[0]] = vals[1];
         });
