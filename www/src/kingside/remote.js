@@ -4,7 +4,6 @@ define(['underscore', './socket'], function(_, socket) {
     
     var Remote = function(color, gameId, name) {
         this._color = color; 
-        this._board = board;
         this._gameId = gameId;
         
         this.name = name;
@@ -38,7 +37,11 @@ define(['underscore', './socket'], function(_, socket) {
     var Factory = function() {
     };
     
-    Factory.prototype.create = function(cb) {
+    Factory.prototype.create = function(color, gameId, name) {
+        return new Remote(color, gameId, name);
+    };
+    
+    Factory.prototype.request = function(cb) {
         socket.on('game_ready', function(color, gameId, name) {
             var remote = new Remote(color, gameId, name);
             cb(remote);

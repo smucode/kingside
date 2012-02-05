@@ -1,8 +1,14 @@
 define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player', '../../../src/event/pubsub'],
     function(_, Rex, FooBoard, Player, pubsub) {
     
-    var Game = function(white, black) {
-        this.rex = this._createRex();
+    var Game = function(obj) {
+        white = obj.w;
+        black = obj.b;
+        fen = obj.fen;
+        
+        this.id = Math.random();
+        
+        this.rex = this._createRex(fen);
         
         white.onMove(this._bind(this.rex, 'move'));
         black.onMove(this._bind(this.rex, 'move'));
@@ -16,9 +22,10 @@ define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player'
         this.rex.onMove(this._bind(white, 'update'));
         this.rex.onMove(this._bind(black, 'update'));
         
-        this.rex.onMove(function(state) {
+        this.rex.onMove(_.bind(function(state) {
+            state.gameId = this.id;
             pubsub.pub('/game/updated', state);
-        });
+        }, this));
         
         this._white = white;
         this._black = black;
@@ -41,8 +48,8 @@ define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player'
     
     // private
     
-    Game.prototype._createRex = function() {
-        return new Rex();
+    Game.prototype._createRex = function(fen) {
+        return new Rex(fen);
     };
     
     Game.prototype._bind = function(obj, name) {
@@ -51,19 +58,23 @@ define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player'
         
     // factory
     
-    var Factory = function() {};
+    var Factory = function() {
+    };
     
-    Factory.prototype.create = function(p1Type, p2Type, cb) {
-        Player.create(p2Type, 'b', function(player2) {
+    Factory.prototype.create = function(def, cb) {
+        
+        Player.create(def.b, 'b', function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
-            Player.create(p1Type, col, function(player1) {
-                if (col == 'w') {
-                    cb(new Game(player1, player2));
-                } else {
-                    cb(new Game(player2, player1));
-                }
+            Player.create(def.w, col, function(player1) {
+                var game = new Game({
+                    w: col == 'w' ? player1 : player2,
+                    b: col == 'w' ? player2 : player1,
+                    fen: def.fen
+                });
+                cb(game);
             });
         });
+        
     };
     
     return new Factory();

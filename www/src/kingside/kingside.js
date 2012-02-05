@@ -27,32 +27,32 @@ define('kingside', [
         var board = this._createFooBoard();
         board.render();
         
-        this._createGame('local', 'garbo');
+        this._createGame({w: 'local', b: 'garbo'});
 
         var menu = new Menu();
         menu.onStart(_.bind(function(p1, p2) {
             if (p2 == 'remote' && !auth.user) {
                 this._status.setMessage('You must log in to play online...');
             } else {
-                this._createGame(p1, p2);
+                this._createGame({w: p1, b: p2});
             }
         }, this));
         
         var games = new Games();
-        games.onClick(function(game) {
-            console.info(game);
-        });
+        games.onClick(_.bind(this._createGame, this));
 
     };
 
-    Kingside.prototype._createGame = function(p1, p2) {
+    Kingside.prototype._createGame = function(obj) {
         this._status.setMessage('Waiting for opponent...');
         
-        Game.create(p1, p2, _.bind(function(game) {
+        Game.create(obj, _.bind(function(game) {
             if (this._game) {
                 this._game.destroy();
             }
             this._game = game;
+            
+            // hum, shoud use pubsub...
             this._game.onMove(_.bind(this._status.update, this._status));
         }, this));
         

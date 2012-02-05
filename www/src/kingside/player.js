@@ -35,11 +35,12 @@ define([
             case 'garbo':
                 cb(this._createGarbo(color)); break;
             case 'local':
+            case (auth.user ? auth.user.email : ''):
                 cb(this._createLocal(color)); break;
             case 'remote':
-                Remote.create(cb); break;
+                Remote.request(cb); break;
             default:
-                throw 'unknown player type: ' + type;
+                cb(Remote.create(color, 'foo', type)); break;
         }
     };
     

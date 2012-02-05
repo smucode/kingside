@@ -127,8 +127,9 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     FooBoard.prototype._fireEvent = function(from, to) {
         this.selected = null;
         pubsub.pub('/fooboard/move', {
+            to: to,
             from: from,
-            to: to
+            gameId: this.board.gameId
         });
     };
     
