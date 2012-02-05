@@ -14,9 +14,10 @@ define('kingside', [
         './status',
         './auth',
         '../../src/fooboard/fooboard',
-        './games'
+        './games',
+        './socket'
     ],
-    function(_, Game, Login, Menu, Status, auth, FooBoard, Games) {
+    function(_, Game, Login, Menu, Status, auth, FooBoard, Games, socket) {
         
     var Kingside = function() {
         
@@ -41,21 +42,27 @@ define('kingside', [
         var games = new Games();
         games.onClick(_.bind(this._createGame, this));
 
+        socket.on('game_ready', _.bind(function(game) {
+            this._createGame(game);
+        }, this));
+
     };
 
     Kingside.prototype._createGame = function(obj) {
-        this._status.setMessage('Waiting for opponent...');
-        
-        Game.create(obj, _.bind(function(game) {
-            if (this._game) {
-                this._game.destroy();
-            }
-            this._game = game;
-            
-            // hum, shoud use pubsub...
-            this._game.onMove(_.bind(this._status.update, this._status));
-        }, this));
-        
+        if (obj.b == 'remote') {
+            this._status.setMessage('Waiting for opponent...');
+            Game.request();
+        } else {
+            Game.create(obj, _.bind(function(game) {
+                if (this._game) {
+                    this._game.destroy();
+                }
+                this._game = game;
+                
+                // hum, shoud use pubsub...
+                this._game.onMove(_.bind(this._status.update, this._status));
+            }, this));
+        }
     };
     
     Kingside.prototype._createFooBoard = function() {

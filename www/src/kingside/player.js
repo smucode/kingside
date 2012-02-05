@@ -30,7 +30,7 @@ define([
     
     var Factory = function() {};
     
-    Factory.prototype.create = function(type, color, cb) {
+    Factory.prototype.create = function(type, color, gameId, cb) {
         switch(type) {
             case 'garbo':
                 cb(this._createGarbo(color)); break;
@@ -40,7 +40,7 @@ define([
             case 'remote':
                 Remote.request(cb); break;
             default:
-                cb(Remote.create(color, 'foo', type)); break;
+                cb(Remote.create(color, gameId, type)); break;
         }
     };
     
@@ -53,5 +53,4 @@ define([
     };
     
     return new Factory();
-    
 });

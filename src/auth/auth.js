@@ -23,7 +23,7 @@ Auth.prototype._googleAuth = function() {
         .consumerSecret('cJ_R8LWwNLwV6z71S-OD3wam')
         .scope(['https://www.googleapis.com/auth/userinfo.profile'])
         .findOrCreateUser(function (session, user, ctx) {
-            var sid = util.parseCookie(ctx.req.headers.cookie)['express.sid'];
+            var sid = util.getSid(ctx.req.headers.cookie);
             console.log('sid', sid);
             that._users[sid] = user;
             return user.claimedIdentifier;

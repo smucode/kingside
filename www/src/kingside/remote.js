@@ -3,18 +3,19 @@ define(['underscore', './socket'], function(_, socket) {
     // remote
     
     var Remote = function(color, gameId, name) {
+        this.name = name;
         this._color = color; 
         this._gameId = gameId;
         
-        this.name = name;
-        
         socket.on('move', _.bind(function(from, to) {
+            console.log('socket move', arguments);
             this._listener(from, to);
         }, this));
     };
     
     Remote.prototype.update = function(obj) {
         if (obj.from) {
+            console.log('emit move ', this._gameId, obj.from, obj.to);
             socket.emit('move', this._gameId, obj.from, obj.to);
         }
     };

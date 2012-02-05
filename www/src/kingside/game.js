@@ -1,10 +1,10 @@
-define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pubsub'],
-    function(_, Rex, Player, pubsub) {
+define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pubsub', './socket'],
+    function(_, Rex, Player, pubsub, socket) {
     
     var Game = function(obj) {
-        white = obj.w;
-        black = obj.b;
-        fen = obj.fen;
+        var white = obj.w;
+        var black = obj.b;
+        var fen = obj.fen;
         
         this.id = Math.random();
         
@@ -61,11 +61,14 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
     var Factory = function() {
     };
     
+    Factory.prototype.request = function() {
+        socket.emit('request_game');
+    };
+    
     Factory.prototype.create = function(def, cb) {
-        
-        Player.create(def.b, 'b', function(player2) {
+        Player.create(def.b, 'b', def.gameId, function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
-            Player.create(def.w, col, function(player1) {
+            Player.create(def.w, col, def.gameId, function(player1) {
                 var game = new Game({
                     w: col == 'w' ? player1 : player2,
                     b: col == 'w' ? player2 : player1,
@@ -74,7 +77,6 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
                 cb(game);
             });
         });
-        
     };
     
     return new Factory();

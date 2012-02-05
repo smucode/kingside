@@ -1,10 +1,10 @@
 var _ = require('underscore');
 var auth = require('../auth/auth').auth;
-var util = require('..//util/httputils');
+var util = require('../util/httputils');
 var Event = require('../event/event');
-
 var io = require('../io/io').io;
 var gameService = require('../services/gameService').GameService;
+var Fen = require('../rex/fen');
 
 var RemoteGameService = function() {
     this._io = io;
@@ -30,21 +30,23 @@ RemoteGameService.prototype.processGameRequests = function() {
     var whiteUser = this._gameRequests.pop();
     var blackUser = this._gameRequests.pop();
     if (whiteUser && blackUser) {
-        var gameId = this._generateGameId();
+        
+        var game = {
+            gameId: this._generateGameId(),
+            w: whiteUser,
+            b: blackUser,
+            fen: Fen.initString
+        };
 
         var socket = this._sockets[whiteUser];
-        socket.emit('game_ready', 'w', gameId, blackUser);
-
+        socket.emit('game_ready', game);
+        
         socket = this._sockets[blackUser];
-        socket.emit('game_ready', 'b', gameId, whiteUser);
+        socket.emit('game_ready', game);
 
-        var game = {
-            w: whiteUser,
-            b: blackUser
-        };
-        this._games[gameId] = game;
+        this._games[game.gameId] = game;
 
-        gameService.saveGame(gameId, game);
+        gameService.saveGame(game.gameId, game);
 
     } else {
         if (whiteUser) {
@@ -69,12 +71,8 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     var that = this;
     socket.on('move', function(gameId, from, to) {
         var game = that._games[gameId];
-        _.each(game, function(email, side) {
-            if (user.email != email) {
-                var otherSocket = that._sockets[email];
-                otherSocket.emit('move', from, to);
-            }
-        });
+        var otherSocket = that._sockets[game.w == user.email ? game.b : game.w];
+        otherSocket.emit('move', from, to);
         that._fireEvent(from, to, gameId, game);
     });
 };
