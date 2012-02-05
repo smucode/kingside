@@ -79,19 +79,24 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     });
 };
 
+RemoteGameService.prototype._listenAfterRequestGame = function(socket) {
+    var that = this;
+    socket.on('request_game', function() {
+        if(user) {
+            that._sockets[user.email] = socket;
+            that._gameRequests.push(user.email);
+            that.processGameRequests();
+        }
+    });
+};
+
 RemoteGameService.prototype.listen = function() {
     var that = this;
     this._io.sockets.on('connection', function (socket) {
         var sid = util.parseCookie(socket.handshake.headers.cookie)['express.sid'];
         var user = auth.getUser(sid);
-        socket.on('request_game', function() {
-            if(user) {
-                that._sockets[user.email] = socket;
-                that._gameRequests.push(user.email);
-                that.processGameRequests();
-            }
-            that._listenAfterMove(socket, user);
-        });
+        that._listenAfterRequestGame(socket);
+        that._listenAfterMove(socket, user);
     });
 };
 
