@@ -19,7 +19,6 @@ vows.describe('db').addBatch({
                 }
             });
             var gameId = 'id';
-            service.push(gameId);
             service.updateGame('a2', 'a4', gameId, {w: 'white', b:'black'});
             assert.isTrue(updateCalled);
         },
@@ -31,13 +30,11 @@ vows.describe('db').addBatch({
                 }
             });
             var gameId = 'id';
-            service.push(gameId);
             service.saveGame(gameId, {w: 'white', b:'black'});
             assert.isTrue(daoCalled);
         },
         'save game validates moves' : function() {
             var gameId = 'id';
-            service.push(gameId);
             assert.throws(service.saveGame(gameId, {w: 'white', b:'black'}));
         },
         'find users games calles dao': function() {

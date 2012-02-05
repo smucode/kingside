@@ -49,6 +49,7 @@ define('kingside', [
     };
 
     Kingside.prototype._createGame = function(obj) {
+        console.log('create game', obj);
         if (obj.b == 'remote') {
             this._status.setMessage('Waiting for opponent...');
             Game.request();

@@ -25,6 +25,7 @@ Db.prototype.connect = function() {
 };
 
 Db.prototype._userModel = mongoose.model('User', User);
+
 Db.prototype.saveUser = function(userIn, cb) {
    cb = cb || function() {};
    if(!userIn || _.isEmpty(userIn)) {
@@ -57,6 +58,7 @@ Db.prototype.removeUsers = function(key, cb) {
 };
 
 Db.prototype._gameModel = mongoose.model('Game', Game);
+
 Db.prototype.saveGame = function(data, cb) {
     cb = cb || function() {};
     if(!data) {

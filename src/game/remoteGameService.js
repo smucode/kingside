@@ -14,9 +14,9 @@ var RemoteGameService = function() {
     this._listeners = [];
     this._event = new Event();
     
-    this.onMove(function(from, to, gameId, game) {
-        console.log('from', from, 'to', to, 'gameId', gameId, 'game', game);
-        gameService.updateGame(from, to, gameId, game);
+    this.onMove(function(from, to, game) {
+        console.log('from', from, 'to', to, 'game', game);
+        gameService.updateGame(from, to, game);
     });
 
     this.listen();
@@ -63,17 +63,26 @@ RemoteGameService.prototype.onMove = function(f) {
     this._event.addListener('move', f);
 };
 
-RemoteGameService.prototype._fireEvent =  function(from, to, gameId, game) {
-    this._event.fire('move', from, to, gameId, game);
+RemoteGameService.prototype._fireEvent =  function(from, to, game) {
+    this._event.fire('move', from, to, game);
 };
 
 RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     var that = this;
     socket.on('move', function(gameId, from, to) {
-        var game = that._games[gameId];
-        var otherSocket = that._sockets[game.w == user.email ? game.b : game.w];
-        otherSocket.emit('move', from, to);
-        that._fireEvent(from, to, gameId, game);
+        gameService.getGameById(gameId, function(game) {
+            var otherSocket = that._sockets[(game.w == user.email) ? game.b : game.w];
+            if (otherSocket) {
+                otherSocket.emit('move', from, to);
+            }
+            // todo: JT, the game we get from service contains lotsa crap
+            that._fireEvent(from, to, {
+                gameId: game.gameId,
+                w: game.w,
+                b: game.b,
+                fen: game.fen
+            });
+        });
     });
 };
 
