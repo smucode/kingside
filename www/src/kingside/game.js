@@ -1,5 +1,5 @@
-define(['underscore', '../../../src/rex/rex', '../fooboard/fooboard', './player', '../../../src/event/pubsub'],
-    function(_, Rex, FooBoard, Player, pubsub) {
+define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pubsub'],
+    function(_, Rex, Player, pubsub) {
     
     var Game = function(obj) {
         white = obj.w;

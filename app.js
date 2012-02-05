@@ -1,14 +1,16 @@
+var _ = require('underscore');
 var express = require('express');
 var conf = require('./src/conf/conf');
 var util = require('./src/util/httputils');
-
 var auth = require('./src/auth/auth').auth;
+var routes = require('./src/routes/routes').routes;
 var gameService = require('./src/services/gameService').GameService;
 var RemoteGameService = require('./src/game/remoteGameService').RemoteGameService;
 
 var app = express.createServer();
 
 var io = require('socket.io').listen(app);
+
 var remoteGameService = new RemoteGameService(io);
 
 app.configure(function(){
@@ -28,44 +30,14 @@ app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-app.get('/user', function(req, res, next){
-    var sid = util.getSid(req.headers.cookie);
-    var user = auth.getUser(sid);
-    res.contentType('json'); 
-    res.send(user ? JSON.stringify(user) : '');
-});
-
-app.get('/games', function(req, res, next){
-    var sid = util.getSid(req.headers.cookie);
-    var user = auth.getUser(sid);
-    res.contentType('json');
-    if(user) {
-        gameService.findUserGames(user.email, function(games) {
-            res.send(games ? JSON.stringify(games) : '');
-        });
-    } else {
-        res.send('');
-    }
-});
-
-app.get('/request_game/', function(req, res, next){
-    var sid = util.getSid(req.headers.cookie);
-    var user = auth.getUser(sid);
-    res.contentType('json');
-    if(user) {
-        gameService.findUserGames(user.email, function(games) {
-            res.send(games ? JSON.stringify(games) : '');
-        });
-    } else {
-        res.send('');
-    }
+_.each(routes, function(v, k) {
+    app.get(k, v);
 });
 
 app.listen(conf.http.port);
 
 remoteGameService.onMove(function(from, to, gameId, game) {
     gameService.saveGame(from, to, gameId, game);
-
 });
 
 remoteGameService.listen();
