@@ -5,10 +5,12 @@ define(["require", "underscore"], function(require, __) {
     var Fen = function(fen) {
         this.pieces = {};
         this.activeColor = null;
-        this._parse(fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+        this._parse(fen || Fen.initString);
     };
 
     // public
+
+    Fen.initString = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
     Fen.prototype.move = function(from, to) {
         this._validateMove(from, to);

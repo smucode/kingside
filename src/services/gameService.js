@@ -3,7 +3,7 @@ var dao = require('../dao/db').Db;
 var Fen = require('../rex/Fen');
 
 var GameService = function() {
-    this._games = {};
+    this._games = {}; //Should be stored in the db
 };
 
 GameService.prototype.push = function(gameId) {
@@ -16,19 +16,22 @@ GameService.prototype._getFenString = function(gameId, from, to) {
     return fen.toString();
 };
 
-GameService.prototype.saveGame = function(from, to, gameId, gameIn) {
+GameService.prototype.saveGame = function(gameId, gameIn) {
+    try {
+        var fenString = Fen.initString;
+        var game = {gameId: gameId, w: gameIn.w, b: gameIn.b, fen: fenString};
+        dao.saveGame(game);
+    } catch (e) {
+        console.error('Invalid move', from, to, e);
+    }
+};
+
+GameService.prototype.updateGame = function(from, to, gameId, gameIn) {
     try {
         var fenString = this._getFenString(gameId, from, to);
-        var game = {gameId: gameId, w: gameIn.w, b: gameIn.b};
-        dao.findGame(game, function(err, games) {
-            game.fen = fenString;
-            if(!games ||_.isEmpty(games)) {
-                dao.saveGame(game);
-            } else {
-                console.log('update', game);
-                dao.updateGame(game);
-            }
-        });
+        var game = {gameId: gameId, w: gameIn.w, b: gameIn.b, fen: fenString};
+        this._games[gameId] = fenString;
+        dao.updateGame(game);
     } catch (e) {
         console.error('Invalid move', from, to, e);
     }

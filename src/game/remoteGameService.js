@@ -15,7 +15,8 @@ var RemoteGameService = function() {
     this._event = new Event();
     
     this.onMove(function(from, to, gameId, game) {
-        gameService.saveGame(from, to, gameId, game);
+        console.log('from', from, 'to', to, 'gameId', gameId, 'game', game);
+        gameService.updateGame(from, to, gameId, game);
     });
 
     this.listen();
@@ -37,10 +38,13 @@ RemoteGameService.prototype.processGameRequests = function() {
         socket = this._sockets[blackUser];
         socket.emit('game_ready', 'b', gameId, whiteUser);
 
-        this._games[gameId] = {
+        var game = {
             w: whiteUser,
             b: blackUser
         };
+        this._games[gameId] = game;
+
+        gameService.saveGame(gameId, game);
 
     } else {
         if (whiteUser) {
