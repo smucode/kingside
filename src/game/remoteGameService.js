@@ -1,16 +1,24 @@
 var _ = require('underscore');
-var Io = require('socket.io');
 var auth = require('../auth/auth').auth;
 var util = require('..//util/httputils');
 var Event = require('../event/event');
 
-var RemoteGameService = function(inIo) {
-    this._io = inIo;
+var io = require('../io/io').io;
+var gameService = require('../services/gameService').GameService;
+
+var RemoteGameService = function() {
+    this._io = io;
     this._sockets = {};
     this._games = {};
     this._gameRequests = [];
     this._listeners = [];
     this._event = new Event();
+    
+    this.onMove(function(from, to, gameId, game) {
+        gameService.saveGame(from, to, gameId, game);
+    });
+
+    this.listen();
 };
 
 RemoteGameService.prototype._generateGameId = function() {
