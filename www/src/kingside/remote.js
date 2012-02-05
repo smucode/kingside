@@ -17,7 +17,6 @@ define(['underscore', './socket'], function(_, socket) {
         if (obj.from) {
             socket.emit('move', this._gameId, obj.from, obj.to);
         }
-        // this._board.update(obj);
     };
     
     Remote.prototype.onMove = function(fn) {

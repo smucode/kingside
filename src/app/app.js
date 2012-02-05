@@ -19,7 +19,7 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-    app.use(express.static(__dirname + '/../..')); // todo, move to conf
+    app.use(express['static'](__dirname + '/../..')); // todo, move to conf
     app.use(express.errorHandler({ 
         dumpExceptions: true, 
         showStack: true 
