@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var dao = require('../dao/db').Db;
+var dao = require('../dao/gameDao').GameDao;
 var Fen = require('../rex/Fen');
 
 var GameService = function() {
@@ -42,7 +42,6 @@ GameService.prototype.getGameById = function(id, cb) {
         if(err) {
             console.error('error fetching game', data, err);
         }
-        console.log('got', typeof res, res);
         cb(res[0]);
     });
 };
