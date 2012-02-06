@@ -53,7 +53,7 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     // private
     
     FooBoard.prototype._highlightLastMove = function(obj, game) {
-        var fromGame = game.moves ? game.moves[game.moves.length - 1] : [null, null];
+        var fromGame = (game.moves && game.moves.length) ? game.moves[game.moves.length - 1] : [null, null];
         
         var from = obj.from || fromGame[0];
         if (from) {
