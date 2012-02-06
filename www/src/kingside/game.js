@@ -69,11 +69,10 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
         Player.create(def.b, 'b', def.gameId, function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
             Player.create(def.w, col, def.gameId, function(player1) {
-                var game = new Game({
-                    w: col == 'w' ? player1 : player2,
-                    b: col == 'w' ? player2 : player1,
-                    fen: def.fen
-                });
+                // todo: not good...
+                def.w = col == 'w' ? player1 : player2;
+                def.b = col == 'w' ? player2 : player1;
+                var game = new Game(def);
                 cb(game);
             });
         });

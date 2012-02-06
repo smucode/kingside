@@ -14,10 +14,6 @@ var RemoteGameService = function() {
     this._listeners = [];
     this._event = new Event();
     
-    this.onMove(function(from, to, game) {
-        gameService.updateGame(from, to, game);
-    });
-
     this.listen();
 };
 
@@ -57,15 +53,6 @@ RemoteGameService.prototype.processGameRequests = function() {
     }
 };
 
-
-RemoteGameService.prototype.onMove = function(f) {
-    this._event.addListener('move', f);
-};
-
-RemoteGameService.prototype._fireEvent =  function(from, to, game) {
-    this._event.fire('move', from, to, game);
-};
-
 RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     var that = this;
     socket.on('move', function(gameId, from, to) {
@@ -74,7 +61,7 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
             if (otherSocket) {
                 otherSocket.emit('move', from, to);
             }
-            that._fireEvent(from, to, game);
+            gameService.updateGame(from, to, game);
         });
     });
 };

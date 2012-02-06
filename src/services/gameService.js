@@ -7,8 +7,13 @@ var GameService = function() {
 
 GameService.prototype.saveGame = function(gameId, gameIn) {
     try {
-        var fenString = Fen.initString;
-        var game = {gameId: gameId, w: gameIn.w, b: gameIn.b, fen: fenString};
+        var game = {
+            moves: [],
+            w: gameIn.w, 
+            b: gameIn.b, 
+            gameId: gameId, 
+            fen: Fen.initString
+        };
         dao.saveGame(game);
     } catch (e) {
         console.error('Invalid move', from, to, e);
@@ -20,6 +25,7 @@ GameService.prototype.updateGame = function(from, to, game) {
         var fen = new Fen(game.fen);
         fen.move(from, to);
         game.fen = fen.toString();
+        game.moves.push([from, to]);
         dao.updateGame(game);
     } catch (e) {
         console.error('Invalid move', from, to, e);

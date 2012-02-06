@@ -7,6 +7,8 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.selected = null;
         this.target = target;
         
+        this._lastMove = [null, null];
+        
         this._fileRankMap = {
             w: {
                 files: 'abcdefgh'.split(''),
@@ -18,40 +20,13 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
             }
         };
         
-        this.files = 'abcdefgh'.split('');
-        this.ranks = '87654321'.split('');
-        
-        this.bfiles = 'hgfedcba'.split('');
-        this.branks = '12345678'.split('');
-        
         pubsub.sub('/game/updated', _.bind(this.update, this));
+        
+        this._create();
     };
     
     // public
-
-    FooBoard.prototype.render = function(opts) {
-        this._create();
-    };
-
-    FooBoard.prototype._idToPos = function(id) {
-        var f = this._fileRankMap[this._orientation].files[id.charAt(1)];
-        var r = this._fileRankMap[this._orientation].ranks[id.charAt(2)];
-        return f + r;
-    };
     
-    FooBoard.prototype._posToId = function(pos) {
-        var f = this._fileRankMap[this._orientation].files.indexOf(pos.charAt(0));
-        var r = this._fileRankMap[this._orientation].ranks.indexOf(pos.charAt(1));
-        return 'x' + f + r;
-    };
-    
-    FooBoard.prototype._flip = function(pos) {
-        var arr = pos.split('');
-        var f = this.bfiles[this.files.indexOf(pos.charAt(0))];
-        var r = this.branks[this.ranks.indexOf(pos.charAt(1))];
-        return f + r;
-    };
-
     FooBoard.prototype.update = function(obj, game) {
         this._resetBoard();
         
@@ -66,23 +41,39 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
             }
         }, this);
         
-        if (obj.from) {
-            this.squares[this._posToId(obj.from)].className += ' hl';
-        }
-        
-        if (obj.to) {
-            this.squares[this._posToId(obj.to)].className += ' hl';
-        }
+        this._highlightLastMove(obj, game);
         
         this.board = obj;
     };
     
-    FooBoard.prototype._resetBoard = function() {
-        if (this.board.from) {
-            this._removeClass(this.squares[this._posToId(this.board.from)], 'hl');
+    FooBoard.prototype.destroy = function(fn) {
+        $(this.target).remove();
+    };
+    
+    // private
+    
+    FooBoard.prototype._highlightLastMove = function(obj, game) {
+        var fromGame = game.moves ? game.moves[game.moves.length - 1] : [null, null];
+        
+        var from = obj.from || fromGame[0];
+        if (from) {
+            this.squares[this._posToId(from)].className += ' hl';
         }
-        if (this.board.to) {
-            this._removeClass(this.squares[this._posToId(this.board.to)], 'hl');
+        
+        var to = obj.to || fromGame[1];
+        if (to) {
+            this.squares[this._posToId(to)].className += ' hl';
+        }
+        
+        this._lastMove = [from, to];
+    };
+
+    FooBoard.prototype._resetBoard = function() {
+        if (this._lastMove[0]) {
+            this._removeClass(this.squares[this._posToId(this._lastMove[0])], 'hl');
+        }
+        if (this._lastMove[1]) {
+            this._removeClass(this.squares[this._posToId(this._lastMove[1])], 'hl');
         }
     };
     
@@ -92,12 +83,22 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
             node.className = node.className.slice(0, pos);
         }
     };
-    
-    FooBoard.prototype.destroy = function(fn) {
-        $(this.target).remove();
+
+    FooBoard.prototype._createId = function(f, r) {
+        return 'x' + f + r;
+    };
+
+    FooBoard.prototype._idToPos = function(id) {
+        var f = this._fileRankMap[this._orientation].files[id.charAt(1)];
+        var r = this._fileRankMap[this._orientation].ranks[id.charAt(2)];
+        return f + r;
     };
     
-    // private
+    FooBoard.prototype._posToId = function(pos) {
+        var f = this._fileRankMap[this._orientation].files.indexOf(pos.charAt(0));
+        var r = this._fileRankMap[this._orientation].ranks.indexOf(pos.charAt(1));
+        return this._createId(f, r);
+    };
 
     FooBoard.prototype._create = function() {
         this.table = this._c('div');
@@ -120,16 +121,18 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
 
     FooBoard.prototype._createSquare = function(file_id, rank_id) {
         var td = this._c('div');
-        td.setAttribute('_pos', 'x' + file_id + rank_id);
+        var id = this._createId(file_id, rank_id);
         td.className = this._getClassName(file_id, rank_id) + ' square';
-        this.squares['x' + file_id + rank_id] = td;
+        td.setAttribute('_pos', id);
+        this.squares[id] = td;
         return td;
     };
     
     FooBoard.prototype._createPiece = function(file_id, rank_id) {
         var td = this._c('div');
-        td.setAttribute('_pos', 'x' + file_id + rank_id);
-        this.pieces['x' + file_id + rank_id] = td;
+        var id = this._createId(file_id, rank_id);
+        td.setAttribute('_pos', id);
+        this.pieces[id] = td;
         return td;
     };
 

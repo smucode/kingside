@@ -25,8 +25,7 @@ define('kingside', [
             target: $('.content').get()[0]
         });
         
-        var board = this._createFooBoard();
-        board.render();
+        this._createFooBoard();
         
         this._createGame({w: 'local', b: 'garbo'});
 

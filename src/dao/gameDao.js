@@ -10,19 +10,14 @@ GameDao._schema = new Schema({
     w: {type: String},
     b: {type: String},
     fen: {type: String},
-    date: {type: Date, 'default': Date.now}
+    date: {type: Date, 'default': Date.now},
+    moves: {type: Array}
 });
 
 GameDao.prototype._gameModel = mongoose.model('Game', GameDao._schema);
 
 GameDao.prototype.saveGame = function(data, cb) {
     cb = cb || function() {};
-    if(!data) {
-        console.error("Could not persist game incorrect parameters", w, b, fen);
-        cb(false);
-        return;
-    }
-
     var game = new this._gameModel(data);
     return game.save(function(err){
         if(err) {
@@ -36,7 +31,7 @@ GameDao.prototype.saveGame = function(data, cb) {
 GameDao.prototype.updateGame = function(data, cb) {
     cb = cb || function(){};
     var query = {gameId: data.gameId};
-    this._gameModel.update(query, {fen: data.fen}, function(err, data) {
+    this._gameModel.update(query, {fen: data.fen, moves: data.moves}, function(err, data) {
         if(err) {
             console.error('Could not search for game', err);
         }
