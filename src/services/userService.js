@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var dao = require('../dao/db').Db;
+var dao = require('../dao/userDao').UserDao;
 
 var UserService = function() {};
 

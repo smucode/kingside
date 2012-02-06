@@ -15,7 +15,6 @@ var RemoteGameService = function() {
     this._event = new Event();
     
     this.onMove(function(from, to, game) {
-        console.log('from', from, 'to', to, 'game', game);
         gameService.updateGame(from, to, game);
     });
 
@@ -75,13 +74,7 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
             if (otherSocket) {
                 otherSocket.emit('move', from, to);
             }
-            // todo: JT, the game we get from service contains lotsa crap
-            that._fireEvent(from, to, {
-                gameId: game.gameId,
-                w: game.w,
-                b: game.b,
-                fen: game.fen
-            });
+            that._fireEvent(from, to, game);
         });
     });
 };
@@ -99,7 +92,7 @@ RemoteGameService.prototype._listenAfterRequestGame = function(socket, user) {
 RemoteGameService.prototype.listen = function() {
     var that = this;
     this._io.sockets.on('connection', function (socket) {
-        var sid = util.parseCookie(socket.handshake.headers.cookie)['express.sid'];
+        var sid = that._getSid(socket);
         var user = auth.getUser(sid);
         if (user) {
             that._sockets[user.email] = socket;
@@ -107,6 +100,10 @@ RemoteGameService.prototype.listen = function() {
             that._listenAfterMove(socket, user);
         }
     });
+};
+
+RemoteGameService.prototype._getSid = function(socket) {
+    return util.parseCookie(socket.handshake.headers.cookie)['express.sid'];
 };
 
 exports.RemoteGameService = RemoteGameService;
