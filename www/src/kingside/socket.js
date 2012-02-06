@@ -1,5 +1,4 @@
 define(['socket.io'], function(io) {
-
     var socket;
     
     if (window.location.port == 8000) {

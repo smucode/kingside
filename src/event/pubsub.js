@@ -11,12 +11,13 @@ define(["underscore"], function(__) {
         this.topics = g.___t = g.___t || {};
     };
     
-    PubSub.prototype.pub = function(topic, data) {
+    PubSub.prototype.pub = function(topic) {
+        var args = __.toArray(arguments).slice(1);
         if (this.debug) {
-            console.log('pub. topic: ' + topic + '. listeners: ' + (this.topics[topic] ? this.topics[topic].length : 0) + '. data: ', data);
+            console.log('pub. topic: ' + topic + '. listeners: ' + (this.topics[topic] ? this.topics[topic].length : 0) + '. args: ', args);
         }
         __.each(this.topics[topic], function(callback) {
-            callback(data);
+            callback.apply(callback, args);
         });
     };
     

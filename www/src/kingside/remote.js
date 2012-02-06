@@ -6,11 +6,12 @@ define(['underscore', './socket'], function(_, socket) {
         this.name = name;
         this._color = color; 
         this._gameId = gameId;
-        
+
         socket.on('move', _.bind(function(from, to) {
             console.log('socket move', arguments);
             this._listener(from, to);
         }, this));
+
     };
     
     Remote.prototype.update = function(obj) {

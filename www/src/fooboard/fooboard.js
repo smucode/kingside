@@ -7,24 +7,32 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.selected = null;
         this.target = target;
         
+        this.files = 'abcdefgh'.split('');
+        this.ranks = '87654321'.split('');
+        
+        this.bfiles = 'hgfedcba'.split('');
+        this.branks = '12345678'.split('');
+        
         pubsub.sub('/game/updated', _.bind(this.update, this));
     };
     
     // public
 
     FooBoard.prototype.render = function(opts) {
-        this.files = 'abcdefgh'.split('');
-        this.ranks = '87654321'.split('');
-
-        if (opts && opts.orientation == 'b') {
-            this.files.reverse();
-            this.ranks.reverse();
-        }
-
         this._create();
     };
 
-    FooBoard.prototype.update = function(obj) {
+    FooBoard.prototype._flip = function(pos) {
+        var arr = pos.split('');
+        var f = this.bfiles[this.files.indexOf(pos.charAt(0))];
+        var r = this.branks[this.ranks.indexOf(pos.charAt(1))];
+        return f + r;
+    };
+
+    FooBoard.prototype.update = function(obj, game) {
+        
+        console.log(game);
+        
         if (this.board.from) {
             this._removeClass(this.squares[this.board.from], 'hl');
         }
@@ -34,8 +42,9 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         }
         
         _.each(this.pieces, function(p, pos) {
-            if (obj.board[pos]) {
-                this._updatePiece(pos, obj.board[pos]);
+            var fpos = (game.w.type == 'local') ? pos : this._flip(pos);
+            if (obj.board[fpos]) {
+                this._updatePiece(pos, obj.board[fpos]);
             } else {
                 p.className = '';
             }
@@ -135,7 +144,7 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     
     FooBoard.prototype._getClassName = function(file, rank) {
         var fileIdx = (_.indexOf(this.files, file) % 2);
-        return fileIdx - (rank % 2) ? 'light' : 'dark';
+        return fileIdx - (rank % 2) ? 'dark' : 'light';
     };
 
     FooBoard.prototype._updatePiece = function(pos, type) {

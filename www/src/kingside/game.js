@@ -24,7 +24,7 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
         
         this.rex.onMove(_.bind(function(state) {
             state.gameId = this.id;
-            pubsub.pub('/game/updated', state);
+            pubsub.pub('/game/updated', state, obj);
         }, this));
         
         this._white = white;

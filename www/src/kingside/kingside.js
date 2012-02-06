@@ -46,6 +46,10 @@ define('kingside', [
             this._createGame(game);
         }, this));
 
+        socket.on('move', function() {
+            console.log('socket on move: ', arguments);
+        });
+    
     };
 
     Kingside.prototype._createGame = function(obj) {
