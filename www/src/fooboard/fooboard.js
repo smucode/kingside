@@ -7,6 +7,17 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.selected = null;
         this.target = target;
         
+        this._fileRankMap = {
+            w: {
+                files: 'abcdefgh'.split(''),
+                ranks: '87654321'.split('')
+            },
+            b: {
+                files: 'abcdefgh'.split('').reverse(),
+                ranks: '87654321'.split('').reverse()
+            }
+        };
+        
         this.files = 'abcdefgh'.split('');
         this.ranks = '87654321'.split('');
         
@@ -22,6 +33,18 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this._create();
     };
 
+    FooBoard.prototype._idToPos = function(id) {
+        var f = this._fileRankMap[this._orientation].files[id.charAt(1)];
+        var r = this._fileRankMap[this._orientation].ranks[id.charAt(2)];
+        return f + r;
+    };
+    
+    FooBoard.prototype._posToId = function(pos) {
+        var f = this._fileRankMap[this._orientation].files.indexOf(pos.charAt(0));
+        var r = this._fileRankMap[this._orientation].ranks.indexOf(pos.charAt(1));
+        return 'x' + f + r;
+    };
+    
     FooBoard.prototype._flip = function(pos) {
         var arr = pos.split('');
         var f = this.bfiles[this.files.indexOf(pos.charAt(0))];
@@ -30,35 +53,37 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     };
 
     FooBoard.prototype.update = function(obj, game) {
+        this._resetBoard();
         
-        console.log(game);
+        this._orientation = (game.w.type == 'local') ? 'w' : 'b';
         
-        if (this.board.from) {
-            this._removeClass(this.squares[this.board.from], 'hl');
-        }
-        
-        if (this.board.to) {
-            this._removeClass(this.squares[this.board.to], 'hl');
-        }
-        
-        _.each(this.pieces, function(p, pos) {
-            var fpos = (game.w.type == 'local') ? pos : this._flip(pos);
-            if (obj.board[fpos]) {
-                this._updatePiece(pos, obj.board[fpos]);
+        _.each(this.pieces, function(p, id) {
+            var pos = this._idToPos(id);
+            if (obj.board[pos]) {
+                this._updatePiece(id, obj.board[pos]);
             } else {
                 p.className = '';
             }
         }, this);
         
         if (obj.from) {
-            this.squares[obj.from].className += ' hl';
+            this.squares[this._posToId(obj.from)].className += ' hl';
         }
         
         if (obj.to) {
-            this.squares[obj.to].className += ' hl';
+            this.squares[this._posToId(obj.to)].className += ' hl';
         }
         
         this.board = obj;
+    };
+    
+    FooBoard.prototype._resetBoard = function() {
+        if (this.board.from) {
+            this._removeClass(this.squares[this._posToId(this.board.from)], 'hl');
+        }
+        if (this.board.to) {
+            this._removeClass(this.squares[this._posToId(this.board.to)], 'hl');
+        }
     };
     
     FooBoard.prototype._removeClass = function(node, name) {
@@ -77,12 +102,12 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     FooBoard.prototype._create = function() {
         this.table = this._c('div');
         this.table.className = 'fooboard';
-        _.each(this.ranks, function(rank) {
+        _.each(_.range(8), function(rank_id) {
             var tr = this._c('div');
             tr.className = 'rank';
-            _.each(this.files, function(file) {
-                var sq = this._createSquare(file, rank);
-                var p = this._createPiece(file, rank);
+            _.each(_.range(8), function(file_id) {
+                var sq = this._createSquare(file_id, rank_id);
+                var p = this._createPiece(file_id, rank_id);
                 this._makeDroppable(p);
                 sq.appendChild(p);
                 tr.appendChild(sq);
@@ -93,23 +118,18 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         this.target.appendChild(this.table);
     };
 
-    FooBoard.prototype._createSquare = function(file, rank) {
+    FooBoard.prototype._createSquare = function(file_id, rank_id) {
         var td = this._c('div');
-        if(file == 'x' || rank == 'x') {
-            td.className = 'legend';
-            td.innerHTML = (file != 'x' ? file : (rank != 'x' ? rank : '')).toUpperCase();
-        } else {
-            td.setAttribute('_pos', file + rank);
-            td.className = this._getClassName(file, rank) + ' square';
-            this.squares[file + rank] = td;
-        }
+        td.setAttribute('_pos', 'x' + file_id + rank_id);
+        td.className = this._getClassName(file_id, rank_id) + ' square';
+        this.squares['x' + file_id + rank_id] = td;
         return td;
     };
     
-    FooBoard.prototype._createPiece = function(file, rank) {
+    FooBoard.prototype._createPiece = function(file_id, rank_id) {
         var td = this._c('div');
-        td.setAttribute('_pos', file + rank);
-        this.pieces[file + rank] = td;
+        td.setAttribute('_pos', 'x' + file_id + rank_id);
+        this.pieces['x' + file_id + rank_id] = td;
         return td;
     };
 
@@ -124,10 +144,16 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         
         $(node).droppable({
             drop : function(event, ui) {
-                var target = $(this).attr('_pos');
-                var source = ui.draggable.attr('_pos');
-                if(_.include(that.board.valid_moves[source], target)) {
-                    that._fireEvent(source, target);
+                var target_id = $(this).attr('_pos');
+                var source_id = ui.draggable.attr('_pos');
+                
+                var target_pos = that._idToPos(target_id);
+                var source_pos = that._idToPos(source_id);
+                
+                console.log(target_pos, target_id);
+                
+                if(_.include(that.board.valid_moves[source_pos], target_pos)) {
+                    that._fireEvent(source_pos, target_pos);
                 }
             }
         });
@@ -142,21 +168,23 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         });
     };
     
-    FooBoard.prototype._getClassName = function(file, rank) {
-        var fileIdx = (_.indexOf(this.files, file) % 2);
-        return fileIdx - (rank % 2) ? 'dark' : 'light';
+    FooBoard.prototype._getClassName = function(file_id, rank_id) {
+        return (file_id % 2) - (rank_id % 2) ? 'dark' : 'light';
     };
 
-    FooBoard.prototype._updatePiece = function(pos, type) {
-        var p = this.pieces[pos];
-        p.className = 'piece ' + this._classMap[type];
-        p.setAttribute('_type', type);
+    FooBoard.prototype._updatePiece = function(id, type) {
+        var piece = this.pieces[id];
+        piece.className = 'piece ' + this._classMap[type];
+        piece.setAttribute('_type', type);
     };
 
     FooBoard.prototype._attachEvents = function() {
+        var that = this;
         $(this.table).bind('click', _.bind(function(evt) {
             var sq = evt.target.parentNode;
-            var pos = evt.target.getAttribute('_pos');
+            
+            var id = evt.target.getAttribute('_pos');
+            var pos = that._idToPos(id);
             
             if (this.board.valid_moves[pos]) {
                 if (this.selected) {
@@ -169,7 +197,10 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
                     this.selected = null;
                 }
             } else if (this.selected) {
-                var from = this.selected.getAttribute('_pos');
+                
+                var from_id = this.selected.getAttribute('_pos');
+                var from = that._idToPos(from_id);
+                
                 if(_.include(this.board.valid_moves[from], pos)) {
                     $(this.selected).css('background', '');
                     this._fireEvent(from, pos);
