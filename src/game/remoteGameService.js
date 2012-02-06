@@ -86,7 +86,7 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     });
 };
 
-RemoteGameService.prototype._listenAfterRequestGame = function(socket) {
+RemoteGameService.prototype._listenAfterRequestGame = function(socket, user) {
     var that = this;
     socket.on('request_game', function() {
         if(user) {
@@ -102,7 +102,7 @@ RemoteGameService.prototype.listen = function() {
     this._io.sockets.on('connection', function (socket) {
         var sid = util.parseCookie(socket.handshake.headers.cookie)['express.sid'];
         var user = auth.getUser(sid);
-        that._listenAfterRequestGame(socket);
+        that._listenAfterRequestGame(socket, user);
         that._listenAfterMove(socket, user);
     });
 };
