@@ -90,7 +90,6 @@ RemoteGameService.prototype._listenAfterRequestGame = function(socket, user) {
     var that = this;
     socket.on('request_game', function() {
         if(user) {
-            that._sockets[user.email] = socket;
             that._gameRequests.push(user.email);
             that.processGameRequests();
         }
@@ -102,8 +101,11 @@ RemoteGameService.prototype.listen = function() {
     this._io.sockets.on('connection', function (socket) {
         var sid = util.parseCookie(socket.handshake.headers.cookie)['express.sid'];
         var user = auth.getUser(sid);
-        that._listenAfterRequestGame(socket, user);
-        that._listenAfterMove(socket, user);
+        if (user) {
+            that._sockets[user.email] = socket;
+            that._listenAfterRequestGame(socket, user);
+            that._listenAfterMove(socket, user);
+        }
     });
 };
 
