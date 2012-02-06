@@ -19,7 +19,7 @@ vows.describe('db').addBatch({
                 }
             });
             var gameId = 'id';
-            service.updateGame('a2', 'a4', gameId, {w: 'white', b:'black'});
+            service.updateGame('a2', 'a4', {w: 'white', b:'black', moves: []});
             assert.isTrue(updateCalled);
         },
         'saving games calles dao' : function() {
