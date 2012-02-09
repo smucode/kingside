@@ -18,6 +18,7 @@ GameService.prototype.saveGame = function(gameId, gameIn) {
     } catch (e) {
         console.error('Invalid move', gameId, gameIn);
     }
+    console.log('save done');
 };
 
 GameService.prototype.updateGame = function(from, to, game) {
@@ -36,7 +37,9 @@ GameService.prototype.findUserGames = function(user, cb) {
     cb = cb || function() {};
     dao.findUserGames(user, function(err, res) {
         if(err) {
-            console.error('Could not find users games', user, err);
+            console.error('error fetching game', data, err);
+            cb(null);
+            return;
         }
         cb(res);
     });
@@ -46,9 +49,11 @@ GameService.prototype.getGameById = function(id, cb) {
     cb = cb || function() {};
     dao.findGame({gameId: id}, function(err, res) {
         if(err) {
-            console.error('error fetching game', data, err);
+            console.error('error fetching game', err);
+            cb(null);
+            return;
         }
-        cb(res[0]);
+        cb(_.first(res));
     });
 };
 

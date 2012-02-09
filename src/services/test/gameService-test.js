@@ -8,10 +8,7 @@ service.setDao({
     findUserGames: function() {}
 });
 
-buster.testCase('save game', {
-  'testur' : function() {
-      assert(true); 
-  },
+buster.testCase('game service', {
   'existing game is updated' : function() {
       var updateCalled;
       service.setDao({
@@ -34,15 +31,52 @@ buster.testCase('save game', {
       service.saveGame(gameId, {w: 'white', b:'black'});
       assert(daoCalled);
   },
-  'find users games calles dao': function() {
-      var lookingForUser;
+  'find users games calles dao': function(done) {
       service.setDao({
           findUserGames: function(user, cb) {
-              lookingForUser = user;
+              cb();
           }
       });
       var user = 'testur@gmail.com';
-      service.findUserGames(user);
-      assert.equals(lookingForUser, user);
-  }
+      service.findUserGames(user, function(err, users) {
+          assert(true);
+          done();
+      });
+    },
+    'find user returns a result': function(done) {
+        var testUser = {name: 'testur', email: 'testur@testur.net'};
+         service.setDao({
+            findUserGames: function(user, cb) {
+                cb(null, [testUser]);
+            }
+         });
+        service.findUserGames('userId', function(users) {
+           assert.equals(users, [testUser]);
+           done();
+        });
+    },
+    'get game by calls dao': function(done) {
+        service.setDao({
+            findGame: function(id, cb) {
+                cb(null, [{name: 'user'}]);
+            }
+         });
+        service.getGameById('gameId', function(game) {
+           assert(true);
+           done();
+        });
+    },
+    'get game handles dao error': function(done) {
+        service.setDao({
+            findGame: function(id, cb) {
+                cb('error', null);
+            }
+         });
+        service.getGameById('gameId', function(game) {
+           assert.isNull(game);
+           done();
+        });
+    
+    }
+
 });
