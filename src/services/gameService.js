@@ -16,7 +16,7 @@ GameService.prototype.saveGame = function(gameId, gameIn) {
         };
         dao.saveGame(game);
     } catch (e) {
-        console.error('Invalid move', from, to, e);
+        console.error('Invalid move', gameId, gameIn);
     }
 };
 

@@ -1,5 +1,4 @@
-var vows = require('vows');
-var assert = require('assert');
+var buster = require("buster");
 var service = require('../gameService').GameService;
 
 service.setDao({
@@ -9,45 +8,41 @@ service.setDao({
     findUserGames: function() {}
 });
 
-vows.describe('db').addBatch({
-    'save game' : {
-        'existing game is updated' : function() {
-            var updateCalled = false;
-            service.setDao({
-                updateGame: function() {
-                    updateCalled = true;
-                }
-            });
-            var gameId = 'id';
-            service.updateGame('a2', 'a4', {w: 'white', b:'black', moves: []});
-            assert.isTrue(updateCalled);
-        },
-        'saving games calles dao' : function() {
-            var daoCalled = false;
-            service.setDao({
-                saveGame: function(id, w, b, fen) {
-                    daoCalled = true;
-                }
-            });
-            var gameId = 'id';
-            service.saveGame(gameId, {w: 'white', b:'black'});
-            assert.isTrue(daoCalled);
-        },
-        'save game validates moves' : function() {
-            var gameId = 'id';
-            assert.throws(service.saveGame(gameId, {w: 'white', b:'black'}));
-        },
-        'find users games calles dao': function() {
-            var lookingForUser;
-            service.setDao({
-                findUserGames: function(user, cb) {
-                    lookingForUser = user;
-                }
-            });
-            var user = 'testur@gmail.com';
-            service.findUserGames(user);
-            assert.equal(lookingForUser, user);
-        }
-    }
-
-})["export"](module);
+buster.testCase('save game', {
+  'testur' : function() {
+      assert(true); 
+  },
+  'existing game is updated' : function() {
+      var updateCalled;
+      service.setDao({
+          updateGame: function() {
+              updateCalled = true;
+          }
+      });
+      var gameId = 'id';
+      service.updateGame('a2', 'a4', {w: 'white', b:'black', moves: []});
+      assert(updateCalled);
+  },
+  'saving games calles dao' : function() {
+      var daoCalled;
+      service.setDao({
+          saveGame: function(id, w, b, fen) {
+              daoCalled = true;
+          }
+      });
+      var gameId = 'id';
+      service.saveGame(gameId, {w: 'white', b:'black'});
+      assert(daoCalled);
+  },
+  'find users games calles dao': function() {
+      var lookingForUser;
+      service.setDao({
+          findUserGames: function(user, cb) {
+              lookingForUser = user;
+          }
+      });
+      var user = 'testur@gmail.com';
+      service.findUserGames(user);
+      assert.equals(lookingForUser, user);
+  }
+});
