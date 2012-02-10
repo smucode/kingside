@@ -18,7 +18,6 @@ GameService.prototype.saveGame = function(gameId, gameIn) {
     } catch (e) {
         console.error('Invalid move', gameId, gameIn);
     }
-    console.log('save done');
 };
 
 GameService.prototype.updateGame = function(from, to, game) {

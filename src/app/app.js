@@ -3,6 +3,7 @@ var express = require('express');
 var conf = require('../conf/conf');
 var auth = require('../auth/auth').auth;
 var routes = require('../routes/routes').routes;
+var db = require('../dao/db').Db;
 
 var app = express.createServer();
 
@@ -31,5 +32,6 @@ _.each(routes, function(v, k) {
 });
 
 app.listen(conf.http.port);
+db.connect();
 
 exports.app = app;

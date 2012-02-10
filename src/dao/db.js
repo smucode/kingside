@@ -2,7 +2,6 @@ var _ = require('underscore');
 var mongoose = require('mongoose');
 
 var Db = function() {
-    this.connect();
 };
 
 Db.prototype.connect = function() {
