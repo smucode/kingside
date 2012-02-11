@@ -7,6 +7,8 @@ var auth = require('./src/auth/auth').auth;
 var gameService = require('./src/services/gameService').GameService;
 var userService = require('./src/services/userService').UserService;
 
+throw "not in use"
+
 var debug = false;
 
 var server = connect(

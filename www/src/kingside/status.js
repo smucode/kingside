@@ -3,7 +3,6 @@ define(['underscore'], function(_) {
     var Status = function(opts) {
         this.dom = document.createElement('div');
         
-        this.dom.className = 'status';
         this.dom.innerHTML = 'awesome chess powa...';
         
         opts.target.appendChild(this.dom);

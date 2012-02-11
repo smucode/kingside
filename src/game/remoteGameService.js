@@ -14,7 +14,7 @@ var RemoteGameService = function() {
     this._listeners = [];
     this._event = new Event();
     
-    this.listen();
+    this._listen();
 };
 
 RemoteGameService.prototype._generateGameId = function() {
@@ -58,10 +58,13 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     socket.on('move', function(gameId, from, to) {
         gameService.getGameById(gameId, function(game) {
             var otherSocket = that._sockets[(game.w == user.email) ? game.b : game.w];
-            if (otherSocket) {
-                otherSocket.emit('move', from, to);
-            }
-            gameService.updateGame(from, to, game);
+            gameService.updateGame(from, to, game, function() {
+	            if (otherSocket) {
+	                otherSocket.emit('move', game.gameId, from, to);
+	            }
+				socket.emit('move', game.gameId, from, to);
+			});
+
         });
     });
 };
@@ -69,14 +72,14 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
 RemoteGameService.prototype._listenAfterRequestGame = function(socket, user) {
     var that = this;
     socket.on('request_game', function() {
-        if(user) {
+        if(user && that._gameRequests.indexOf(user.email) === -1) {
             that._gameRequests.push(user.email);
             that.processGameRequests();
         }
     });
 };
 
-RemoteGameService.prototype.listen = function() {
+RemoteGameService.prototype._listen = function() {
     var that = this;
     this._io.sockets.on('connection', function (socket) {
         var sid = that._getSid(socket);

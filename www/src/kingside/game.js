@@ -68,6 +68,7 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
     Factory.prototype.create = function(def, cb) {
         Player.create(def.b, 'b', def.gameId, function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
+
             Player.create(def.w, col, def.gameId, function(player1) {
                 // todo: not good...
                 def.w = col == 'w' ? player1 : player2;

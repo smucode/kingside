@@ -20,15 +20,18 @@ GameService.prototype.saveGame = function(gameId, gameIn) {
     }
 };
 
-GameService.prototype.updateGame = function(from, to, game) {
+GameService.prototype.updateGame = function(from, to, game, callback) {
     try {
         var fen = new Fen(game.fen);
         fen.move(from, to);
         game.fen = fen.toString();
         game.moves.push([from, to]);
-        dao.updateGame(game);
+        dao.updateGame(game, function(err, data) {
+			callback(data);
+		});
     } catch (e) {
         console.error('Invalid move', from, to, e);
+		callback(game);
     }
 };
 

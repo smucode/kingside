@@ -22,7 +22,7 @@ define('kingside', [
     var Kingside = function() {
         
         this._status = new Status({ 
-            target: $('.content').get()[0]
+            target: $('.status').get()[0]
         });
         
         this._createFooBoard();
@@ -44,15 +44,10 @@ define('kingside', [
         socket.on('game_ready', _.bind(function(game) {
             this._createGame(game);
         }, this));
-
-        socket.on('move', function() {
-            console.log('socket on move: ', arguments);
-        });
     
     };
 
     Kingside.prototype._createGame = function(obj) {
-        console.log('create game', obj);
         if (obj.b == 'remote') {
             this._status.setMessage('Waiting for opponent...');
             Game.request();
@@ -70,7 +65,7 @@ define('kingside', [
     };
     
     Kingside.prototype._createFooBoard = function() {
-        var content = $('.content');
+        var content = $('.board');
         var target = $('<div></div>');
         content.append(target);
         return new FooBoard(target.get()[0]);
