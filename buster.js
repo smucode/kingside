@@ -12,13 +12,14 @@ config["browser test"] = {
         './www/src/fooboard/fooboard.js'
     ],
     tests: [
-       "./www/src/fooboard/test/*.js",
-     ]
+       "./www/src/fooboard/test/*.js"
+    ]
 };
 
 config["node test"] = {
   environment: "node",
     tests: [
-       "./src/services/test/*.js"
+       "./src/services/test/*.js",
+       "./src/dao/test/*.js"
      ]
 }
