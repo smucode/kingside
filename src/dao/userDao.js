@@ -12,13 +12,16 @@ UserDao._schema = new Schema({
 
 UserDao.prototype._userModel = mongoose.model('User', UserDao._schema);
 
-UserDao.prototype.saveUser = function(userIn, cb) {
-   cb = cb || function() {};
+UserDao.prototype._validateUser = function(userIn) {
    if(!userIn || _.isEmpty(userIn)) {
        console.error('Could not persist user incorrect parameters', userIn);
        cb(false);
-       return;
    }
+};
+
+UserDao.prototype.saveUser = function(userIn, cb) {
+   cb = cb || function() {};
+   this._validateUser(userIn, cb);
    var user = new this._userModel(userIn);
    return user.save(function(err) {
         if(err) {
@@ -27,6 +30,20 @@ UserDao.prototype.saveUser = function(userIn, cb) {
         }
         cb(true);
     });
+};
+
+UserDao.prototype.updateUser = function(userIn,  cb) {
+   cb = cb || function() {};
+   this._validateUser(userIn, cb);
+    this._userModel.update(query,
+        {name: userIn.name},
+        function(err, data) {
+            if(err) {
+                console.error('Could not search for game', err);
+            }
+            cb(err, data);
+       }
+    );
 };
 
 UserDao.prototype.findUser = function(data, cb) {

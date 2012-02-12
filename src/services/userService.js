@@ -1,6 +1,6 @@
 var _ = require('underscore');
-var dao = require('../dao/userDao').UserDao;
-
+var conf = require('../conf/conf');
+var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
 var UserService = function() {};
 
 UserService.prototype.saveUser = function(user) {
@@ -21,7 +21,7 @@ UserService.prototype.setDao = function(inDao) {
 
 UserService.prototype._updateUser = function(userIn, user) {
     dao.updateUser(userIn, function () {
-        console.log('user saved', user);
+        console.log('user updated', user);
     });
 };
 

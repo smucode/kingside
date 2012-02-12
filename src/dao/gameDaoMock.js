@@ -5,14 +5,12 @@ GameDaoMock = function() {
 };
 
 GameDaoMock.prototype.saveGame = function(data, cb) {
-    console.log('mock save', data);
     cb = cb || function() {};
     this.games[data.gameId] = data;
     cb(true);
 };
 
 GameDaoMock.prototype.updateGame = function(updatedGame, cb) {
-    console.log('mock update', updatedGame);
     cb = cb || function() {};
     var id = updatedGame.gameId;
     var game = this.games[id]; 
@@ -21,7 +19,6 @@ GameDaoMock.prototype.updateGame = function(updatedGame, cb) {
 };
 
 GameDaoMock.prototype.findGame = function(data, cb) {
-    console.log('mock find', data);
     cb = cb || function() {};
     var game = this.games[data.gameId];
     if(!game) {
@@ -31,7 +28,6 @@ GameDaoMock.prototype.findGame = function(data, cb) {
 };
 
 GameDaoMock.prototype.findUserGames = function(userId, cb) {
-    console.log('mock find users', userId);
     var games = _.filter(this.games, function(game, id) {
         return game.w == userId || game.b == userId;
     }); 
