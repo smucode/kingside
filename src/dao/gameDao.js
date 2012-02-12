@@ -44,7 +44,11 @@ GameDao.prototype.findGame = function(data, cb) {
         if(err) {
             console.error('Could not search for game', err);
         }
-        cb(err, data);
+        var game;
+        if(data) {
+            game = _.first(data);
+        }
+        cb(err, game);
     });
 };
 

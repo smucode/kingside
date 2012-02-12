@@ -1,6 +1,7 @@
 var _ = require('underscore');
-var dao = require('../dao/gameDao').GameDao;
 var Fen = require('../rex/Fen');
+var conf = require('../conf/conf');
+var dao = conf.dev ? require('../dao/gameDaoMock').GameDaoMock : require('../dao/gameDao').GameDao;
 
 var GameService = function() {
 };
@@ -53,7 +54,8 @@ GameService.prototype.getGameById = function(id, cb) {
             cb(null);
             return;
         }
-        cb(_.first(res));
+        console.log('found res'. res);
+        cb(res);
     });
 };
 

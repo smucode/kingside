@@ -9,7 +9,9 @@ var conf = {
             sid: 'express.sid',
             secret: 'tacocat is a palindrome'
         }
-    }
+    },
+    dev: (process.argv.length > 2 && process.argv[2] == 'dev')
+
 };
 
 _.each(conf, function(v, k) {

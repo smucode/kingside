@@ -1,5 +1,6 @@
 var everyauth = require('everyauth');
 var util = require('../util/httputils');
+var conf = require('../conf/conf');
 
 var Auth = function() {
     this._users = {};
@@ -10,7 +11,7 @@ Auth.prototype._googleAuth = function() {
     var that = this;
     
     // todo: figure out how to just register localhost here, so we don't need to flip with etc/hosts
-    var hostname = (process.argv.length > 2 && process.argv[2] == 'dev') ? 'http://kingsi.de:8000' : 'http://kingsi.de';
+    var hostname = conf.dev ? 'http://kingsi.de:8000' : 'http://kingsi.de';
     console.log('auth: hostname ' + hostname);
 
     everyauth.everymodule.moduleErrback(function (err) {
