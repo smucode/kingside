@@ -1,21 +1,21 @@
 define(['underscore', '../socket', '../../../../src/rex/Fen'], function(_, socket, Fen) {
     
     var GameService = function() {
-		this.debug = false;
+        this.debug = false;
 	
 		socket.on('game_ready', _.bind(function(game) {
 			this.log('new game: ', game);
 			this.games[game.gameId] = game;
-	    }, this));
+        }, this));
 
-	    socket.on('move', _.bind(function(gameId, from, to) {
-	        this.log('move', arguments);
+        socket.on('move', _.bind(function(gameId, from, to) {
+            this.log('move', arguments);
 			var game = this.games[game.gameId];
 			var fen = new Fen(game.fen);
 			fen.move(from. to);
 			game.fen = fen.toString();
 			this.games[gameId] = game;
-	    }, this));
+        }, this));
 
 		this.list();
     };
@@ -25,8 +25,8 @@ define(['underscore', '../socket', '../../../../src/rex/Fen'], function(_, socke
 		if (this.games) {
 			callback(_.values(this.games));
 		} else {
-	        $.getJSON('/games', _.bind(function(games) {
-				this.log('got games: ', games)
+            $.getJSON('/games', _.bind(function(games) {
+                this.log('got games: ', games);
 				var gameMap = {};
 				this.games = _.each(games, function(game){
 					gameMap[game.gameId] = game;
@@ -45,7 +45,7 @@ define(['underscore', '../socket', '../../../../src/rex/Fen'], function(_, socke
 		if (this.debug) {
 			console.log.apply(console, arguments);
 		}
-	}
+    };
 
     return new GameService();
 

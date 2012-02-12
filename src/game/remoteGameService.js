@@ -59,9 +59,9 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
         gameService.getGameById(gameId, function(game) {
             var otherSocket = that._sockets[(game.w == user.email) ? game.b : game.w];
             gameService.updateGame(from, to, game, function() {
-	            if (otherSocket) {
-	                otherSocket.emit('move', game.gameId, from, to);
-	            }
+                if (otherSocket) {
+                    otherSocket.emit('move', game.gameId, from, to);
+                }
 				socket.emit('move', game.gameId, from, to);
 			});
 
