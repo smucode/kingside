@@ -12,7 +12,7 @@ config["browser test"] = {
         './www/src/fooboard/fooboard.js'
     ],
     tests: [
-       "./www/src/fooboard/test/*.js"
+       "./www/src/fooboard/test/alltest.js"
     ]
 };
 
