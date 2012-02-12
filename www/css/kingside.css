@@ -28,7 +28,7 @@ a {
 
 // header
 
-.header {
+body > .header {
     color: white;
     height: 40px;
     line-height: 40px;
@@ -109,6 +109,28 @@ div.status {
 .content .login {
     padding-top: 10px;
     text-align: center;
+}
+
+// games list
+
+.games {
+    .shadow;
+    margin-right: 5px;
+    background-color: #fafafa;
+    
+    .header {
+        padding: 5px;
+        font-size: 16px;
+    }
+    
+    .game {
+        padding: 2px 5px;
+        cursor: pointer;
+    }
+    
+    .game:hover {
+        text-decoration: underline;
+    }
 }
 
 // fooboard

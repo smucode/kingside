@@ -2,19 +2,27 @@ define(['underscore', '../socket', '../../../../src/rex/Fen'], function(_, socke
     
     var GameService = function() {
         this.debug = false;
+        
+        this._listener = function() {};
 	
 		socket.on('game_ready', _.bind(function(game) {
 			this.log('new game: ', game);
 			this.games[game.gameId] = game;
+			this._notify();
         }, this));
 
         socket.on('move', _.bind(function(gameId, from, to) {
             this.log('move', arguments);
-			var game = this.games[game.gameId];
-			var fen = new Fen(game.fen);
-			fen.move(from. to);
-			game.fen = fen.toString();
+			var game = this.games[gameId];
+			try {
+    			var fen = new Fen(game.fen);
+    			fen.move(from, to);
+    			game.fen = fen.toString();			    
+			} catch (e) {
+			    console.log(e);
+			}
 			this.games[gameId] = game;
+			this._notify();
         }, this));
 
 		this.list();
@@ -45,6 +53,14 @@ define(['underscore', '../socket', '../../../../src/rex/Fen'], function(_, socke
 		if (this.debug) {
 			console.log.apply(console, arguments);
 		}
+    };
+    
+    GameService.prototype._notify = function() {
+        this._listener(_.values(this.games));
+    };
+    
+    GameService.prototype.onUpdate = function(fn) {
+        this._listener = fn;
     };
 
     return new GameService();

@@ -4,36 +4,41 @@ define(['underscore', './timer', './panel', './auth', './socket', 'service/gameS
     var Games = function() {
         this._target = $('.games');
 
-        gameService.list(_.bind(function(games) {
-
-            var my = [];
-			var their = [];
-			_.each(games, function(game) {
-				var fen = new Fen(game.fen);
-				if (game.w == game.b) {
-					console.log('bad game', game); return;
-				}
-				if (game[fen.activeColor] == auth.user.email) {
-					my.push(game);
-				} else {
-					their.push(game);
-				}
-			});
-			
-			if (my.length) {
-				this._target.append('<b>Your move:</b>');
-				this._appendGames(my);
-			}
-			
-			if (their.length) {
-				this._target.append('<b>Their move:</b>');
-				this._appendGames(their);
-			}
-						
-        }, this));
-
+        gameService.list(_.bind(this._render, this));
+        gameService.onUpdate(_.bind(this._render, this));
     };
-
+    
+	Games.prototype._render = function(games) {
+        var my = [];
+		var their = [];
+		this._target.html('');
+		
+		console.log('render', games);
+		
+		_.each(games, function(game) {
+			var fen = new Fen(game.fen);
+			if (game.w == game.b) {
+			    //todo: remove when db is nuked
+				return;
+			}
+			if (game[fen.activeColor] == auth.user.email) {
+				my.push(game);
+			} else {
+				their.push(game);
+			}
+		});
+		
+		if (my.length) {
+			this._target.append('<div class="header">Your move:</div>');
+			this._appendGames(my);
+		}
+		
+		if (their.length) {
+			this._target.append('<div class="header">Their move:</div>');
+			this._appendGames(their);
+		}
+    };
+	    
 	Games.prototype._appendGames = function(games) {
 		_.each(games, function(game) {
 			var gameDom = this._createGameDom(game);

@@ -39,9 +39,7 @@ GameService.prototype.findUserGames = function(user, cb) {
     cb = cb || function() {};
     dao.findUserGames(user, function(err, res) {
         if(err) {
-            console.error('error fetching game', data, err);
-            cb(null);
-            return;
+            console.error('error fetching game', user, err);
         }
         cb(res);
     });
