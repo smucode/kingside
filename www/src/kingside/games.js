@@ -14,7 +14,7 @@ define(['underscore', './timer', './panel', './auth', './socket', 'service/gameS
 		this._target.html('');
 		
 		_.each(games, function(game) {
-			if (game[game.state.active_color] == auth.user.email || game[game.state.active_color] == 'local') {
+			if (auth.isMe(game[game.state.active_color]) || game[game.state.active_color] == 'local') {
 				my.push(game);
 			} else {
 				their.push(game);
@@ -41,7 +41,7 @@ define(['underscore', './timer', './panel', './auth', './socket', 'service/gameS
 		
 	Games.prototype._createGameDom = function(game) {
 		var g = $('<div class="game"></div>').attr('id', game.gameId);
-		var opponent = (game.w == auth.user.email || game.w == 'local') ? game.b : game.w;
+		var opponent = (auth.isMe(game.w) || game.w == 'local') ? game.b : game.w;
 		g.append($('<div>' + opponent + '</div>'));
 		return g;
 	};
