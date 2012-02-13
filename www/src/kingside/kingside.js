@@ -81,8 +81,8 @@ define('kingside', [
 
     $(function() {
         auth.getUser(function() {
-            new Login();
-            new Kingside();
+          var login = new Login();
+          var king = new Kingside();
         });
     });
 });
