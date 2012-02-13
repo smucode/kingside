@@ -63,8 +63,8 @@ define('kingside', [
         }, this));
         
         var games = new Games();
-        games.onClick(_.bind(function(game) {
-            var game = gameService.get(game.gameId);
+        games.onClick(_.bind(function(gameIn) {
+            var game = gameService.get(gameIn.gameId);
             this._currentGame = game;
             pubsub.pub('/game/updated', this._currentGame);
             this._status.update(game);

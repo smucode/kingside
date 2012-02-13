@@ -54,7 +54,9 @@ define(["require", "underscore","./Piece"], function(require, __, Piece) {
     King.prototype._addRegularMoves = function() {
         __.each(this.DIRECTIONS, function(direction) {
             var target = this.idx + direction;
-            if (!this.isSquareBehindCheckedKing(target) && ((this.canMoveTo(target) && !this.isAttacked(target)) || (this.canCapture(target) && !this.isProtected(target)))) {
+            if (!this.isSquareBehindCheckedKing(target) 
+               && ((this.canMoveTo(target) && !this.isAttacked(target)) 
+               || (this.canCapture(target) && !this.isProtected(target)))) {
                 this.moves.push(target);
             }
             if (this.board.isOnBoard(target)) {

@@ -14,8 +14,7 @@ UserDao.prototype._userModel = mongoose.model('User', UserDao._schema);
 
 UserDao.prototype._validateUser = function(userIn) {
    if(!userIn || _.isEmpty(userIn)) {
-       console.error('Could not persist user incorrect parameters', userIn);
-       cb(false);
+       throw new Error('Could not persist user incorrect parameters', userIn);
    }
 };
 
@@ -25,10 +24,10 @@ UserDao.prototype.saveUser = function(userIn, cb) {
    var user = new this._userModel(userIn);
    return user.save(function(err) {
         if(err) {
-            console.error('Could not persist user', user, err);
-            cb(false);
+            throw new Error('Could not persist user', user, err);
+        } else {
+            cb(true);
         }
-        cb(true);
     });
 };
 
@@ -39,7 +38,7 @@ UserDao.prototype.updateUser = function(userIn,  cb) {
         {name: userIn.name},
         function(err, data) {
             if(err) {
-                console.error('Could not search for game', err);
+                throw new Error('Could not search for user', user, err);
             }
             cb(err, data);
        }

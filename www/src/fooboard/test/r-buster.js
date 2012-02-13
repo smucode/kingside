@@ -1,3 +1,3 @@
-define('buster', [], function() {
+define([], function() {
     return buster;
 });
