@@ -13,7 +13,7 @@ define('kingside', [
         './menu',
         './status',
         './auth',
-        '../../src/fooboard/fooboard',
+        '../fooboard/fooboard',
         './games',
         './socket',
         './service/gameService',
