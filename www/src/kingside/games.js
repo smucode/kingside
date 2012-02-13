@@ -42,6 +42,7 @@ define(['underscore', './timer', './panel', './auth', './socket', 'service/gameS
 	Games.prototype._createGameDom = function(game) {
 		var g = $('<div class="game"></div>').attr('id', game.gameId);
 		var opponent = (auth.isMe(game.w) || game.w == 'local') ? game.b : game.w;
+		opponent = (opponent == 'garbo') ? 'The Computer' : opponent;
 		g.append($('<div>' + opponent + '</div>'));
 		return g;
 	};
