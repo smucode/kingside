@@ -9,7 +9,6 @@ var Fen = require('../rex/fen');
 var RemoteGameService = function() {
     this._io = io;
     this._sockets = {};
-    this._games = {};
     this._gameRequests = [];
     this._listeners = [];
     this._event = new Event();
@@ -25,7 +24,6 @@ RemoteGameService.prototype.processGameRequests = function() {
     var whiteUser = this._gameRequests.pop();
     var blackUser = this._gameRequests.pop();
     if (whiteUser && blackUser) {
-        
         var game = {
             gameId: this._generateGameId(),
             w: whiteUser,
@@ -39,17 +37,11 @@ RemoteGameService.prototype.processGameRequests = function() {
         socket = this._sockets[blackUser];
         socket.emit('game_ready', game);
 
-        this._games[game.gameId] = game;
-
         gameService.saveGame(game.gameId, game);
 
     } else {
-        if (whiteUser) {
-            this._gameRequests.push(whiteUser);
-        }
-        if (blackUser) {
-            this._gameRequests.push(blackUser);
-        }
+        if (whiteUser) this._gameRequests.push(whiteUser);
+        if (blackUser) this._gameRequests.push(blackUser);
     }
 };
 

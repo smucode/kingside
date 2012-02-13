@@ -1,4 +1,4 @@
-define(['underscore'], function(_) {
+define(['underscore', './auth'], function(_, auth) {
     
     var Status = function(opts) {
         this.dom = document.createElement('div');
@@ -37,24 +37,19 @@ define(['underscore'], function(_) {
         this.dom.innerHTML = message;
     };
     
-    Status.prototype.update = function(obj) {
-        var state = obj.state;
-        
-        var me = obj.w.type == 'local' ? 'w' : 'b';
-        var op = obj.w.type == 'local' ? 'b' : 'w';
+    Status.prototype.update = function(game) {
+        var state = game.state;
         
         if (state.finished) {
             if (state.check) {
-                if (obj.state.active_color == me) {
-                    this._msg('checkmate, you lost');
-                } else {
-                    this._msg('checkmate, you won');
-                }
+                this._msg('checkmate');
             } else {
-                this._msg('it\'s a draw');
+                this._msg('stalemate');
             }
         } else {
-            this._msg('playing against ' + obj[op].name);
+            var op = (auth.isMe(game.w) || game.w == 'local') ? game.b : game.w;
+            if (op == 'garbo') op = 'the Computer';
+            this._msg('Playing against ' + op);
         }
     };
     

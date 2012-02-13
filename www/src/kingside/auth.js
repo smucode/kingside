@@ -1,12 +1,17 @@
 define(['underscore', './socket'], function(_, socket) {
-    return (function() {
+    var Auth = function() {
         return {
             getUser: function(cb) {
                 $.getJSON('/user', _.bind(function(user) {
                     this.user = user;
                     cb(user);
                 }, this));
+            },
+            isMe: function(email) {
+                return this.user ? this.user.email == email : false;
             }
         };
-    }());
+    };
+    // todo: this sucks...
+    return window.auth || (window.auth = new Auth());
 });

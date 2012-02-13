@@ -44,9 +44,7 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
                 state: state
             });
         });
-    };    
-    
-    // private
+    };
     
     Game.prototype._createRex = function(fen) {
         return new Rex(fen);
@@ -55,7 +53,15 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
     Game.prototype._bind = function(obj, name) {
         return _.bind(obj[name], obj);
     };
-        
+    
+    // remote game
+    
+    var RemoteGame = function(def) {
+    };
+    
+    RemoteGame.prototype.move = function() {
+    };
+    
     // factory
     
     var Factory = function() {
@@ -66,6 +72,11 @@ define(['underscore', '../../../src/rex/rex', './player', '../../../src/event/pu
     };
     
     Factory.prototype.create = function(def, cb) {
+        if (def.gameId) {
+            var game = new RemoteGame(def);
+            cb(game);
+            return;
+        }
         Player.create(def.b, 'b', def.gameId, function(player2) {
             var col = player2.color == 'w' ? 'b' : 'w';
 

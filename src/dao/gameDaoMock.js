@@ -1,7 +1,15 @@
 var _ = require('underscore');
     
 GameDaoMock = function() {
-    this.games = {};
+    this.games = { 
+        '42': {
+            gameId: 42,
+            moves: [],
+            w: 'stig.murberg@gmail.com',
+            b: 'fiskarsymjar@gmail.com',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+        }
+    };
 };
 
 GameDaoMock.prototype.saveGame = function(data, cb) {

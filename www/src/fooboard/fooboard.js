@@ -1,4 +1,4 @@
-define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
+define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function(_, pubsub, auth) {
 
     var FooBoard = function(target) {
         this.board = {};
@@ -27,10 +27,16 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
     
     // public
     
-    FooBoard.prototype.update = function(obj, game) {
+    FooBoard.prototype.update = function(game) {
+
+        // todo: remove this assignment
+        var obj = game.state;
+        
         this._resetBoard();
         
-        this._orientation = (game.w.type == 'local') ? 'w' : 'b';
+        this._gameId = game.gameId;
+        
+        this._orientation = (game.w == 'local' || auth.isMe(game.w)) ? 'w' : 'b';
         
         _.each(this.pieces, function(p, id) {
             var pos = this._idToPos(id);
@@ -167,7 +173,7 @@ define(['underscore', '../../../src/event/pubsub'], function(_, pubsub) {
         pubsub.pub('/fooboard/move', {
             to: to,
             from: from,
-            gameId: this.board.gameId
+            gameId: this._gameId
         });
     };
     

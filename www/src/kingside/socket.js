@@ -1,4 +1,5 @@
 define(['socket.io'], function(io) {
+
     var socket;
     
     if (window.location.port == 8000) {
@@ -9,9 +10,8 @@ define(['socket.io'], function(io) {
     
     socket.on('auth', function (user) {
         socket.user = user;
-    }).on('find_game', function () {
-        console.info(arguments);
     });
     
     return socket;
+    
 });

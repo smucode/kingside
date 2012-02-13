@@ -15,9 +15,11 @@ define('kingside', [
         './auth',
         '../../src/fooboard/fooboard',
         './games',
-        './socket'
+        './socket',
+        './service/gameService',
+        '../../../src/event/pubsub'
     ],
-    function(_, Game, Login, Menu, Status, auth, FooBoard, Games, socket) {
+    function(_, Game, Login, Menu, Status, auth, FooBoard, Games, socket, gameService, pubsub) {
         
     var Kingside = function() {
         
@@ -26,42 +28,48 @@ define('kingside', [
         });
         
         this._createFooBoard();
+
+        gameService.onMove(_.bind(function(game) {
+            // todo: do not update fooboard if the move was 
+            // from another game than the current one
+            pubsub.pub('/game/updated', game);
+            this._status.update(game);
+        }, this));
         
-        this._createGame({w: 'local', b: 'garbo'});
+        gameService.onCreate(_.bind(function(game) {
+            this._currentGame = game;
+            // todo: we have the reference to fooboard
+            // here, perhaps an explicit call is better
+            pubsub.pub('/game/updated', this._currentGame);
+            this._status.update(game);
+        }, this));
+        
+        gameService.requestLocalGame({
+            w: 'local', b: 'garbo'
+        });
 
         var menu = new Menu();
-        menu.onStart(_.bind(function(p1, p2) {
-            if (p2 == 'remote' && !auth.user) {
+        menu.onStart(_.bind(function(white, black) {
+            if (black == 'remote' && !auth.user) {
                 this._status.setMessage('You must log in to play online...');
+                return;
+            }
+            if (black == 'remote') {
+                this._status.setMessage('Searching for opponent...');
+                gameService.requestRemoteGame();
             } else {
-                this._createGame({w: p1, b: p2});
+                gameService.requestLocalGame({w: white, b: black});
             }
         }, this));
         
         var games = new Games();
-        games.onClick(_.bind(this._createGame, this));
-
-        socket.on('game_ready', _.bind(function(game) {
-            this._createGame(game);
+        games.onClick(_.bind(function(game) {
+            var game = gameService.get(game.gameId);
+            this._currentGame = game;
+            pubsub.pub('/game/updated', this._currentGame);
+            this._status.update(game);
         }, this));
-    
-    };
-
-    Kingside.prototype._createGame = function(obj) {
-        if (obj.b == 'remote') {
-            this._status.setMessage('Waiting for opponent...');
-            Game.request();
-        } else {
-            Game.create(obj, _.bind(function(game) {
-                if (this._game) {
-                    this._game.destroy();
-                }
-                this._game = game;
-                
-                // hum, shoud use pubsub...
-                this._game.onMove(_.bind(this._status.update, this._status));
-            }, this));
-        }
+        
     };
     
     Kingside.prototype._createFooBoard = function() {
