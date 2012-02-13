@@ -1,5 +1,7 @@
 var _ = require('underscore');
 
+var dev = (process.argv.length > 2 && process.argv[2] == 'dev');
+
 var conf = {
     debug: false,
     http: {
@@ -8,9 +10,10 @@ var conf = {
         session: {
             sid: 'express.sid',
             secret: 'tacocat is a palindrome'
-        }
+        },
+        www_dir: dev ? __dirname + '/../..' : __dirname + '/../../www'
     },
-    dev: (process.argv.length > 2 && process.argv[2] == 'dev')
+    dev: dev
 
 };
 

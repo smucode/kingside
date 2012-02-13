@@ -1,3 +1,5 @@
+if (typeof module !== 'undefined' && typeof module.require === 'undefined') { module.require = require; }
+
 if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
 
 define(["underscore"], function(__) {
@@ -9,7 +11,6 @@ define(["underscore"], function(__) {
             if (typeof listener != "function") {
                 throw new TypeError("Listener is not function");
             }
-            
             eventMap[event] = eventMap[event] || [];
             eventMap[event].push(listener);
         };

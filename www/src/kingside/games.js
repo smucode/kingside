@@ -1,4 +1,4 @@
-define(['underscore', './timer', './panel', './auth', './socket', 'service/gameService', '../../../../src/rex/Fen'], 
+define(['underscore', './timer', './panel', './auth', './socket', 'service/gameService', '../../../src/rex/Fen'], 
 	function(_, Timer, Panel, auth, socket, gameService, Fen) {
 
     var Games = function() {

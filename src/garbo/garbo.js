@@ -1,4 +1,4 @@
-define(['underscore', '../../../lib/garbo/garbochess.js'], function(_, Engine) {
+define(['underscore', '../../lib/garbo/garbochess.js'], function(_, Engine) {
     var Garbo = function(color) {
         this._color = color;
         this._engine = new Engine();

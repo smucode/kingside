@@ -9,7 +9,7 @@ var Auth = function() {
 
 Auth.prototype._googleAuth = function() {
     var that = this;
-    
+
     // todo: figure out how to just register localhost here, so we don't need to flip with etc/hosts
     var hostname = conf.dev ? 'http://kingsi.de:8000' : 'http://kingsi.de';
     console.log('auth: hostname ' + hostname);
@@ -17,7 +17,7 @@ Auth.prototype._googleAuth = function() {
     everyauth.everymodule.moduleErrback(function (err) {
         console.log('err', err);
     });
-    
+
     everyauth.googlehybrid
         .myHostname(hostname)
         .consumerKey('kingsi.de')
