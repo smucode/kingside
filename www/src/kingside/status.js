@@ -48,7 +48,9 @@ define(['underscore', './auth'], function(_, auth) {
             }
         } else {
             var op = (auth.isMe(game.w) || game.w == 'local') ? game.b : game.w;
-            if (op == 'garbo') op = 'the Computer';
+            if (op == 'garbo') {
+				op = 'the Computer';
+			}
             this._msg('Playing against ' + op);
         }
     };

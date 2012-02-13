@@ -46,9 +46,9 @@ define(["require", "./Pawn","./King","./Rook","./Knight","./Bishop","./Queen"], 
             create: function(charCode, pos, board) {
                 var numCode = _pieceMap[charCode];
                 var color = numCode > 0 ? Const.WHITE : Const.BLACK;
-                var inst = _instanceArr[Math.abs(numCode)];
-                if (inst) {
-                    return new inst(pos, color, board);
+                var Inst = _instanceArr[Math.abs(numCode)];
+                if (Inst) {
+                    return new Inst(pos, color, board);
                 } else {
                     // remove when implemented all pieces
                     return {};

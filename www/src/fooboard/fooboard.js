@@ -1,6 +1,5 @@
-define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function(_, pubsub, auth) {
-
-    var FooBoard = function(target) {
+define('FooBoard', ['underscore', '../../../src/event/pubsub', '../kingside/auth'], function(_, pubsub, auth) {
+  var FooBoard = function(target) {
         this.board = {};
         this.pieces = {};
         this.squares = {};
@@ -9,14 +8,16 @@ define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function
         
         this._lastMove = [null, null];
         
+        var alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        var nums = ['8', '7', '6', '5', '4', '3', '2', '1'];
         this._fileRankMap = {
             w: {
-                files: 'abcdefgh'.split(''),
-                ranks: '87654321'.split('')
+                files: alph,
+                ranks: nums
             },
             b: {
-                files: 'abcdefgh'.split('').reverse(),
-                ranks: '87654321'.split('').reverse()
+                files: alph,
+                ranks: nums
             }
         };
         

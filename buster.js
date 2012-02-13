@@ -8,9 +8,6 @@ config["browser test"] = {
         './www/lib/require-jquery/*.js',
         './www/lib/**/*.js',
     ],
-    sources: [
-        './www/src/fooboard/fooboard.js'
-    ],
     tests: [
        "./www/src/fooboard/test/alltest.js"
     ]

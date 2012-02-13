@@ -1,8 +1,5 @@
 #!/bin/bash
-
-jshint src/*
-jshint www/src/*
-
+autolint --once
 vows src/rex/test/*
 
 buster test --node

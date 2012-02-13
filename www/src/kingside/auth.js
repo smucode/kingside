@@ -13,5 +13,8 @@ define(['underscore', './socket'], function(_, socket) {
         };
     };
     // todo: this sucks...
-    return window.auth || (window.auth = new Auth());
+    if(!window.auth) {
+       window.auth = new Auth(); 
+    }
+    return window.auth;
 });

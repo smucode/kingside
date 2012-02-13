@@ -33,7 +33,12 @@ define(["require", "underscore","./Piece"], function(require, __, Piece) {
         var square = this.idx + (this.color * 16);
         if(this.board.isOnBoard(square) && this.board.isEmpty(square)) {
             this.moves.push(square);
-            if((this.color == 1 && this.idx >= 16 && this.idx < 16 + 8) || (this.color == -1 && this.idx >= 96 && this.idx < 96 + 8)) {
+            if((this.color == 1 
+               && this.idx >= 16 && this.idx < 16 + 8) 
+               || (this.color == -1 
+               && this.idx >= 96 
+               && this.idx < 96 + 8)
+              ) {
                 square = this.idx + (this.color * 32);
                 if(this.board.isEmpty(square)) {
                     this.moves.push(square);
