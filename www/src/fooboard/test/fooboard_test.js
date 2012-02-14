@@ -1,11 +1,10 @@
-console.log('--------------- foboard test -----------');
-define(['r-buster', '../fooboard'], function(buster, FooBoard) {
-    console.log('--------------- foboard test -----------');
-    buster.testCase("fooboard", {
-      "fooboard init": function () {
-          assert(true);
-      }
-    });
-
+require(['fooboard/test/r-buster'], function(buster) {
+	console.log('--------------- foboard inside test -----------', buster);
+	buster.testCase("fooboard", {
+		"fooboard init": function () {
+			assert(true);
+		}
+	});
+	console.log('------------ fooboard done ----------------');
 });
 
