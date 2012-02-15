@@ -5,30 +5,92 @@ var UserService = function() {};
 
 UserService.prototype.saveUser = function(user) {
     var that = this;
-    dao.findUser({email: user.email}, function(err, users) {
+    this.doesUserExists(user.email, function(exists) {
         var userIn = {name: user.firstname + ' ' + user.lastname, email: user.email};
-        if(_.isEmpty(users)) {
-            that._saveUser(userIn, user);
+        if(exists) {
+            that._saveUser(userIn);
         } else {
-            that._updateUser(userIn, user);
+            that._updateUser(userIn);
         }
     });
 };
 
-UserService.prototype.setDao = function(inDao) {
-    dao = inDao;
-};
-
-UserService.prototype._updateUser = function(userIn, user) {
-    dao.updateUser(userIn, function () {
+UserService.prototype._updateUser = function(userIn) {
+    dao.updateUser(userIn, function(err, user) {
         console.log('user updated', user);
     });
 };
 
-UserService.prototype._saveUser = function(userIn, user) {
-    dao.saveUser(userIn, function () {
+UserService.prototype._saveUser = function(userIn) {
+    dao.saveUser(userIn, function(err, user) {
         console.log('user saved', user);
     });
+};
+
+UserService.prototype.doesUserExists = function(userId, cb) {
+    cb = cb || function() {};
+    this._getUser(userId, function(user) {
+        if(user) {
+            cb(true);  
+        } else {
+            cb(false);
+        }
+    }); 
+};
+
+UserService.prototype.getBuddyList = function(userId, cb) {
+  cb = cb || function() {};
+  this._getUser(userId, function(user) {
+      if(user) {
+          cb(user.buddies);
+      } else {
+          cb(null);
+      }
+  });
+};
+
+UserService.prototype.addBuddy = function(userId, buddy, cb) {
+  cb = cb || function() {};
+  var that = this;
+  this._getUser(userId, function(user) {
+      if(user) {
+          var userIn = user;
+          userIn.buddies.push(buddy);
+          that._updateUser(userIn);
+          cb(true);
+      } else {
+          cb(false);
+      }
+  });
+};
+
+UserService.prototype.removeBuddy = function(userId, buddy, cb) {
+  cb = cb || function() {};
+  var that = this;
+  this._getUser(userId, function(user) {
+      if(user) {
+          var userIn = user;
+          userIn.buddies = _.without(user.buddies, buddy);
+          that._updateUser(userIn);
+          cb(true);
+      } else {
+          cb(false);
+      }
+  });  
+};
+
+UserService.prototype._getUser = function(userId, cb) { 
+    dao.findUser({email: userId}, function(err, users) {
+      if(users && users.length == 1) {
+          cb(_.first(users));
+      } else {
+          cb(null);
+      }
+  });  
+};
+
+UserService.prototype.setDao = function(inDao) {
+    dao = inDao;
 };
 
 exports.UserService = new UserService();
