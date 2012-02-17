@@ -113,6 +113,22 @@ buster.testCase('buddy list', {
             assert(added);
         });
     },
+    'should only be possible to add existing users': function(){
+        var testUser = 'tuster@testuc.com';
+        var oldBuddies = ['testur_old@testur.com'];
+        service.setDao({
+            findUser: function(user, cb) {
+                if(user.email == testUser) {
+                    cb(null, [{name: 'testur', buddies: oldBuddies}]);    
+                } else {
+                    cb('user does not exists', null);
+                }
+            }
+        });
+        service.addBuddy(testUser, 'non_existing_buddy', function(added) {
+            refute(added);
+        });
+    },
     'remove user from buddy list': function() {
         var buddies = ['testur_old@testur.com', 'tetur_friend@testur.com'];
         service.setDao({

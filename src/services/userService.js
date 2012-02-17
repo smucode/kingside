@@ -54,10 +54,16 @@ UserService.prototype.addBuddy = function(userId, buddy, cb) {
   var that = this;
   this._getUser(userId, function(user) {
       if(user) {
-          var userIn = user;
-          userIn.buddies.push(buddy);
-          that._updateUser(userIn);
-          cb(true);
+            that._getUser(buddy, function(user) {
+                if(!user) {
+                    cb(false);
+                } else {
+                    var userIn = user;
+                    userIn.buddies.push(buddy);
+                    that._updateUser(userIn);
+                    cb(true);          
+                }
+            });
       } else {
           cb(false);
       }
@@ -72,7 +78,7 @@ UserService.prototype.removeBuddy = function(userId, buddy, cb) {
           var userIn = user;
           userIn.buddies = _.without(user.buddies, buddy);
           that._updateUser(userIn);
-          cb(true);
+          cb(true);      
       } else {
           cb(false);
       }
@@ -81,7 +87,7 @@ UserService.prototype.removeBuddy = function(userId, buddy, cb) {
 
 UserService.prototype._getUser = function(userId, cb) { 
     dao.findUser({email: userId}, function(err, users) {
-      if(users && users.length == 1) {
+      if(!err && users && users.length == 1) {
           cb(_.first(users));
       } else {
           cb(null);
