@@ -33,7 +33,7 @@ buster.testCase('create or update user', {
             },
             findUser: function(user, cb) {
                 lookingForUser = user;
-                cb(null,[{}]);
+                cb(null,[]);
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
@@ -41,7 +41,7 @@ buster.testCase('create or update user', {
         assert.equals(testUser.email, lookingForUser.email);
         assert(daoCalled);
     },
-    'if user does exist do not update it' : function() {
+    'if user does exist update it' : function() {
         var saveCalled = false, updateCalled = false, lookingForUser;
         service.setDao({
             saveUser: function(user) {
@@ -52,7 +52,7 @@ buster.testCase('create or update user', {
             },
             findUser: function(user, cb) {
                 lookingForUser = user;
-                cb(null,[]);
+                cb(null,[{}]);
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
@@ -61,7 +61,6 @@ buster.testCase('create or update user', {
         assert(updateCalled);
     }
 });
-
 
 buster.testCase('buddy list', {
     'true if if user exists': function() {

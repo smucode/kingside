@@ -22,6 +22,7 @@ config["node test"] = {
   environment: "node",
     tests: [
        "./src/services/test/*.js",
-       "./src/dao/test/*.js"
+       "./src/dao/test/*.js",
+       "./src/routes/test/*.js"
      ]
 }

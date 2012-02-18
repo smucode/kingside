@@ -8,9 +8,9 @@ UserService.prototype.saveUser = function(user) {
     this.doesUserExists(user.email, function(exists) {
         var userIn = {name: user.firstname + ' ' + user.lastname, email: user.email};
         if(exists) {
-            that._saveUser(userIn);
-        } else {
             that._updateUser(userIn);
+        } else {
+            that._saveUser(userIn);
         }
     });
 };

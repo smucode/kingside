@@ -27,8 +27,11 @@ app.configure('development', function(){
     }));
 });
 
-_.each(routes, function(v, k) {
+_.each(routes.gets, function(v, k) {
     app.get(k, v);
+});
+_.each(routes.puts, function(v, k) {
+    app.put(k, v);
 });
 
 app.listen(conf.http.port);
