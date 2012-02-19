@@ -7,7 +7,8 @@ UserDao = function() {};
 
 UserDao._schema = new Schema({
     name : {type: String},
-    email: {type: String, required: true, index: { unique: true }}
+    email: {type: String, required: true},
+    buddies: [String]
 });
 
 UserDao.prototype._userModel = mongoose.model('User', UserDao._schema);
@@ -34,11 +35,15 @@ UserDao.prototype.saveUser = function(userIn, cb) {
 UserDao.prototype.updateUser = function(userIn,  cb) {
    cb = cb || function() {};
    this._validateUser(userIn, cb);
-    this._userModel.update(query,
-        {name: userIn.name},
+    var query = {email: userIn.email};
+    var input =  {name: userIn.name};
+    if(userIn.buddies) {
+      input.buddies = userIn.buddies;
+    }
+    this._userModel.update(query, input,
         function(err, data) {
             if(err) {
-                throw new Error('Could not search for user', user, err);
+                throw new Error('Could not update for user', userIn, err);
             }
             cb(err, data);
        }
