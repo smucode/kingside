@@ -1,6 +1,6 @@
 // mixins
 
-.shadow (@x: 2px, @y: 2px, @spread: 5px, @color: #aaa) {
+.shadow (@x: 1px, @y: 1px, @spread: 4px, @color: #999) {
             box-shadow: @x @y @spread @color;
        -moz-box-shadow: @x @y @spread @color;
     -webkit-box-shadow: @x @y @spread @color;
@@ -11,22 +11,54 @@
     background: -webkit-gradient(linear, left top, left bottom, from(@start), to(@stop));
 }
 
+.radius () {
+    border-radius: 4px;
+}
+
 // general styles
 
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-size: 14px;
+    font-size: 13px;
     background: url(img/bg.png);
-    font-family: 'Droid Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 a {
     text-decoration: none;
 }
 
+// layout
+
+.center {
+    width: 600px;
+    margin: 0 auto;
+    overflow: auto;
+}
+.left {
+    float: left;
+    width: 200px;
+    overflow: auto;
+}
+.right {
+    float: right;
+    width: 400px;
+    overflow: auto;
+}
+
 // header
+
+#logo {
+    font-family: 'PT Sans', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 25px;
+    text-shadow: 1px 1px 3px #666;
+    text-align: center;
+}
+
 
 body > .header {
     color: white;
@@ -35,31 +67,13 @@ body > .header {
     
     .hgrad(#c35D49, #A33D29);
     .shadow;
-    
-    .c {
-        width: 500px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    .logo {
-        float: left;
-        font-family: 'PT Sans', sans-serif;
-        font-weight: 700;
-        font-style: italic;
-        font-size: 25px;
-        text-shadow: 1px 1px 3px #666;
-    }
-    
+        
     .login {
         float: right;
     }
     
-    .menu, .games {
+    .menu, .login {
         padding: 0 10px;
-    }
-    
-    .games {
     }
     
     a { color: #eee; }
@@ -111,11 +125,26 @@ div.status {
     text-align: center;
 }
 
+// game status
+#game-status {
+    .radius;
+    .shadow;
+
+    background-color: #fafafa;
+    margin-bottom: 10px;
+    padding: 5px;
+
+    .black, .white {
+        font-size: 16px;
+    }
+}
+
 // games list
 
 .games {
+    .radius;
     .shadow;
-    margin-right: 5px;
+
     background-color: #fafafa;
     
     .header {
@@ -145,7 +174,7 @@ div.fooboard {
 
     background: url(img/board-bg.jpg);
 
-    .shadow(2px, 2px, 10px, #bbb);
+    .shadow;
     
     width: @sq * 8;
     text-align: center;
