@@ -1,5 +1,6 @@
 var everyauth = require('everyauth');
 var util = require('../util/httputils');
+var userService = require('../services/userService').UserService;
 var conf = require('../conf/conf');
 
 var Auth = function() {
@@ -22,6 +23,7 @@ Auth.prototype._googleAuth = function() {
         .findOrCreateUser(function (session, user, ctx) {
             var sid = util.getSid(ctx.req.headers.cookie);
             that._users[sid] = user;
+            userService.saveUser(user); //Should we do this here
             return user.claimedIdentifier;
         })
         .redirectPath('/')

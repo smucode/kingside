@@ -5,7 +5,7 @@ var userDaoMock = require('../userDaoMock.js').UserDaoMock;
 
 var assertPersisted = function(expected) {
    userDaoMock.findUser({email: expected.email}, function(err, user) {
-       assert.equals(expected, user);
+       assert.equals(expected, _.first(user));
    });
 };
 var testCase = buster.testCase("user dao", {
@@ -23,7 +23,7 @@ var testCase = buster.testCase("user dao", {
     },
     'saving user returns true when user is persisted': function() {
        var testUser = {name: 'test name', email: 'test@email.com'};
-       userDaoMock.saveUser(testUser, function(saved) {
+       userDaoMock.saveUser(testUser, function(err, saved) {
            assert(saved);
        });
     },

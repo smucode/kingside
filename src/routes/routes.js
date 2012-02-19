@@ -47,7 +47,7 @@ exports.routes = {
             var user = auth.getUser(sid);
             var buddy = req.query.id;
             userService.addBuddy(user.email, buddy, function(added) {
-                req.send(added); 
+                res.send(added); 
             });
         }
     }
