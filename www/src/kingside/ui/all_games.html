@@ -1,0 +1,14 @@
+
+<% if (mine.length) { %>
+    <div class="ym-header">Your move:</div>
+    <% _.each(mine, function(game) { %>
+        <div id="<%=game.gameId%>" class="game"><%=game[game.state.active_color == 'w' ? 'b' : 'w']%></div>
+    <% }); %>
+<% } %>
+
+<% if (their.length) { %>
+    <div class="tm-header">Their move:</div>
+    <% _.each(their, function(game) { %>
+        <div id="<%=game.gameId%>" class="game"><%=game[game.state.active_color]%></div>
+    <% }); %>
+<% } %>

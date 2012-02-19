@@ -14,12 +14,13 @@ define('kingside', [
         './status',
         './auth',
         '../fooboard/fooboard',
-        './games',
         './socket',
         './service/gameService',
-        '../../../src/event/pubsub'
+        '../../../src/event/pubsub',
+        './ui/current_game',
+        './ui/all_games'
     ],
-    function(_, Game, Login, Menu, Status, auth, FooBoard, Games, socket, gameService, pubsub) {
+    function(_, Game, Login, Menu, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames) {
         
     var Kingside = function() {
         
@@ -62,7 +63,7 @@ define('kingside', [
             }
         }, this));
         
-        var games = new Games();
+        var games = new AllGames();
         games.onClick(_.bind(function(gameIn) {
             var game = gameService.get(gameIn.gameId);
             this._currentGame = game;
@@ -82,6 +83,7 @@ define('kingside', [
     $(function() {
         auth.getUser(function() {
           var login = new Login();
+          var cg = new CurrentGame();
           var king = new Kingside();
         });
     });
