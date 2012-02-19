@@ -42,16 +42,20 @@ define(['underscore', './auth'], function(_, auth) {
         
         if (state.finished) {
             if (state.check) {
-                this._msg('checkmate');
+                if (auth.isMe(game[game.state.active_color])) {
+                    this._msg('Checkmate, you lost.');
+                } else {
+                    this._msg('Checkmate, you won.');
+                }
             } else {
-                this._msg('stalemate');
+                this._msg('Game ended in a draw.');
             }
         } else {
-            var op = (auth.isMe(game.w) || game.w == 'local') ? game.b : game.w;
-            if (op == 'garbo') {
-				op = 'the Computer';
-			}
-            this._msg('Playing against ' + op);
+            if (auth.isMe(game[game.state.active_color])) {
+                this._msg('It\'s your move.');
+            } else {
+                this._msg('Waiting for the opponent.');
+            }
         }
     };
     

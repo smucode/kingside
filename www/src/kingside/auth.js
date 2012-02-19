@@ -8,6 +8,9 @@ define(['underscore', './socket'], function(_, socket) {
                 }, this));
             },
             isMe: function(email) {
+                if (email == 'local') {
+                    return true;
+                }
                 return this.user ? this.user.email == email : false;
             }
         };

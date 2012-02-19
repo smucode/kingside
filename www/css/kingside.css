@@ -144,10 +144,16 @@ div.status {
 
 // games list
 
-.games {
+#all-games {
     background-color: #fafafa;
     
-    .header {
+    .ym-header {
+        padding-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .tm-header {
+        padding-top: 10px;
         padding-bottom: 5px;
         font-size: 16px;
     }
