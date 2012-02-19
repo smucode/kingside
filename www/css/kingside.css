@@ -30,6 +30,13 @@ a {
     text-decoration: none;
 }
 
+// bootstrap overrides
+
+.well {
+    background: #fafafa;
+    padding: 10px;
+}
+
 // layout
 
 .center {
@@ -126,13 +133,9 @@ div.status {
 }
 
 // game status
-#game-status {
-    .radius;
-    .shadow;
 
-    background-color: #fafafa;
+#game-status {
     margin-bottom: 10px;
-    padding: 5px;
 
     .black, .white {
         font-size: 16px;
@@ -142,13 +145,10 @@ div.status {
 // games list
 
 .games {
-    .radius;
-    .shadow;
-
     background-color: #fafafa;
     
     .header {
-        padding: 5px;
+        padding-bottom: 5px;
         font-size: 16px;
     }
     
