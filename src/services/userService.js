@@ -3,7 +3,7 @@ var conf = require('../conf/conf');
 var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
 var UserService = function() {};
 
-UserService.prototype.saveUser = function(user) {
+UserService.prototype.create = function(user) {
     var that = this;
     this.doesUserExists(user.email, function(exists) {
         var userIn = {name: user.firstname + ' ' + user.lastname, email: user.email};

@@ -17,7 +17,7 @@ buster.testCase('game service', {
           }
       });
       var gameId = 'id';
-      service.updateGame('a2', 'a4', {w: 'white', b:'black', moves: []});
+      service.update('a2', 'a4', {w: 'white', b:'black', moves: []});
       assert(updateCalled);
   },
   'saving games calles dao' : function() {
@@ -28,7 +28,7 @@ buster.testCase('game service', {
           }
       });
       var gameId = 'id';
-      service.saveGame(gameId, {w: 'white', b:'black'});
+      service.create(gameId, {w: 'white', b:'black'});
       assert(daoCalled);
   },
   'find users games calles dao': function(done) {

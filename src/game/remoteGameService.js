@@ -37,7 +37,7 @@ RemoteGameService.prototype.processGameRequests = function() {
         socket = this._sockets[blackUser];
         socket.emit('game_ready', game);
 
-        gameService.saveGame(game.gameId, game);
+        gameService.create(game.gameId, game);
 
     } else {
         if (whiteUser) this._gameRequests.push(whiteUser);
@@ -50,7 +50,7 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
     socket.on('move', function(gameId, from, to) {
         gameService.getGameById(gameId, function(game) {
             var otherSocket = that._sockets[(game.w == user.email) ? game.b : game.w];
-            gameService.updateGame(from, to, game, function() {
+            gameService.update(from, to, game, function() {
                 if (otherSocket) {
                     otherSocket.emit('move', game.gameId, from, to);
                 }

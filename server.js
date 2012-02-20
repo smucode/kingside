@@ -124,7 +124,7 @@ io.sockets.on('connection', function (socket) {
             }
         });
 
-        gameService.saveGame(from, to, gameId, game);
+        gameService.create(from, to, gameId, game);
     });
 
     socket.on('find_game', function(user) {

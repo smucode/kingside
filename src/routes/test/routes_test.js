@@ -11,7 +11,7 @@ buster.testCase('routes test', {
 			lastname: 'lastname',
 			email: 'buddy@buddy.com'
 		};
-		userService.saveUser(buddy);
+		userService.create(buddy);
 	},
 	'//add buddy through the api': function(){
 		var add_buddy = routes.puts['/add_buddy/'];

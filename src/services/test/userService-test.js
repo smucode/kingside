@@ -37,7 +37,7 @@ buster.testCase('create or update user', {
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
-        service.saveUser(testUser);
+        service.create(testUser);
         assert.equals(testUser.email, lookingForUser.email);
         assert(daoCalled);
     },
@@ -56,7 +56,7 @@ buster.testCase('create or update user', {
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
-        service.saveUser(testUser);
+        service.create(testUser);
         refute(saveCalled);
         assert(updateCalled);
     }
