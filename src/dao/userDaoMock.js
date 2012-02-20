@@ -16,20 +16,20 @@ UserDaoMock.prototype.init = function() {
 };
 
 
-UserDaoMock.prototype.saveUser = function(user, cb) {
+UserDaoMock.prototype.save = function(user, cb) {
     cb = cb || function() {};
     this.users[user.email] = user;
     cb(null, user);
 };
 
-UserDaoMock.prototype.updateUser = function(userIn, cb) {
+UserDaoMock.prototype.update = function(userIn, cb) {
     cb = cb || function() {};
     var user = this.users[userIn.email]; 
     this.users[user.email] = _.extend(user, userIn);
     cb(null, this.users[user.email]);
 };
 
-UserDaoMock.prototype.findUser = function(userIn, cb) {
+UserDaoMock.prototype.find = function(userIn, cb) {
     cb = cb || function() {};
     var user = this.users[userIn.email]; 
     cb(null, [user]);

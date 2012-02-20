@@ -4,8 +4,8 @@ var buster = require("buster");
 var service = require('../userService').UserService;
 
 service.setDao({
-    saveUser: function() {},
-    findUser: function() {}
+    save: function() {},
+    find: function() {}
 });
 
 buster.assertions.add("containsTheSame", {
@@ -28,35 +28,35 @@ buster.testCase('create or update user', {
     'if user does not exist save it' : function() {
         var daoCalled, lookingForUser;
         service.setDao({
-            saveUser: function(user) {
+            save: function(user) {
                 daoCalled = true;
             },
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 lookingForUser = user;
                 cb(null,[]);
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
-        service.saveUser(testUser);
+        service.create(testUser);
         assert.equals(testUser.email, lookingForUser.email);
         assert(daoCalled);
     },
     'if user does exist update it' : function() {
         var saveCalled = false, updateCalled = false, lookingForUser;
         service.setDao({
-            saveUser: function(user) {
+            save: function(user) {
                 saveCalled = true;
             },
-            updateUser: function(user) {
+            update: function(user) {
                 updateCalled = true;
             },
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 lookingForUser = user;
                 cb(null,[{}]);
             }
         });
         var testUser = {firstname: 'firstname', lastname: 'lastname', email: 'user email'};
-        service.saveUser(testUser);
+        service.create(testUser);
         refute(saveCalled);
         assert(updateCalled);
     }
@@ -65,7 +65,7 @@ buster.testCase('create or update user', {
 buster.testCase('buddy list', {
     'true if if user exists': function() {
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 cb(null, [{name: 'myUser'}]);
             }  
         });
@@ -75,7 +75,7 @@ buster.testCase('buddy list', {
     },
     'false if user does not exists': function() {
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 cb(null, []);
             }  
         });
@@ -86,7 +86,7 @@ buster.testCase('buddy list', {
     "lookup users buddy list": function() {
         var friends = ['testur_friend@testur.com', 'testur_frind2@testur.com'];
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 cb(null, [{
                     email: 'testur@testur.com',
                     buddies: friends
@@ -101,10 +101,10 @@ buster.testCase('buddy list', {
         var oldBuddies = ['testur_old@testur.com'];
         var buddies = _.union(oldBuddies, ['tetur_friend@testur.com']);
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 cb(null, [{name: 'testur', buddies: oldBuddies}]);
             },
-            updateUser: function(user, cb) {
+            update: function(user, cb) {
                 assert.containsTheSame(user.buddies, buddies);
             }
         });
@@ -116,7 +116,7 @@ buster.testCase('buddy list', {
         var testUser = 'tuster@testuc.com';
         var oldBuddies = ['testur_old@testur.com'];
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 if(user.email == testUser) {
                     cb(null, [{name: 'testur', buddies: oldBuddies}]);    
                 } else {
@@ -131,10 +131,10 @@ buster.testCase('buddy list', {
     'remove user from buddy list': function() {
         var buddies = ['testur_old@testur.com', 'tetur_friend@testur.com'];
         service.setDao({
-            findUser: function(user, cb) {
+            find: function(user, cb) {
                 cb(null, [{name: 'testur', buddies: buddies}]);
             },
-            updateUser: function(user, cb) {
+            update: function(user, cb) {
                 refute.containsTheSame(user.buddies, buddies);
             }
         });

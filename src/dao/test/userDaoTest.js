@@ -4,7 +4,7 @@ var userDaoMock = require('../userDaoMock.js').UserDaoMock;
 
 
 var assertPersisted = function(expected) {
-   userDaoMock.findUser({email: expected.email}, function(err, user) {
+   userDaoMock.find({email: expected.email}, function(err, user) {
        assert.equals(expected, _.first(user));
    });
 };
@@ -13,30 +13,30 @@ var testCase = buster.testCase("user dao", {
         userDaoMock.init();
     },
     'has a save user' : function() {
-        assert(userDaoMock.saveUser);
+        assert(userDaoMock.save);
     },
     'has a find user' : function() {
-        assert(userDaoMock.findUser);
+        assert(userDaoMock.find);
     },
     'has a update user' : function() {
-        assert(userDaoMock.updateUser);
+        assert(userDaoMock.update);
     },
     'saving user returns true when user is persisted': function() {
        var testUser = {name: 'test name', email: 'test@email.com'};
-       userDaoMock.saveUser(testUser, function(err, saved) {
+       userDaoMock.save(testUser, function(err, saved) {
            assert(saved);
        });
     },
     'after saving a user it should be possible to read it back out' : function() {
         var testUser = {name: 'test name', email: 'test@email.com'};
-        userDaoMock.saveUser(testUser);
+        userDaoMock.save(testUser);
         assertPersisted(testUser);
     },
     'user updates is persisted': function() {
        var testUser = {name: 'test name', email: 'test@email.com'};
-       userDaoMock.saveUser(testUser);
+       userDaoMock.save(testUser);
        var updateUser = {name: 'updated user name', email: testUser.email};  
-       userDaoMock.updateUser(updateUser);
+       userDaoMock.update(updateUser);
        assertPersisted(updateUser);
     }
 });

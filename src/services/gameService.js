@@ -6,7 +6,7 @@ var dao = conf.dev ? require('../dao/gameDaoMock').GameDaoMock : require('../dao
 var GameService = function() {
 };
 
-GameService.prototype.saveGame = function(gameId, gameIn) {
+GameService.prototype.create = function(gameId, gameIn) {
     try {
         var game = {
             moves: [],
@@ -21,7 +21,7 @@ GameService.prototype.saveGame = function(gameId, gameIn) {
     }
 };
 
-GameService.prototype.updateGame = function(from, to, game, callback) {
+GameService.prototype.update = function(from, to, game, callback) {
     try {
         var fen = new Fen(game.fen);
         fen.move(from, to);

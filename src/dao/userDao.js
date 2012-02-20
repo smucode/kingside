@@ -19,7 +19,7 @@ UserDao.prototype._validateUser = function(userIn) {
    }
 };
 
-UserDao.prototype.saveUser = function(userIn, cb) {
+UserDao.prototype.save = function(userIn, cb) {
    cb = cb || function() {};
    this._validateUser(userIn, cb);
    var user = new this._userModel(userIn);
@@ -32,7 +32,7 @@ UserDao.prototype.saveUser = function(userIn, cb) {
     });
 };
 
-UserDao.prototype.updateUser = function(userIn,  cb) {
+UserDao.prototype.update = function(userIn,  cb) {
    cb = cb || function() {};
    this._validateUser(userIn, cb);
     var query = {email: userIn.email};
@@ -50,13 +50,13 @@ UserDao.prototype.updateUser = function(userIn,  cb) {
     );
 };
 
-UserDao.prototype.findUser = function(data, cb) {
+UserDao.prototype.find = function(data, cb) {
     this._userModel.find(data, function(err, data) {
         cb(err, data);
     });
 };
 
-UserDao.prototype.removeUsers = function(key, cb) {
+UserDao.prototype.remove = function(key, cb) {
     this.findUser(key, function(err, users) {
         _.each(users, function(user) {
             user.remove();
