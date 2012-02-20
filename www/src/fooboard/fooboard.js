@@ -10,14 +10,18 @@ define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function
         
         var alph = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
         var nums = ['8', '7', '6', '5', '4', '3', '2', '1'];
+
+        var alphr = _.clone(alph).reverse();
+        var numsr = _.clone(nums).reverse();
+
         this._fileRankMap = {
             w: {
                 files: alph,
                 ranks: nums
             },
             b: {
-                files: alph.reverse(),
-                ranks: nums.reverse()
+                files: alphr,
+                ranks: numsr
             }
         };
         
