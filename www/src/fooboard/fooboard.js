@@ -16,8 +16,8 @@ define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function
                 ranks: nums
             },
             b: {
-                files: alph,
-                ranks: nums
+                files: alph.reverse(),
+                ranks: nums.reverse()
             }
         };
         
@@ -36,9 +36,9 @@ define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function
         this._resetBoard();
         
         this._gameId = game.gameId;
-        
+
         this._orientation = (game.w == 'local' || auth.isMe(game.w)) ? 'w' : 'b';
-        
+
         _.each(this.pieces, function(p, id) {
             var pos = this._idToPos(id);
             if (obj.board[pos]) {
