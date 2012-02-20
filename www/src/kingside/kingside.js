@@ -70,11 +70,25 @@ define('kingside', [
 
     $(function() {
         auth.getUser(function() {
-          var login = new Login();
-          var cg = new CurrentGame();
-          var ng = new NewGame();
-          var gc = new GameControls();
-          var king = new Kingside();
+            var login = new Login();
+            var cg = new CurrentGame();
+            var ng = new NewGame();
+            var gc = new GameControls();
+            var king = new Kingside();
+
+            ng.onSelect(_.bind(function(white, black) {
+                if (black == 'remote' && !auth.user) {
+                    king._status.setMessage('You must log in to play online...');
+                    return;
+                }
+                if (black == 'remote') {
+                    king._status.setMessage('Searching for opponent...');
+                    gameService.requestRemoteGame();
+                } else {
+                    gameService.requestLocalGame({w: white, b: black});
+                }
+            }, this));
+
         });
     });
 });
