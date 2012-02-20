@@ -20,8 +20,8 @@ define([
 			var game = new RemoteGame(game);
 			game.onMove(_.bind(this._gameMove, this));
 			this._games[game.gameId] = game;
-			this._createListener(game);
-			this._listener(_.values(this._games));
+            this._createListener(game);
+            this._listener(_.values(this._games));
         }, this));
 
         socket.on('move', _.bind(function(gameId, from, to) {
