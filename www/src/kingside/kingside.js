@@ -10,7 +10,6 @@ define('kingside', [
         'underscore',
         './game', 
         './login',
-        './menu',
         './status',
         './auth',
         '../fooboard/fooboard',
@@ -21,7 +20,7 @@ define('kingside', [
         './ui/all_games',
         './ui/new_game'
     ],
-    function(_, Game, Login, Menu, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames, NewGame) {
+    function(_, Game, Login, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames, NewGame) {
         
     var Kingside = function() {
         
