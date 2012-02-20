@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var conf = require('../conf/conf');
-var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
+//var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
+var dao = require('../dao/userDao').UserDao;
 var UserService = function() {};
 
 UserService.prototype.create = function(user) {
@@ -16,13 +17,13 @@ UserService.prototype.create = function(user) {
 };
 
 UserService.prototype._updateUser = function(userIn) {
-    dao.updateUser(userIn, function(err, user) {
+    dao.update(userIn, function(err, user) {
         console.log('user updated', user);
     });
 };
 
 UserService.prototype._saveUser = function(userIn) {
-    dao.saveUser(userIn, function(err, user) {
+    dao.save(userIn, function(err, user) {
         console.log('user saved', user);
     });
 };
@@ -86,7 +87,7 @@ UserService.prototype.removeBuddy = function(userId, buddy, cb) {
 };
 
 UserService.prototype._getUser = function(userId, cb) { 
-    dao.findUser({email: userId}, function(err, users) {
+    dao.find({email: userId}, function(err, users) {
       if(!err && users && users.length == 1) {
           cb(_.first(users));
       } else {
