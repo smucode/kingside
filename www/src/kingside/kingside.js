@@ -18,9 +18,10 @@ define('kingside', [
         './service/gameService',
         '../../../src/event/pubsub',
         './ui/current_game',
-        './ui/all_games'
+        './ui/all_games',
+        './ui/new_game'
     ],
-    function(_, Game, Login, Menu, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames) {
+    function(_, Game, Login, Menu, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames, NewGame) {
         
     var Kingside = function() {
         
@@ -84,6 +85,7 @@ define('kingside', [
         auth.getUser(function() {
           var login = new Login();
           var cg = new CurrentGame();
+          var ng = new NewGame();
           var king = new Kingside();
         });
     });
