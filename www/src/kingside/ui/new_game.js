@@ -1,4 +1,4 @@
-define(['underscore'], function(_) {
+define(['underscore', '../service/buddy_service'], function(_, bs) {
     
     var Widget = function() {
         this.listener = null;
@@ -21,6 +21,7 @@ define(['underscore'], function(_) {
         this._html.find('#play-online').click(_.bind(function() {
             this.opponent.hide();
             this.online.show();
+            bs.list();
         }, this));
     };
 

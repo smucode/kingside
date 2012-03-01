@@ -5,7 +5,7 @@ UserDaoMock = function() {
         "jontore@gmail.com": {
             name: "Jon Tore ",
             email: "jontore@gmail.com",
-            buddies: []
+            buddies: ["kjell.t.ringen@gmail.com"]
         }
 
     };

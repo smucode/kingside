@@ -3,18 +3,38 @@ var auth = require('../auth/auth').auth;
 var gameService = require('../services/gameService').GameService;
 var userService = require('../services/userService').UserService;
 
+var getUser = function(req) {
+    var sid = util.getSid(req.headers.cookie);
+    return auth.getUser(sid);
+};
+
 exports.routes = {
     gets: {
         '/user': function(req, res, next) {
-            var sid = util.getSid(req.headers.cookie);
-            var user = auth.getUser(sid);
+            var user = getUser(req); 
             res.contentType('json'); 
             res.send(user ? JSON.stringify(user) : '');
         },
+        '/buddies': function(req, res, next) {
+            var user = getUser(req);
+            res.contentType('json');
+            if(user) {
+                userService.getBuddyList(user.email, function(buddies) {
+                    if(buddies) {
+                        var json = buddies ? JSON.stringify(buddies) : '';
+                        res.send(json);    
+                    } else {
+                        res.send('{}');
+                    }
+                });    
+            } else {
+                res.send('{}');
+            }
+            
+        },
         '/games': function(req, res, next){
             try {
-                var sid = util.getSid(req.headers.cookie);
-                var user = auth.getUser(sid);
+                var user = getUser(req);
                 res.contentType('json');
                 if(user) {
                     gameService.findUserGames(user.email, function(games) {
@@ -29,8 +49,7 @@ exports.routes = {
             }
         },
         '/request_game/': function(req, res, next){
-            var sid = util.getSid(req.headers.cookie);
-            var user = auth.getUser(sid);
+            var user = getUser(req);
             res.contentType('json');
             if(user) {
                 gameService.findUserGames(user.email, function(games) {
@@ -43,8 +62,7 @@ exports.routes = {
     },
     puts: {
         '/add_buddy/': function(req, res) {
-            var sid = util.getSid(req.headers.cookie);
-            var user = auth.getUser(sid);
+            var user = getUser(req);
             var buddy = req.query.id;
             userService.addBuddy(user.email, buddy, function(added) {
                 res.send(added); 
