@@ -3,18 +3,20 @@ var config = module.exports;
 config["browser test"] = {
   environment: "browser",
   autoRun: false,
-  rootPath: 'www/src',
+  rootPath: 'www',
   libs: [
-      '../lib/underscore/*.js',
-      '../lib/requirejs/*.js',
-      '../lib/require-jquery/*.js',
-      '../lib/**/*.js'
+      'lib/requirejs/*.js',
+      'lib/require-jquery/*.js',
+      'lib/underscore/*.js',
+      'lib/jquery/*.js',
+      'lib/jquery-ui/*.js',
+      'lib/less/*.js'
   ],
   resources: [
       '**/*.js'
   ],
   tests: [
-     "fooboard/test/alltest.js"
+     "src/fooboard/test/alltest.js"
   ]
 };
 

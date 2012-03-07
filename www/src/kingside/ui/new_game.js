@@ -21,7 +21,12 @@ define(['underscore', '../service/buddy_service'], function(_, bs) {
         this._html.find('#play-online').click(_.bind(function() {
             this.opponent.hide();
             this.online.show();
-            bs.list();
+            bs.list(function(buddies){
+                $('.buddy').remove();
+                _.each(buddies, function(buddy) {
+                    $('#buddies').append('<li class="buddy">'  + buddy + '</li>');
+                });
+            });
         }, this));
     };
 

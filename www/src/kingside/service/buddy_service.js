@@ -4,9 +4,7 @@ define(['underscore'], function(_) {
 
     BuddyService.prototype.list = function(callback) {
         callback = callback || function() {};
-        console.log('this._buddies', this._buddies);
         if (this._buddies) {
-            this.log('buddies', this._buddies);
             callback(this._buddies);
         } else {
             $.getJSON('/buddies', _.bind(function(buddies) {

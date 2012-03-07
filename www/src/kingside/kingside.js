@@ -21,7 +21,8 @@ define('kingside', [
         './ui/new_game',
         './ui/game_controls'
     ],
-    function(_, Game, Login, Status, auth, FooBoard, socket, gameService, pubsub, CurrentGame, AllGames, NewGame, GameControls) {
+    function(_, Game, Login, Status, auth, FooBoard, socket, gameService, 
+        pubsub, CurrentGame, AllGames, NewGame, GameControls) {
         
     var Kingside = function() {
         

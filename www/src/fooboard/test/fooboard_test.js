@@ -5,4 +5,3 @@ require(['fooboard/test/r-buster'], function(buster) {
         }
 	});
 });
-
