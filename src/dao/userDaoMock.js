@@ -15,7 +15,6 @@ UserDaoMock.prototype.init = function() {
     this.users = {};
 };
 
-
 UserDaoMock.prototype.save = function(user, cb) {
     cb = cb || function() {};
     this.users[user.email] = user;

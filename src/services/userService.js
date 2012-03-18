@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var conf = require('../conf/conf');
-//var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
-var dao = require('../dao/userDao').UserDao;
+var dao = conf.dev ? require('../dao/userDaoMock').UserDaoMock : require('../dao/userDao').UserDao;
 var UserService = function() {};
 
 UserService.prototype.create = function(user) {
@@ -37,53 +36,6 @@ UserService.prototype.doesUserExists = function(userId, cb) {
             cb(false);
         }
     }); 
-};
-
-UserService.prototype.getBuddyList = function(userId, cb) {
-  cb = cb || function() {};
-  this._getUser(userId, function(user) {
-      if(user) {
-          cb(user.buddies);
-      } else {
-          cb(null);
-      }
-  });
-};
-
-UserService.prototype.addBuddy = function(userId, buddy, cb) {
-  cb = cb || function() {};
-  var that = this;
-  this._getUser(userId, function(user) {
-      if(user) {
-            that._getUser(buddy, function(user) {
-                if(!user) {
-                    cb(false);
-                } else {
-                    var userIn = user;
-                    userIn.buddies.push(buddy);
-                    that._updateUser(userIn);
-                    cb(true);          
-                }
-            });
-      } else {
-          cb(false);
-      }
-  });
-};
-
-UserService.prototype.removeBuddy = function(userId, buddy, cb) {
-  cb = cb || function() {};
-  var that = this;
-  this._getUser(userId, function(user) {
-      if(user) {
-          var userIn = user;
-          userIn.buddies = _.without(user.buddies, buddy);
-          that._updateUser(userIn);
-          cb(true);      
-      } else {
-          cb(false);
-      }
-  });  
 };
 
 UserService.prototype._getUser = function(userId, cb) { 

@@ -23,8 +23,12 @@ define(['underscore', '../service/buddy_service'], function(_, bs) {
             this.online.show();
             bs.list(function(buddies){
                 $('.buddy').remove();
+                console.log('buddies');
                 _.each(buddies, function(buddy) {
-                    $('#buddies').append('<li class="buddy">'  + buddy + '</li>');
+                    var li = $("<li>").text(buddy).click(function() {
+                        console.log('buddy', buddy);
+                    }); 
+                    $('#buddies').append(li);
                 });
             });
         }, this));
