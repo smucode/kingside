@@ -22,5 +22,4 @@ BuddyDaoMock.prototype.remove = function(user, buddy) {
     });
 };
 
-
 exports.BuddyDaoMock = new BuddyDaoMock();
