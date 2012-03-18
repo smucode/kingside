@@ -14,11 +14,15 @@ var testCase = buster.testCase("buddy dao", {
     },
     'add a new buddy': function(user, buddy) {
         buddyDaoMock.add({email: 'testur'}, 'newBuddy@testur.com');
-        assert.equals(buddyDaoMock.list({email: 'testur'}), ['newBuddy@testur.com']);
+        buddyDaoMock.list({email: 'testur'}, function(list) {
+            assert.equals(['newBuddy@testur.com'], list);
+        });
     },
     'remove a buddy': function(user, buddy) {
         buddyDaoMock.add({email: 'testur'}, 'newBuddy@testur.com');
         buddyDaoMock.remove({email: 'testur'}, 'newBuddy@testur.com');
-        assert(buddyDaoMock.list({email: 'testur'}));
+        buddyDaoMock.list({email: 'testur'}, function(list) {
+            assert(list);
+        });
     }
 });
