@@ -2,6 +2,7 @@ var util = require('../util/httputils');
 var auth = require('../auth/auth').auth;
 var gameService = require('../services/gameService').GameService;
 var userService = require('../services/userService').UserService;
+var buddyService = require('../services/buddyService').BuddyService;
 
 var getUser = function(req) {
     var sid = util.getSid(req.headers.cookie);
@@ -19,7 +20,7 @@ exports.routes = {
             var user = getUser(req);
             res.contentType('json');
             if(user) {
-                userService.getBuddyList(user.email, function(buddies) {
+                buddyService.getBuddyList(user.email, function(buddies) {
                     if(buddies) {
                         var json = buddies ? JSON.stringify(buddies) : '';
                         res.send(json);    
@@ -64,9 +65,14 @@ exports.routes = {
         '/add_buddy/': function(req, res) {
             var user = getUser(req);
             var buddy = req.query.id;
-            userService.addBuddy(user.email, buddy, function(added) {
-                res.send(added); 
-            });
+            if(user && buddy) {
+                buddyService.addBuddy(user.email, buddy, function(added) {
+                    res.send(added); 
+                });    
+            } else {
+                res.send('User does not exist');
+            }
+            
         }
     }
 };

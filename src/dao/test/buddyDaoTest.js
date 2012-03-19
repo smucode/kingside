@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var buster = require('buster');
 var buddyDaoMock = require('../buddyDaoMock.js').BuddyDaoMock;
+//var buddyDaoMock = require('../buddyDao.js').BuddyDao;
 
 var testCase = buster.testCase("buddy dao", {
     setUp: function() {
@@ -12,16 +13,18 @@ var testCase = buster.testCase("buddy dao", {
     'has a get buddy list function': function() {
         assert(buddyDaoMock.list);
     },
-    'add a new buddy': function(user, buddy) {
-        buddyDaoMock.add({email: 'testur'}, 'newBuddy@testur.com');
-        buddyDaoMock.list({email: 'testur'}, function(list) {
-            assert.equals(['newBuddy@testur.com'], list);
+    'add a new buddy': function() {
+        var user = 'testur';
+        buddyDaoMock.add(user, 'newBuddyAdd@testur.com');
+        buddyDaoMock.list(user, function(err, list) {
+            assert.equals(['newBuddyAdd@testur.com'], list);
         });
     },
-    'remove a buddy': function(user, buddy) {
-        buddyDaoMock.add({email: 'testur'}, 'newBuddy@testur.com');
-        buddyDaoMock.remove({email: 'testur'}, 'newBuddy@testur.com');
-        buddyDaoMock.list({email: 'testur'}, function(list) {
+    'remove a buddy': function() {
+        var user = 'testurRemove';
+        buddyDaoMock.add(user, 'newBuddyRemove@testur.com');
+        buddyDaoMock.remove(user, 'newBuddyRemove@testur.com');
+        buddyDaoMock.list(user, function(err, list) {
             assert(list);
         });
     }

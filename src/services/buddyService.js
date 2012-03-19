@@ -1,56 +1,38 @@
 var _ = require('underscore');
 var conf = require('../conf/conf');
-var dao = require('../dao/userDao').UserDao;
-var service = require('./userService').UserService;
+var dao = conf.dev ? require('../dao/buddyDaoMock').BuddyDaoMock : require('../dao/buddyDao').BuddyDao;
 var BuddyService = function() {};
 
 BuddyService.prototype.getBuddyList = function(userId, cb) {
   cb = cb || function() {};
-  service._getUser(userId, function(user) {
-      if(user) {
-          cb(user.buddies);
-      } else {
-          cb(null);
-      }
+  dao.list(userId, function(err, list) {
+    cb(list);
   });
 };
 
 BuddyService.prototype.addBuddy = function(userId, buddy, cb) {
   cb = cb || function() {};
-  service._getUser(userId, function(user) {
-      if(user) {
-            service._getUser(buddy, function(user) {
-                if(!user) {
-                    cb(false);
-                } else {
-                    var userIn = user;
-                    userIn.buddies.push(buddy);
-                    service._updateUser(userIn);
-                    cb(true);          
-                }
-            });
-      } else {
-          cb(false);
-      }
+  dao.add(userId, buddy, function(err, data) {
+    if(err) {
+        cb(false);
+    } else {
+        cb(true);        
+    }
   });
 };
 
 BuddyService.prototype.removeBuddy = function(userId, buddy, cb) {
   cb = cb || function() {};
-  service._getUser(userId, function(user) {
-      if(user) {
-          var userIn = user;
-          userIn.buddies = _.without(user.buddies, buddy);
-          service._updateUser(userIn);
-          cb(true);      
-      } else {
-          cb(false);
-      }
-  });  
+  dao.remove(userId, buddy, function(err, data) {
+    if(err) {
+        cb(false);
+    } else {
+        cb(true);        
+    }
+  });
 };
 
 BuddyService.prototype.setDao = function(inDao) {
-    service.setDao(inDao);
     dao = inDao;
 };
 

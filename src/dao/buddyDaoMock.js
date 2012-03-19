@@ -9,18 +9,18 @@ BuddyDaoMock.prototype.init = function() {
 
 BuddyDaoMock.prototype.add = function(user, buddy, cb) {
     cb = cb || function() {};
-    this.users[user.email] = this.users[user.email] || [];
-    this.users[user.email].push(buddy);
+    this.users[user] = this.users[user] || [];
+    this.users[user].push(buddy);
     cb();
 };
 
 BuddyDaoMock.prototype.list = function(user, cb) {
-    cb(this.users[user.email]);
+    cb({}, this.users[user]);
 };
 
 BuddyDaoMock.prototype.remove = function(user, buddy, cb) {
     cb = cb || function() {};
-    this.users[user.email] = _.reject(this.users[user.email], function(el) {
+    this.users[user] = _.reject(this.users[user], function(el) {
         return el === buddy;
     });
     cb();
