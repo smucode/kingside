@@ -14,7 +14,7 @@ buster.testCase('routes test', {
 		userService.create(buddy);
 	},
 	'//add buddy through the api': function(){
-		var add_buddy = routes.puts['/add_buddy/'];
+		var add_buddy = routes.puts['/buddies/'];
 		add_buddy({
 			query: {id: 'buddy@buddy.com'},
 			send: function(added) {

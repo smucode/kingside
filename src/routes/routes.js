@@ -10,7 +10,7 @@ var getUser = function(req) {
 };
 
 exports.routes = {
-    gets: {
+    get: {
         '/user': function(req, res, next) {
             var user = getUser(req); 
             res.contentType('json'); 
@@ -61,8 +61,8 @@ exports.routes = {
             }
         }
     },
-    puts: {
-        '/add_buddy/': function(req, res) {
+    put: {
+        '/buddies/': function(req, res) {
             var user = getUser(req);
             var buddy = req.query.id;
             if(user && buddy) {
@@ -70,9 +70,22 @@ exports.routes = {
                     res.send(added); 
                 });    
             } else {
-                res.send('User does not exist');
+                res.send('User does not exists or add id', user, buddy);
             }
             
+        }
+    },
+    del: {
+        '/buddies/': function(req, res) {
+            var user = getUser(req);
+            var buddy = req.query.id;
+            if(user && buddy) {
+                buddyService.removeBuddy(user.email, buddy, function(added) {
+                    res.send(added); 
+                });    
+            } else {
+                res.send('User or buddy does not exists', user, buddy);
+            }
         }
     }
 };
