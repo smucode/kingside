@@ -1,4 +1,4 @@
-define(['underscore', './socket'], function(_, socket) {
+define(['underscore', 'socket.io'], function(_, socket) {
     var Auth = function() {
         return {
             getUser: function(cb) {
@@ -15,9 +15,5 @@ define(['underscore', './socket'], function(_, socket) {
             }
         };
     };
-    // todo: this sucks...
-    if(!window.auth) {
-       window.auth = new Auth(); 
-    }
-    return window.auth;
+    return Auth;
 });

@@ -2,11 +2,10 @@ define([
         'underscore', 
         '../socket', 
         '../../../../src/rex/Fen', 
-        '../game/localgame',
-        '../game/remotegame',
+        '../game/game',
         '../../../../src/event/pubsub',
         '../auth'
-    ], function(_, socket, Fen, LocalGame, RemoteGame, pubsub, auth) {
+    ], function(_, socket, Fen, Game, pubsub, auth) {
     
     var GameService = function() {
         this.debug = true;
@@ -17,7 +16,7 @@ define([
 
 		socket.on('game_ready', _.bind(function(game) {
 			this.log('new game: ', game);
-			var game = new RemoteGame(game);
+			var game = new Game(game);
 			game.onMove(_.bind(this._gameMove, this));
 			this._games[game.gameId] = game;
             this._createListener(game);
@@ -44,7 +43,7 @@ define([
     };
 
     GameService.prototype.requestLocalGame = function(game) {
-        var game = new LocalGame(game);
+        var game = new Game(game);
         game.onMove(_.bind(this._gameMove, this));
         this._games[game.gameId] = game;
         this._createListener(game);
@@ -67,7 +66,7 @@ define([
             $.getJSON('/games', _.bind(function(games) {
                 this.log('got games: ', games);
 				this.games = _.each(games, function(g){
-					var game = new RemoteGame(g);
+					var game = new Game(g);
 					game.onMove(_.bind(this._gameMove, this));
 					this._games[game.gameId] = game;
 				}, this);
