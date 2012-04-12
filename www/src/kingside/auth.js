@@ -1,4 +1,4 @@
-define(['underscore', './socket'], function(_, socket) {
+define(['underscore'], function(_) {
     var Auth = function() {
         return {
             getUser: function(cb) {

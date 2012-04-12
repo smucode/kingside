@@ -1,6 +1,13 @@
-require(['fooboard/test/r-buster'], function(buster) {
-    buster.testCase("Some code module", {
-        "will work": function () {
+require.config({
+    paths: {
+        "underscore": 'www/lib/underscore/underscore'
+    },
+    baseUrl: '.'
+});
+
+require(['www/src/fooboard/fooboard'], function(Fooboard) {
+    buster.testCase("Fooboard", {
+        "possible to create": function () {
             assert(true);
         }
 	});

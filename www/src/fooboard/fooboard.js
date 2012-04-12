@@ -1,4 +1,5 @@
-define(['underscore', '../../../src/event/pubsub', '../kingside/auth'], function(_, pubsub, auth) {
+define(['underscore', 'www/src/kingside/auth', '/src/event/pubsub'], function(_, auth, pubsub) {
+    console.log('fooboard');;
   var FooBoard = function(target) {
         this.board = {};
         this.pieces = {};
