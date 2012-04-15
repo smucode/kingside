@@ -2,6 +2,7 @@ var everyauth = require('everyauth');
 var util = require('../util/httputils');
 var userService = require('../services/userService').UserService;
 var conf = require('../conf/conf');
+var cache = require('../cache/userCache').UserCache;
 
 var Auth = function() {
     this._users = {};
@@ -22,8 +23,8 @@ Auth.prototype._googleAuth = function() {
         .scope(['https://www.googleapis.com/auth/userinfo.profile'])
         .findOrCreateUser(function (session, user, ctx) {
             var sid = util.getSid(ctx.req.headers.cookie);
-            that._users[sid] = user;
-            userService.create(user); //Should we do this here
+            cache.add(sid, user);
+            userService.create(user); //Should we do this here?
             return user.claimedIdentifier;
         })
         .redirectPath('/')
