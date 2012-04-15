@@ -5,11 +5,11 @@ define(['underscore', 'backbone', '../../../src/rex/rex', '../../../src/garbo/ga
             state: {}
         },
 
-        initialize: function(options) { // rex, white, black
+        initialize: function(options) {
             this._options = options;
 
-            this._initRex();
             this._initPlayers();
+            this._initRex();
         },
 
         _initRex: function() {

@@ -20,10 +20,20 @@ define(['underscore', '../model/game'], function(_, Game) {
         this._games.on('add', _.bind(function(game) {
             this.trigger('new', game);
         }, this));
+
     };
 
     GC.prototype._init = function() {
         this.createGame('local', 'garbo');
+    };
+
+    GC.prototype.listGames = function() {
+        return this._games;
+    };
+
+    GC.prototype.activateGame = function(gameId) {
+        var game = this._games.get(gameId);
+        this.trigger('update', game);
     };
 
     GC.prototype.createGame = function(w, b) {
