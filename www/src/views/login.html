@@ -1,0 +1,6 @@
+<% if (user) { %>
+	<div>Logged in as:</div>
+	<div><%=user.firstname%> <%=user.lastname%></div>
+<% } else { %>
+	<a href="/auth/google/">Log In</a>
+<% } %>

@@ -1,6 +1,7 @@
 define(
 	[
 		'views/logo', 
+		'views/login',
 		'views/status',
 		'views/fooboard', 
 		'views/new_game', 
