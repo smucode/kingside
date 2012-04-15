@@ -1,4 +1,12 @@
+require.config({
+    paths: {
+        "underscore": '../../lib/underscore/underscore'
+    },
+    baseUrl: 'www/src/kingside'
+});
+
 define(['underscore'], function(_) {
+    console.error('auth.js');
     var Auth = function() {
         return {
             getUser: function(cb) {

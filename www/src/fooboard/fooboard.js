@@ -1,4 +1,11 @@
-define(['underscore', 'www/src/kingside/auth', '/src/event/pubsub'], function(_, auth, pubsub) {
+require.config({
+    paths: {
+        "underscore": '../../lib/underscore/underscore'
+    },
+    baseUrl: 'www/src/foobord'
+});
+
+define(['underscore', '../src/kingside/auth', '../../src/event/pubsub'], function(_, auth, pubsub) {
     console.log('fooboard');;
   var FooBoard = function(target) {
         this.board = {};

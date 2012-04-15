@@ -1,13 +1,11 @@
 require.config({
-    paths: {
-        "underscore": 'www/lib/underscore/underscore'
-    },
-    baseUrl: '.'
+    baseUrl: 'www/src/fooboard/test'
 });
 
-require(['www/src/fooboard/fooboard'], function(Fooboard) {
+require(['../fooboard'], function(Fooboard) {
     buster.testCase("Fooboard", {
         "possible to create": function () {
+            console.error('fooboard.test')
             assert(true);
         }
 	});

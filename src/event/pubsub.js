@@ -1,4 +1,8 @@
-//if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+if (typeof define !== 'function') { var define = (require('amdefine'))(module); }
+
+require.config({
+    baseUrl: 'src/event'
+});
 
 define(["underscore"], function(__) {
     var PubSub = function() {

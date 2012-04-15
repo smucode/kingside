@@ -20,12 +20,12 @@ config["browser test"] = {
   extensions: [require("buster-amd")]
 };
 
-config["node test"] = {
-  rootPath: "src",
-  environment: "node",
-  tests: [
-     "./services/test/*.js",
-     "./dao/test/*.js",
-     "./routes/test/*.js"
-  ]
-}
+// config["node test"] = {
+//   rootPath: "src",
+//   environment: "node",
+//   tests: [
+//      "./services/test/*.js",
+//      "./dao/test/*.js",
+//      "./routes/test/*.js"
+//   ]
+// }
