@@ -76,7 +76,6 @@ buster.testCase('game service', {
            assert.isNull(game);
            done();
         });
-    
     }
 
 });

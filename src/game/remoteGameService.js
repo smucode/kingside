@@ -56,7 +56,6 @@ RemoteGameService.prototype._listenAfterMove = function(socket, user) {
                 }
 				socket.emit('move', game.gameId, from, to);
 			});
-
         });
     });
 };
