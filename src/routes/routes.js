@@ -1,12 +1,12 @@
 var util = require('../util/httputils');
-var auth = require('../auth/auth').auth;
+var cache = require('../cache/userCache').UserCache;
 var gameService = require('../services/gameService').GameService;
 var userService = require('../services/userService').UserService;
 var buddyService = require('../services/buddyService').BuddyService;
 
 var getUser = function(req) {
     var sid = util.getSid(req.headers.cookie);
-    return auth.getUser(sid);
+    return cache.get(sid);
 };
 
 exports.routes = {

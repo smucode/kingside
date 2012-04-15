@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var auth = require('../auth/auth').auth;
+var cache = require('../cache/userCache').UserCache;
 var util = require('../util/httputils');
 var Event = require('../event/event');
 var io = require('../io/io').io;
@@ -74,7 +74,7 @@ RemoteGameService.prototype._listen = function() {
     var that = this;
     this._io.sockets.on('connection', function (socket) {
         var sid = that._getSid(socket);
-        var user = auth.getUser(sid);
+        var user = cache.get(sid);
         if (user) {
             that._sockets[user.email] = socket;
             that._listenAfterRequestGame(socket, user);
