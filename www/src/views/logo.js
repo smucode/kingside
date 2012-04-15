@@ -9,7 +9,7 @@ define(['backbone'], function(Backbone) {
 		},
 
 		render: function() {
-			this.el.innerHTML = 'kingside';
+			this.el.innerHTML = 'kingside chess';
 		}
 
 	});

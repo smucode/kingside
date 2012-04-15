@@ -1,4 +1,4 @@
-define(['views/logo', 'views/fooboard'], function(Logo, FooBoard) {
+define(['views/logo', 'views/fooboard', 'views/current_game', 'views/new_game'], function() {
 	var args = arguments;
 	return {
 		getViews: function() {

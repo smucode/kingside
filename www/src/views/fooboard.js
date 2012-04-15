@@ -240,21 +240,7 @@ define(['underscore', 'backbone'], function(_, backbone) {
         _fireEvent: function(from, to) {
             this.selected = null; // todo, what is this?
             
-            this.game.trigger('move', this.game.get('id'), from, to);
-
-            /*
-            this.options.gameController.move({
-                to: to,
-                from: from,
-                gameId: this._gameId
-            });
-            */
-            // this.trigger('move', from, to);
-//            pubsub.pub('/fooboard/move', {
-//                to: to,
-//                from: from,
-//                gameId: this._gameId
-//            });
+            this.game.move(from, to);
         }
 
     });
