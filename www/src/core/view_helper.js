@@ -1,8 +1,18 @@
-define(['views/logo', 'views/fooboard', 'views/current_game', 'views/new_game', 'views/list_games'], function() {
-	var args = arguments;
-	return {
-		getViews: function() {
-			return args;
+define(
+	[
+		'views/logo', 
+		'views/status',
+		'views/fooboard', 
+		'views/new_game', 
+		'views/list_games',
+		'views/current_game'
+	],
+	function() {
+		var args = arguments;
+		return {
+			getViews: function() {
+				return args;
+			}
 		}
 	}
-});
+);

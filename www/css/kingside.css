@@ -121,7 +121,7 @@ body > .header {
 
 // status
 
-div.status {
+#status {
     padding: 20px;
     font-size: 18px;
 }
