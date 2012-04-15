@@ -2,7 +2,7 @@ var _ = require('underscore');
 var express = require('express');
 var conf = require('../conf/conf');
 var auth = require('../auth/auth').auth;
-var routes = require('../routes/routes').routes;
+var routes = require('../routes/routes').Routes;
 var db = require('../dao/db').Db;
 
 var app = express.createServer();
@@ -28,8 +28,8 @@ app.configure('development', function(){
 });
 
 _.each(['get', 'put', 'del'], function(resource) {
-    _.each(routes[resource], function(v, k) {
-        app[resource](k, v);
+    _.each(routes[resource](), function(k, v) {
+        app[resource](v, k);
     });
 });
 

@@ -4,13 +4,16 @@ var gameService = require('../services/gameService').GameService;
 var userService = require('../services/userService').UserService;
 var buddyService = require('../services/buddyService').BuddyService;
 
-var getUser = function(req) {
+var Routes = function() {
+};
+
+ var getUser = function(req) {
     var sid = util.getSid(req.headers.cookie);
     return cache.get(sid);
 };
 
-exports.routes = {
-    get: {
+Routes.prototype.get = function() {
+    return {
         '/user': function(req, res, next) {
             var user = getUser(req); 
             res.contentType('json'); 
@@ -60,9 +63,12 @@ exports.routes = {
                 res.send('');
             }
         }
-    },
-    put: {
-        '/buddies/': function(req, res) {
+    }
+};
+
+Routes.prototype.put = function() {
+    return {
+        '/buddies': function(req, res) {
             var user = getUser(req);
             var buddy = req.query.id;
             if(user && buddy) {
@@ -74,9 +80,12 @@ exports.routes = {
             }
             
         }
-    },
-    del: {
-        '/buddies/': function(req, res) {
+    }
+};
+    
+Routes.prototype.del = function() {
+    return {
+        '/buddies': function(req, res) {
             var user = getUser(req);
             var buddy = req.query.id;
             if(user && buddy) {
@@ -89,3 +98,5 @@ exports.routes = {
         }
     }
 };
+
+exports.Routes = new Routes();
