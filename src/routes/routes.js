@@ -1,24 +1,20 @@
 var util = require('../util/httputils');
 var cache = require('../cache/userCache').UserCache;
 var gameService = require('../services/gameService').GameService;
-var userService = require('../services/userService').UserService;
+var userRoutes = require('./userRoutes').UserRoutes;
 var buddyService = require('../services/buddyService').BuddyService;
 
 var Routes = function() {
 };
 
- var getUser = function(req) {
+var getUser = function(req) {
     var sid = util.getSid(req.headers.cookie);
     return cache.get(sid);
 };
 
 Routes.prototype.get = function() {
     return {
-        '/user': function(req, res, next) {
-            var user = getUser(req); 
-            res.contentType('json'); 
-            res.send(user ? JSON.stringify(user) : '');
-        },
+        '/user': userRoutes.get,
         '/buddies': function(req, res, next) {
             var user = getUser(req);
             res.contentType('json');
