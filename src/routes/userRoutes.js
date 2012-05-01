@@ -15,4 +15,11 @@ UserRoutes.prototype.get = function(req, res, next) {
     res.send(user ? JSON.stringify(user) : '');
 };
 
+UserRoutes.prototype.setCache = function(cacheIn) {
+    getUser = function(req) {
+        return cache.get();
+    };
+    cache = cacheIn;
+};
+
 exports.UserRoutes = new UserRoutes();

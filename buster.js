@@ -6,8 +6,7 @@ config["node test"] = {
        "src/services/test/*.js",
        "src/dao/test/*.js",
        "src/routes/test/*.js",
-       "src/cache/test/*.js",
-       "src/app/test/*.js"
+       "src/cache/test/*.js"
      ],
     extensions: [require("buster-lint")],
     "buster-lint": require("./autolint")

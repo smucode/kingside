@@ -2,10 +2,6 @@ var _ = require('underscore');
 var buster = require('buster');
 var assert = buster.assertions.assert;
 
-var userDao = require('../../dao/userDaoMock').UserDaoMock;
-var userService = require('../../services/userService').UserService;
-var gameService = require('../../services/gameService').GameService;
-var buddyService = require('../../services/buddyService').BuddyService;
 var routes = require('../routes').Routes;
 
 buster.assertions.add("containsResources", {
@@ -29,8 +25,6 @@ buster.assertions.add("containsResources", {
 });
 
 buster.testCase('routes test', {
-    setUp: function() {
-    },
     'get contains correct resources': function() {
         var get = routes.get();
         var resources = ['/user', '/buddies', '/games', '/request_game/'];
