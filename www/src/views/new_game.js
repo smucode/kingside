@@ -1,4 +1,4 @@
-define(['underscore'], function(_) {
+define(['underscore', 'backbone'], function(_, Backbone) {
     
     return Backbone.View.extend({
 
@@ -20,7 +20,7 @@ define(['underscore'], function(_) {
                     case 'white': this._newGame('local', 'garbo'); break;
                     case 'black': this._newGame('garbo', 'local'); break;
                     case 'online': this._newGame('local', 'remote'); break;
-                    default: console.log('wtf');
+                    default: throw 'wtf';
                 }
             }, this));
         },
