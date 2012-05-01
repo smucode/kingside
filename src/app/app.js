@@ -34,6 +34,9 @@ _.each(['get', 'put', 'del'], function(resource) {
 });
 
 app.listen(conf.http.port);
-db.connect();
+
+if(!conf.dev) {
+    db.connect();
+}
 
 exports.app = app;
