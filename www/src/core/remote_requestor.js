@@ -1,9 +1,10 @@
 define(
     [
         'underscore',
-        'socket.io'
+        'socket.io',
+        'backbone'
     ], 
-    function(_, io) {
+    function(_, io, Backbone) {
         var socket = io.connect('http://queensi.de/');
 
         var RR = function() {
@@ -16,7 +17,7 @@ define(
             socket.emit('request_game');
         };
 
-        _.extend(GC.prototype, Backbone.Events);
+        _.extend(RR.prototype, Backbone.Events);
 
         return RR;
     }
