@@ -4,13 +4,8 @@ var cache = require('../cache/userCache').UserCache;
 
 var BuddyRoutes = function() {};
 
-var getUser = function(req) {
-    var sid = util.getSid(req.headers.cookie);
-    return cache.get(sid);
-};
-
 BuddyRoutes.prototype.get = function(req, res, next) {
-    var user = getUser(req);
+    var user = cache.get(req);
     res.contentType('json');
     if(user) {
         buddyService.getBuddyList(user.email, function(buddies) {
@@ -27,7 +22,7 @@ BuddyRoutes.prototype.get = function(req, res, next) {
 };
 
 BuddyRoutes.prototype.put = function(req, res) {
-    var user = getUser(req);
+    var user = cache.get(req);
     var buddy = req.query.id;
     if(user && buddy) {
         buddyService.addBuddy(user.email, buddy, function(added) {
@@ -39,7 +34,7 @@ BuddyRoutes.prototype.put = function(req, res) {
 };
 
 BuddyRoutes.prototype.del = function(req, res) {
-    var user = getUser(req);
+    var user = cache.get(req);
     var buddy = req.query.id;
     if(user && buddy) {
         buddyService.removeBuddy(user.email, buddy, function(added) {

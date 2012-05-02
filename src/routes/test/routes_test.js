@@ -15,7 +15,7 @@ buster.assertions.add("containsResources", {
         _.each(resources, function(resource) {
             delete get[resource];
         });
-        if (get === {}) {
+        if(!_.isObject(get)){
             status = false;
         }
         return status;

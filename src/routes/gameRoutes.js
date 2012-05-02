@@ -4,14 +4,9 @@ var gameService = require('../services/gameService').GameService;
 
 var GameRoutes = function() {};
 
-var getUser = function(req) {
-    var sid = util.getSid(req.headers.cookie);
-    return cache.get(sid);
-};
-
 GameRoutes.prototype.get = function(req, res, next){
     try {
-        var user = getUser(req);
+        var user = cache.get(req);
         res.contentType('json');
         if(user) {
             gameService.findUserGames(user.email, function(games) {
@@ -24,6 +19,14 @@ GameRoutes.prototype.get = function(req, res, next){
     } catch (e) {
         res.send(e);
     }
+};
+
+GameRoutes.prototype.setCache = function(cacheIn) {
+    cache = cacheIn;
+};
+
+GameRoutes.prototype.setGameService = function(service) {
+    gameService = service;
 };
 
 exports.GameRoutes = new GameRoutes();

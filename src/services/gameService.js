@@ -54,7 +54,6 @@ GameService.prototype.getGameById = function(id, cb) {
             cb(null);
             return;
         }
-        console.log('found res'. res);
         cb(res);
     });
 };
