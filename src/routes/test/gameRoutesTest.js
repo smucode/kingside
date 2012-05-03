@@ -30,7 +30,7 @@ buster.testCase('game routes test gets get called', {
             }
         }, {});
     },
-    'sends out errer on error': function(done) {
+    'sends out error on gameservice error': function(done) {
         route.setGameService({
             findUserGames: function(email, cb) {
                 throw new Error();
