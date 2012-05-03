@@ -17,18 +17,7 @@ Routes.prototype.get = function() {
     return {
         '/user': userRoutes.get,
         '/buddies': buddyRoutes.get,
-        '/games': gameRoutes.get,
-        '/request_game/': function(req, res, next){
-            var user = getUser(req);
-            res.contentType('json');
-            if(user) {
-                gameService.findUserGames(user.email, function(games) {
-                    res.send(games ? JSON.stringify(games) : '');
-                });
-            } else {
-                res.send('');
-            }
-        }
+        '/games': gameRoutes.get
     };
 };
 

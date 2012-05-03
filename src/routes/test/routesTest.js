@@ -27,7 +27,7 @@ buster.assertions.add("containsResources", {
 buster.testCase('routes test', {
     'get contains correct resources': function() {
         var get = routes.get();
-        var resources = ['/user', '/buddies', '/games', '/request_game/'];
+        var resources = ['/user', '/buddies', '/games'];
         assert.containsResources(get, resources);
     },
     'puts contains correct resources': function() {
