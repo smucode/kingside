@@ -1,0 +1,46 @@
+body {
+  margin: 20px;
+}
+
+.board-view {
+  display: inline-block;
+}
+
+.board-view .file {
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  background-image: url('../img/pieces.png');
+  background-position: -288px 0px;
+}
+
+.board-view .file.light {
+  background-color: #fafafa;
+}
+
+.board-view .file.dark {
+  background-color: #ddd;
+}
+
+.piece {
+    width: @sq;
+    height: @sq;
+    background-image: url('img/pieces.png');
+}
+
+.board-view .file.wr { background-position: -0px   0px; }
+.board-view .file.wq { background-position: -48px  0px; }
+.board-view .file.wp { background-position: -96px  0px; }
+.board-view .file.wn { background-position: -144px 0px; }
+.board-view .file.wk { background-position: -192px 0px; }
+.board-view .file.wb { background-position: -240px 0px; }
+
+.board-view .file.br { background-position: -0px   -48px; }
+.board-view .file.bq { background-position: -48px  -48px; }
+.board-view .file.bp { background-position: -96px  -48px; }
+.board-view .file.bn { background-position: -144px -48px; }
+.board-view .file.bk { background-position: -192px -48px; }
+.board-view .file.bb { background-position: -240px -48px; }
