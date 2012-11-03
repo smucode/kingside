@@ -1,0 +1,8 @@
+{
+    "name": "rex",
+    "version": "0.0.1",
+    "dependencies": {
+        "underscore": "1.2.4",
+        "amdefine": ">=0.0.1"
+    }
+}
