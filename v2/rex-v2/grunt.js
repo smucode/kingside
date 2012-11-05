@@ -50,8 +50,8 @@ module.exports = function(grunt) {
     'clean', 
     'coffeelint', 
     'coffee', 
-    'concat', 
-    'shell'
+    'concat',
+    'shell:test'
   ]);
 
 };

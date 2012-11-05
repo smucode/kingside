@@ -6,6 +6,7 @@
     "grunt-shell": "git://github.com/cri5ti/grunt-shell-spawn",
     "grunt-coffeelint": "0.0.3",
     "grunt-coffee": "0.0.6",
-    "grunt-clean": "~0.3.0"
+    "grunt-clean": "~0.3.0",
+    "backbone": "~0.9.2"
   }
 }
