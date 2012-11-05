@@ -35,7 +35,8 @@ module.exports = function(grunt) {
     },
     shell: {
       test: {
-          command: 'vows',
+          command: 'vows test/*.coffee',
+          stderr: true,
           stdout: true
       }
     }
