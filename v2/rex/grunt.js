@@ -55,6 +55,12 @@ module.exports = function(grunt) {
           stderr: true,
           stdout: true
       }
+    },
+    min: {
+      dist: {
+        src: ['rex.js'],
+        dest: 'rex.min.js'
+      }
     }
   });
 
@@ -64,12 +70,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-coffeelint');
 
   grunt.registerTask('default', [
+    'shell:test',
     'clean', 
     'coffeelint', 
     'coffee', 
     'concat',
     'shell:build',
-    'shell:test'
+    'min'
   ]);
 
 };
