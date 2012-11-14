@@ -17,10 +17,12 @@ define ['jquery', 'backbone'], ($, Backbone) ->
     render: () ->
       files = 'abcdefgh'
       for rank in [8..1]
-        $rank = $('<div class="rank"></div>').appendTo(@$el)
+        frag = '<div class="rank"></div>'
+        $rank = $(frag).appendTo(@$el)
         for file in [0..7]
           san = files[file] + rank
-          $file = $("<div data-san='#{san}' class='file'></div>").appendTo $rank
+          frag = "<div data-san='#{san}' class='file'></div>"
+          $file = $(frag).appendTo $rank
           $file.addClass if (rank + file) % 2 == 0 then 'light' else 'dark'
 
     updateBoard: (game) =>
@@ -31,13 +33,21 @@ define ['jquery', 'backbone'], ($, Backbone) ->
     click: (e) =>
       san = $(e.target).attr('data-san')
       if @selected
-        @moveSelectedPiece san
+        if @selected is san
+          @unselectSelected()
+        else
+          @moveSelectedPiece san if @game._state.valid_moves[@selected].indexOf(san) isnt -1
       else
-        @updateSelectedPiece san
+        @updateSelectedPiece san if @game._state.valid_moves[san]
 
     updateSelectedPiece: (san) ->
       @selected = san
+      @$el.find(".file[data-san=#{san}]").addClass 'selected'
 
     moveSelectedPiece: (san) ->
       @bus.trigger 'move', @selected, san
+      @unselectSelected()
+
+    unselectSelected: ->
+      @$el.find(".file[data-san=#{@selected}]").removeClass 'selected'
       @selected = null

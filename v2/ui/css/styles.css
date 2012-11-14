@@ -25,6 +25,10 @@ body {
   background-color: #ddd;
 }
 
+.board-view .file.selected {
+  background-color: #97b;
+}
+
 .piece {
     width: @sq;
     height: @sq;
