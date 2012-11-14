@@ -7,13 +7,12 @@ define ['jquery', 'backbone'], ($, Backbone) ->
       r: 'br', n: 'bn', b: 'bb', q: 'bq', k: 'bk', p: 'bp'
       R: 'wr', N: 'wn', B: 'wb', Q: 'wq', K: 'wk', P: 'wp'
 
-    initialize: (opts) ->
-      opts.bus.on 'show_game', @updateBoard
+    events:
+      'click .file': 'click'
 
-    updateBoard: (game) =>
-      for pos, piece of game._state.board
-        # console.log ".#{pos}", @img[piece]
-        @$el.find(".#{pos}").addClass @img[piece]      
+    initialize: (opts) ->
+      @bus = opts.bus
+      @bus.on 'show_game', @updateBoard
 
     render: () ->
       files = 'abcdefgh'
@@ -21,5 +20,24 @@ define ['jquery', 'backbone'], ($, Backbone) ->
         $rank = $('<div class="rank"></div>').appendTo(@$el)
         for file in [0..7]
           san = files[file] + rank
-          $file = $("<div class='file #{san}'></div>").appendTo $rank
+          $file = $("<div data-san='#{san}' class='file'></div>").appendTo $rank
           $file.addClass if (rank + file) % 2 == 0 then 'light' else 'dark'
+
+    updateBoard: (game) =>
+      @game = game
+      for pos, piece of game._state.board
+        @$el.find(".file[data-san=#{pos}]").addClass @img[piece]
+
+    click: (e) =>
+      san = $(e.target).attr('data-san')
+      if @selected
+        @moveSelectedPiece san
+      else
+        @updateSelectedPiece san
+
+    updateSelectedPiece: (san) ->
+      @selected = san
+
+    moveSelectedPiece: (san) ->
+      @bus.trigger 'move', @selected, san
+      @selected = null
