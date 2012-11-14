@@ -1,5 +1,5 @@
 _        = require 'underscore'
-backbone = require 'backbone'
+Backbone = require 'backbone'
 
 Fen     = require './fen'
 Factory = require './piece_factory'
@@ -13,15 +13,16 @@ class Board
   _files: 'abcdefgh'
 
   constructor: (fen) ->
-    _.extend @, backbone.Events
+    _.extend @, Backbone.Events
 
     @_state = {}
     @_fen = new Fen(fen)
     @_board = new Array(128)
+    @factory = new Factory
     
     _.each @_fen.pieces, (piece, pos) =>
       idx = @_posToIdx(pos)
-      @_board[idx] = Factory.create(piece, idx, this)
+      @_board[idx] = @factory.create(piece, idx, this)
     
     @_calculate()
     
@@ -76,7 +77,7 @@ class Board
     
     pieceType = if source.color == 1 then 'Q' else 'q'
 
-    @_board[toIdx] = Factory.create(pieceType, toIdx, this)
+    @_board[toIdx] = @factory.create(pieceType, toIdx, this)
     @_state.promotion = pieceType
 
   _moveEnPassant: (to, from) ->

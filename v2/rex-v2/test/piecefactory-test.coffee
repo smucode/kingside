@@ -5,11 +5,12 @@ assert  = require 'assert'
 Pawn         = require '../src/pawn'
 PieceFactory = require '../src/piece_factory'
 
+Factory = new PieceFactory
 
 vows
   .describe('PieceFactory').addBatch
     'given a factory':
-      topic : PieceFactory
+      topic : Factory
 
       'it should be able to create white pawns': (topic) ->
         pawn = topic.create('p')

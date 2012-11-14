@@ -29,11 +29,27 @@ module.exports = function(grunt) {
     },
     concat: {
       all: {
-        src: ['target/src/*.js'],
-        dest: 'target/app.js'
+        src: [
+          'target/src/fen.js',
+          'target/src/piece.js',
+          'target/src/rook.js',
+          'target/src/knight.js',
+          'target/src/bishop.js',
+          'target/src/king.js',
+          'target/src/queen.js',
+          'target/src/pawn.js',
+          'target/src/piece_factory.js',
+          'target/src/board.js'
+        ],
+        dest: 'target/rex.js'
       }
     },
     shell: {
+      build: {
+          command: 'coffee build/build.coffee',
+          stderr: true,
+          stdout: true
+      },
       test: {
           command: 'vows test/*.coffee',
           stderr: true,
@@ -52,6 +68,7 @@ module.exports = function(grunt) {
     'coffeelint', 
     'coffee', 
     'concat',
+    'shell:build',
     'shell:test'
   ]);
 

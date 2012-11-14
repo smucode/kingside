@@ -15,7 +15,7 @@ Const =
   WHITE: 1
   BLACK: -1
 
-class PieceFactory
+class Factory
   _instanceArr: [
     null,
     Pawn,
@@ -48,7 +48,6 @@ class PieceFactory
     if (Inst)
       return new Inst(pos, color, board)
     else
-      # remove when implemented all pieces
-      return {}
+      throw new Error("Unable to create piece #{charCode}")
 
-module.exports = new PieceFactory
+module.exports = Factory
