@@ -1,6 +1,7 @@
 require.config({
   paths: {
     'cs': 'lib/cs',
+    'rex': 'lib/rex',
     'jquery': 'lib/jquery',
     'backbone': 'lib/backbone',
     'underscore': 'lib/underscore',
@@ -21,6 +22,13 @@ require.config({
       deps: [
         'underscore',
         'jquery'
+      ]
+    },
+    'rex': {
+      exports: 'rex',
+      deps: [
+        'underscore', 
+        'backbone'
       ]
     }
   }

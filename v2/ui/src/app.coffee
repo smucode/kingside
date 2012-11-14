@@ -1,8 +1,9 @@
 define [
   'jquery'
+  'rex'
   'cs!./core/bus'
   'cs!./views/board'
-], ($, Bus, Board) ->
+], ($, rex, Bus, Board) ->
 
   class Foo
     constructor: ->
@@ -11,3 +12,6 @@ define [
       for View in [Board]
         view = new View bus: bus
         view.render()
+
+      board = new rex.Board
+      bus.trigger 'show_game', board
