@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     },
     shell: {
       build: {
-          command: 'coffee build/build.coffee',
+          command: 'coffee tools/build.coffee',
           stderr: true,
           stdout: true
       },
