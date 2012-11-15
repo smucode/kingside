@@ -3,7 +3,8 @@ define [
   'rex'
   'cs!./core/bus'
   'cs!./views/board'
-], ($, rex, Bus, Board) ->
+  'cs!./ai/garbo'
+], ($, rex, Bus, Board, AI) ->
 
   class Foo
     constructor: ->
@@ -13,9 +14,14 @@ define [
         view = new View bus: bus
         view.render()
 
+      ai = new AI 'b'
+
       board = new rex.Board
       bus.trigger 'show_game', board
 
-      bus.on 'move', ->
+      bus.on 'move', (from, to) ->
         board.move.apply board, arguments
         bus.trigger 'show_game', board
+        ai.search from, to, ->
+          board.move.apply board, arguments
+          bus.trigger 'show_game', board

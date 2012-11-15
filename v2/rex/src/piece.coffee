@@ -38,7 +38,7 @@ class Piece
     if (@color == @board._getCurrentColor())
       pinned = @board.isPinned(@idx)
       if (pinned)
-        @moves = _.intersect(@moves, pinned)
+        @moves = _.intersection(@moves, pinned)
 
   _addNextDirectionalMove: (direction, offset) ->
     offset = offset || 1
@@ -61,7 +61,7 @@ class Piece
     if @color == @board._getCurrentColor()
       checkingPieces = @board.getCheckingPieces()
       if checkingPieces.length == 1
-        @moves = _.intersect(@moves, checkingPieces[0].checks)
+        @moves = _.intersection(@moves, checkingPieces[0].checks)
       else if checkingPieces.length > 1
         @moves = []
 

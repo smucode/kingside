@@ -308,7 +308,7 @@
       if (this.color === this.board._getCurrentColor()) {
         pinned = this.board.isPinned(this.idx);
         if (pinned) {
-          return this.moves = _.intersect(this.moves, pinned);
+          return this.moves = _.intersection(this.moves, pinned);
         }
       }
     };
@@ -338,7 +338,7 @@
       if (this.color === this.board._getCurrentColor()) {
         checkingPieces = this.board.getCheckingPieces();
         if (checkingPieces.length === 1) {
-          return this.moves = _.intersect(this.moves, checkingPieces[0].checks);
+          return this.moves = _.intersection(this.moves, checkingPieces[0].checks);
         } else if (checkingPieces.length > 1) {
           return this.moves = [];
         }
