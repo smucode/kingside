@@ -10,6 +10,8 @@ define ['jquery', 'backbone'], ($, Backbone) ->
     events:
       'click .file': 'click'
 
+    activeSquares: {}
+
     initialize: (opts) ->
       @bus = opts.bus
       @bus.on 'show_game', @updateBoard
@@ -27,20 +29,34 @@ define ['jquery', 'backbone'], ($, Backbone) ->
 
     updateBoard: (game) =>
       @game = game
-      for pos, piece of game._state.board
+      
+      @resetBoard() if @board
+      @board = _.clone game._state.board
+      
+      for pos, piece of @board
         @$el.find(".file[data-san=#{pos}]").addClass @img[piece]
+
+    resetBoard: ->
+      for pos, piece of @board
+        @$el.find(".file[data-san=#{pos}]").removeClass @img[piece]
 
     click: (e) =>
       san = $(e.target).attr('data-san')
-      if @selected
-        if @selected is san
-          @unselectSelected()
-        else
-          @moveSelectedPiece san if @game._state.valid_moves[@selected].indexOf(san) isnt -1
-      else
-        @updateSelectedPiece san if @game._state.valid_moves[san]
+      if @isSameAsSelected san then @unselectSelected()
+      else if @isMovablePiece san then @updateSelectedPiece san
+      else if @isValidTarget san then @moveSelectedPiece san
+
+    isSameAsSelected: (san) ->
+      @selected is san
+
+    isMovablePiece: (san) ->
+      @game._state.valid_moves[san]
+
+    isValidTarget: (san) ->
+      @selected and @game._state.valid_moves[@selected].indexOf(san) isnt -1
 
     updateSelectedPiece: (san) ->
+      @unselectSelected()
       @selected = san
       @$el.find(".file[data-san=#{san}]").addClass 'selected'
 
@@ -49,5 +65,6 @@ define ['jquery', 'backbone'], ($, Backbone) ->
       @unselectSelected()
 
     unselectSelected: ->
-      @$el.find(".file[data-san=#{@selected}]").removeClass 'selected'
-      @selected = null
+      if @selected
+        @$el.find(".file[data-san=#{@selected}]").removeClass 'selected'
+        @selected = null

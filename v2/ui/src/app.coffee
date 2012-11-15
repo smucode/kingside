@@ -15,3 +15,7 @@ define [
 
       board = new rex.Board
       bus.trigger 'show_game', board
+
+      bus.on 'move', ->
+        board.move.apply board, arguments
+        bus.trigger 'show_game', board
