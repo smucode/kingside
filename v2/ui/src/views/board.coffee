@@ -10,8 +10,6 @@ define ['jquery', 'backbone'], ($, Backbone) ->
     events:
       'click .file': 'click'
 
-    activeSquares: {}
-
     initialize: (opts) ->
       @bus = opts.bus
       @bus.on 'show_game', @updateBoard

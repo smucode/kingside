@@ -2,10 +2,11 @@ module.exports['browser'] = {
   environment: 'browser',
   libs: [
     'lib/require.js',
-    'lib/require.conf.js'
+    'src/config/requirejs-config.js'
   ],
   resources: [
-    'lib/*.js'
+    'lib/*.js',
+    'src/**/*.html'
   ],
   sources: [
     'src/*.coffee',
