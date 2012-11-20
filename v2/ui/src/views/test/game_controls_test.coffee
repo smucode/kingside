@@ -15,7 +15,7 @@ define ['jquery', 'cs!../game_controls'], ($, View) ->
       @view.render()
 
     'renders': ->
-      assert @view.$el.find('a').length, 1
+      assert @view.$el.find('button').length, 1
 
     'triggers resign event': ->
       @bus.trigger = @spy()

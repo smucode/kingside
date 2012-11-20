@@ -27,10 +27,10 @@ define ['jquery', 'backbone'], ($, Backbone) ->
 
     updateBoard: (game) =>
       @game = game
-      
+
       @resetBoard() if @board
       @board = _.clone game._state.board
-      
+
       for pos, piece of @board
         @$el.find(".file[data-san=#{pos}]").addClass @img[piece]
 

@@ -29,6 +29,10 @@ body {
   background-color: #97b;
 }
 
+.board-view .file.last-move {
+  background-color: #b79;
+}
+
 .piece {
     width: @sq;
     height: @sq;
@@ -48,3 +52,9 @@ body {
 .board-view .file.bn { background-position: -144px -48px; }
 .board-view .file.bk { background-position: -192px -48px; }
 .board-view .file.bb { background-position: -240px -48px; }
+
+.game-status {
+  font-size: 20px;
+  font-weight: 200;
+  padding-bottom: 20px;
+}

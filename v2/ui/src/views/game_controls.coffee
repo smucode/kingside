@@ -4,7 +4,7 @@ define [
   'text!./game_controls.html'
 ], ($, Backbone, html) ->
 
-  class Board extends Backbone.View
+  class GameControls extends Backbone.View
 
     el: '.game-controls'
 
@@ -18,5 +18,4 @@ define [
       @$el.append html
 
     onResign: (e) ->
-      e.preventDefault()
       @bus.trigger 'resign'
